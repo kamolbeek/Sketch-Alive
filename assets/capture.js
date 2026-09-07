@@ -447,6 +447,34 @@
         pvctx.stroke();
       }
 
+      // ── qirqma: konturdan tashqarisi shaffof ──
+      //
+      // Tekstura to'rtburchak bo'lib chiqadi — u 3D model ustiga yopishtirish
+      // uchun tayyorlanadi va qog'oz fonini ham o'z ichiga oladi. Bizning
+      // asosiy sahnamiz esa 2D: u yerda rasm o'zi personaj bo'lib suzadi,
+      // shuning uchun to'rtburchak tekstura suvda qog'oz parchasi bo'lib
+      // ko'rinardi.
+      //
+      // Kesish uchun yangi narsa hisoblash shart emas: `mask` allaqachon bor
+      // — u konturning ichi, chetidan bosilgan chiziq eni qirqib tashlangan
+      // holda. Uni shaffoflik kanaliga ko'chiramiz.
+      //
+      // 3D yo'lga zarari yo'q: kontur modelning o'z siluetidan olingan, ya'ni
+      // shaffof bo'lib qolgan joy modelga baribir tushmaydi.
+      var cut = document.createElement('canvas');
+      cut.width = TEX_W; cut.height = TH;
+      var cctx = cut.getContext('2d');
+
+      function cutout() {
+        cctx.clearRect(0, 0, TEX_W, TH);
+        cctx.drawImage(tex, 0, 0);
+        var ci = cctx.getImageData(0, 0, TEX_W, TH);
+        var cd = ci.data;
+        for (var i = 0; i < N; i++) cd[i * 4 + 3] = mask[i * 4 + 3];
+        cctx.putImageData(ci, 0, 0);
+        return cut.toDataURL('image/png');
+      }
+
       var boost = {
         auto: auto,
         value: 0,
@@ -461,7 +489,7 @@
         // dataURL — только по требованию: на каждое движение ползунка PNG
         // кодировать дорого, а нужен он один раз, при отправке в аквариум
         bake: function () {
-          return { texture: tex.toDataURL('image/png'), preview: pv.toDataURL('image/png') };
+          return { texture: cutout(), preview: pv.toDataURL('image/png') };
         }
       };
       boost.set(auto);
@@ -470,7 +498,7 @@
         kind: kind,
         title: fish.title,
         titles: fish.titles || null,   // название вида на языках сайта
-        texture: tex.toDataURL('image/png'),
+        texture: cutout(),
         preview: pv.toDataURL('image/png'),
         boost: boost
       });

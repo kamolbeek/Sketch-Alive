@@ -88,9 +88,18 @@ televizorni o‘sha manzilga ulaysiz (bitta Wi-Fi bo‘lishi kerak).
    va “Jonlantirish”ni bosadi. Rasm 3 soniyada televizorga chiqadi, ostida
    bolaning ismi turadi.
 
-Printer bo‘lsa, eski yo‘l ham ishlaydi: A4 varaqni chop etib, bola
-ranglaydi, telefonda suratga olinadi (bu yo‘l Paper Aquarium’dan
-qolgan va sotib olingan 3D modellarni talab qiladi).
+## Chop etiladigan varaqlar
+
+Printer bo‘lsa, ikkinchi yo‘l ham bor va u ham **hech narsa sotib olmasdan**
+ishlaydi: `/print.html` da 12 xil baliqning A4 varag‘i turibdi (o‘zbek, rus,
+ingliz, polyak tillarida), yonida esa hammasini bitta PDF qilib yuklab
+oladigan tugma.
+
+Tartib: varaqni 100% masshtabda chop et → bola ranglaydi (burchakdagi to‘rtta
+qora kvadratni bo‘yamasin) → telefonda **Suratga olish** → rasm sahnaga
+tushadi. Tizim varaqni burchak belgilaridan topib, perspektivani to‘g‘rilab,
+baliq konturi bo‘ylab **shaffof qilib kesadi** — shuning uchun sahnada
+qog‘oz emas, faqat bolaning rasmi suzadi.
 
 ## Sahifalar
 

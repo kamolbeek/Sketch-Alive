@@ -186,6 +186,7 @@
 <script src="/vendor/GLTFLoader.js"></script>
 <!-- до fish-glb.js: он спрашивает у FishFrame оси и голову, иначе половина
      покупных рыб в превью развернётся хвостом вперёд -->
+<script src="/assets/scenes.js"></script>
 <script src="/assets/fish-frame.js"></script>
 <script src="/assets/fish-glb.js"></script>
 <script src="/assets/capture.js"></script>
@@ -473,6 +474,11 @@
       // уплывает то, что человек видел на превью
       body: JSON.stringify({
         kind: result.kind,
+        // Suratga olingan varaq ham 2D sahnaga tushadi: rasm endi kontur
+        // bo'ylab kesilgan, ya'ni sotib olingan 3D modelsiz ham suzaveradi.
+        render: 'sprite2d',
+        scene: sceneId,
+        name: childName(),
         texture: result.boost ? result.boost.bake().texture : result.texture
       })
     }).then(function (r) {
@@ -488,6 +494,24 @@
       throw err;
     });
   };
+
+  // Sahnani sozlamadan olamiz — varaq qaysi sahnaga tushishini tarbiyachi
+  // katta ekranda tanlagan bo'ladi, bu yerda yana so'rash ortiqcha savol.
+  var sceneId = (window.SCENES && window.SCENES.defaultId) || 'aquarium';
+  if (window.Tank && window.Tank.id) {
+    fetch(window.Tank.api + '/settings')
+      .then(function (r) { return r.json(); })
+      .then(function (st) { if (st && st.scene) sceneId = st.scene; })
+      .catch(function () { /* sozlama kelmadi — sukut bo'yicha akvarium */ });
+  }
+
+  // Ism chizish sahifasida kiritilgan bo'lsa, o'sha telefonda saqlangan
+  // bo'ladi: bola varaqni ranglab, keyin suratga olsa ham rasm ostida
+  // uning ismi turishi kerak.
+  function childName() {
+    try { return (localStorage.getItem('alive.name') || '').slice(0, 24); }
+    catch (e) { return ''; }
+  }
 
   document.getElementById('b-release').addEventListener('click', function () { window.releaseFish(); });
 })();
