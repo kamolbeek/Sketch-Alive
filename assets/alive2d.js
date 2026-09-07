@@ -198,7 +198,12 @@
       // Sahna almashsa, personajlar yangi qoidaga ko'chadi: akvariumdan
       // hayvonot bog'iga o'tganda baliq havoda suzib yurmasligi kerak.
       c.motion = scene.motion;
-      if (scene.motion === 'walk' && scene.ground) c.y = footLine(scene, c.z);
+      // Yangi qoidaga o'tayotganda balandlik ham qayta hisoblanadi. Bunsiz
+      // hayvonot bog'idan akvariumga o'tgan personajlar yer chizig'ida
+      // qolib, hammasi ekranning pastida bir uyum bo'lib suzardi.
+      if (scene.ground && scene.motion === 'walk') c.y = footLine(scene, c.z);
+      else if (!scene.ground) c.y = rand(0.15, 0.85);
+      else c.y = scene.ground + (NEAR_LINE - scene.ground) * Math.random();
     });
   };
 

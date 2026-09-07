@@ -165,6 +165,17 @@ canvas { display: block; width: 100vw; height: 100vh; }
       panel.appendChild(b);
     });
 
+    // Chizish sahifasiga yo'l. Tarbiyachi telefonda kodni terib shu ekranga
+    // tushadi, chizish esa boshqa sahifada — u yerga o'tadigan tugma
+    // bo'lmasa, manzilni qo'lda yozishga to'g'ri kelardi.
+    if (window.Tank && window.Tank.id) {
+      var draw = document.createElement('button');
+      draw.type = 'button';
+      draw.textContent = t('menu.draw.title');
+      draw.onclick = function () { location.href = window.Tank.url + '/draw'; };
+      panel.appendChild(draw);
+    }
+
     var names = document.createElement('button');
     names.type = 'button';
     names.textContent = t('alive.names');

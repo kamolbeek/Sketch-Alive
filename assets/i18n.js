@@ -1,4 +1,8 @@
-// Три языка: русский, английский, польский.
+// Четыре языка: узбекский, русский, английский, польский.
+//
+// Узбекский — основной язык проекта: Sketch Alive делается для детских
+// садов, где на нём говорят и дети, и воспитатели. Остальные три достались
+// от Paper Aquarium и остаются рабочими.
 //
 // Язык берём из выбора человека (localStorage), а если выбора не было —
 // из настроек его устройства. Ни угадываний по IP, ни отдельного адреса
@@ -14,7 +18,7 @@
 //   I18N.plural(3, 'fish')               — рыбка / рыбки / рыбок
 //   I18N.apply(root)                     — раскладывает переводы по data-t
 //   I18N.set('pl')                       — переключить и запомнить
-//   I18N.mount(el)                       — нарисовать переключатель RU EN PL
+//   I18N.mount(el)                       — нарисовать переключатель UZ RU EN PL
 //
 // В разметке:
 //   <b data-t="menu.feed.title"></b>     — текст
@@ -24,10 +28,274 @@
 (function () {
   'use strict';
 
-  var KEY = 'aqua.lang';
-  var LANGS = ['ru', 'en', 'pl'];
+  var KEY = 'aqua.lang';   // eski nom: tanlangan til yangilanishdan keyin ham qolsin
+  var LANGS = ['uz', 'ru', 'en', 'pl'];
 
   var DICT = {
+    uz: {
+      'lang.name': 'O‘zbekcha',
+
+      // ── bosh sahifa ──
+      'home.title': 'Mening sahnalarim',
+      'home.lead': 'Bola chizadi — chizgani katta ekranda jonlanadi. Barmoq bilan planshetda ham chizsa bo‘ladi, qog‘ozga chizib suratga olsa ham. Har bir guruhning o‘z sahnasi bo‘lishi mumkin.',
+      'home.empty': 'Hozircha sahna yo‘q. Birinchisini yarat — bir soniyalik ish.',
+      'home.new': 'Yangi sahna',
+      'home.bycode.title': 'Sahnani kod bilan ochish',
+      'home.bycode.hint': 'Kod faqat yangi qurilmada kerak — bu qurilmada sahnalar o‘zi eslab qolinadi. «Boshqa ekranda ochish»dagi besh xonali raqam ham bo‘laveradi.',
+      'home.pin.bad.title': 'Bu raqamlar to‘g‘ri kelmadi',
+      'home.pin.bad.text': 'Besh xonali kod 5 daqiqa yashaydi — muddati o‘tgan bo‘lishi mumkin. Qaytadan ko‘rsatishni so‘ra: telefonda «Boshqa ekranda ochish» → «Televizor uchun kod».',
+      'home.pin.many.title': 'Urinish juda ko‘p bo‘ldi',
+      'home.pin.many.text': 'Biroz kutib, yana urinib ko‘r.',
+      'home.bycode.placeholder': 'masalan, mk4dp7wq2f',
+      'home.bycode.open': 'Ochish',
+      'home.how.title': 'Bu qanday ishlaydi',
+      'home.how.s0': 'Sahna yarat',
+      'home.how.s1': 'Varaqni chop et — yoki planshetda chiz',
+      'home.how.s2': 'Rangla',
+      'home.how.s3': 'Telefonda suratga ol',
+      'home.how.s4': 'Katta ekranni kod bilan och',
+      'home.how.demo': '🐠 Jonli sahnani ko‘rish',
+      'home.how.demo.sub': 'umumiy namuna — rasmlar allaqachon harakatda',
+      'home.card.kill': 'Sahnani olib tashlash',
+      'home.card.empty': 'hozircha bo‘sh',
+      'home.terms': 'Qoidalar va ma’lumotlar ↗',
+      'terms.back': '← sahnalarga',
+      'home.footer.important': 'Muhim.',
+      'home.footer.text': ' Hisob ochilmaydi: kod bilan sahna ko‘riladi, parol bilan boshqariladi, ikkalasini shu brauzer saqlaydi. Batafsili — qoidalarda.',
+
+      'home.create.title': 'Yangi sahna',
+      'home.create.text': 'Ro‘yxatda ajratish uchun nom ber — masalan, guruh nomi bilan.',
+      'home.create.value': 'Sahna',
+      'home.create.ok': 'Yaratish',
+      'home.created.title': 'Sahna yaratildi',
+      'home.created.text': 'Kod bilan sahna ochiladi va ko‘riladi, parol bilan boshqariladi. Bu qurilmada ikkalasi ham saqlandi — ular doim sahna menyusida turadi, hozir yozib olish shart emas. Lekin biror joyga saqlab qo‘ygan ma’qul: bu yerda pochta ham, hisob ham yo‘q, tiklaydigan joy bo‘lmaydi.',
+      'home.created.code': 'Sahna kodi',
+      'home.created.pass': 'Parol',
+      'home.created.ok': 'Saqladim, boshladik',
+      'home.create.fail.title': 'Sahna yaratilmadi',
+      'home.create.fail.text': 'Server javob bermayapti shekilli. node server.js ishga tushganini tekshir.',
+      'home.remove.title': '«{name}» olib tashlansinmi?',
+      'home.remove.text': 'Ro‘yxatdan — sahna serverda qoladi, {code} kodi bilan qaytarasan. Butunlay — {what} serverdagi savatga ketadi va kod bilan boshqa ochilmaydi.',
+      'home.remove.whatEmpty': 'sahna ketadi',
+      'home.remove.cancel': 'Bekor qilish',
+      'home.remove.forget': 'Ro‘yxatimdan olib tashlash',
+      'home.remove.delete': 'Sahnani butunlay o‘chirish',
+      'home.remove.pass.title': '«{name}» paroli',
+      'home.remove.pass.text': 'Sahnani butunlay o‘chirish faqat parol bilan mumkin. Parol bo‘lmasa — sahnani o‘z ro‘yxatingdan olib tashla, egasida qolaveradi.',
+      'home.badcode.title': 'Kod to‘g‘ri kelmadi',
+      'home.badcode.text': 'Sahna kodi aynan 10 ta belgi — harf va raqam. Bir belgi tushib qolmaganini tekshir.',
+
+      // ── sahna menyusi ──
+      'menu.tank': 'Sahna',
+      'menu.copied': 'havola nusxalandi',
+      'menu.pass': '🔑 parol',
+      'menu.pass.set': '🔓 parol qo‘yish',
+      'menu.pass.title': 'Sahna paroli',
+      'menu.rename.hint': 'Sahna nomini o‘zgartirish',
+      'menu.close': 'Menyuni yopish',
+      'menu.back': '← orqaga',
+      'menu.hint': 'istalgan joyni bos — menyuni ko‘rsataman',
+      'menu.capture.title': 'Rasmni suratga olish',
+      'menu.capture.sub': 'ranglangan varaq sahnada jonlanadi',
+      'menu.pack.title': 'Tayyor baliqni qo‘yib yuborish',
+      'menu.pack.sub': 'to‘plamdan, ranglamasdan',
+      'menu.feed.title': 'Ovqatlantirish',
+      'menu.feed.sub': 'baliqlar yemga to‘planadi',
+      'menu.print.title': 'Chop etish uchun varaqlar',
+      'menu.print.sub': 'oddiy A4 varaqda 12 xil baliq',
+      'menu.bg.title': 'Fonni almashtirish',
+      'menu.bg.sub': 'rasmlar suzadigan fon',
+      'menu.fish.title': 'Rasmlarni olib tashlash',
+      'menu.fish.sub': 'ortiqchasini sahnadan o‘chirish',
+      'menu.fish.sub.pass': 'ortiqchasini o‘chirish — parol kerak',
+      'menu.home.title': 'Mening sahnalarim',
+      'menu.home.sub': 'boshqa sahnalar — va yangisini yaratish',
+      'menu.picker.title': 'Kimni qo‘yib yuboramiz?',
+      'menu.picker.sub': 'To‘plamdagi baliq sahnada darhol paydo bo‘ladi',
+      'menu.picker.drawing': 'chizyapman…',
+      'menu.picker.failed': 'chiqmadi',
+      'menu.picker.nopack': 'To‘plam yig‘ilmagan — tools\\convert-pack.ps1 ni ishga tushir',
+      'menu.rename.title': 'Sahna nomi',
+      'menu.rename.text': 'Faqat senga ko‘rinadi — sahnalar ro‘yxatida va shu sahifa sarlavhasida.',
+      'menu.rename.ok': 'Saqlash',
+      'menu.rename.fail': 'Nom o‘zgarmadi',
+      'menu.access.title': 'Sahnaga kirish',
+      'menu.access.text': 'Kod bilan sahna ko‘riladi, parol bilan boshqariladi. Ikkalasi shu brauzerda saqlangan — uning ma’lumotlari tozalansa, tiklaydigan joy bo‘lmaydi.',
+      'menu.access.done': 'Tayyor',
+      'menu.access.change': 'Parolni almashtirish',
+      'menu.newpass.title': 'Sahnaning yangi paroli',
+      'menu.newpass.first': 'Sahna uchun parol',
+      'menu.newpass.text': 'Kamida 4 ta belgi. Raqam qulayroq: uni telefonda aytish va pultda terish oson. Eski parol hamma qurilmada ishlamay qoladi.',
+      'menu.newpass.ph': 'yangi parol',
+      'menu.newpass.short.title': 'Juda qisqa',
+      'menu.newpass.short.text': 'Kamida to‘rtta belgi kerak.',
+      'menu.newpass.saved.title': 'Parol saqlandi',
+      'menu.newpass.saved.text': 'Yozib qo‘y: parolni tiklaydigan joy yo‘q. Sahna kodi o‘zgarmadi — u bilan avvalgidek ko‘riladi.',
+      'menu.newpass.saved.field': 'Yangi parol',
+      'menu.newpass.saved.ok': 'Yozib oldim',
+      'menu.oldpass.title': 'Eski parol',
+      'menu.oldpass.text': 'Parolni hozirgisini biladigan odam almashtira oladi.',
+      'menu.fail.title': 'Chiqmadi',
+      'menu.fail.server': 'Server javob bermayapti.',
+      'menu.fail.pass': 'Server parolni qabul qilmadi.',
+      'menu.link.title': 'Sahnaga havola',
+      'tank.doctitle': 'Sahna',
+      'tank.frame.print': 'Chop etish uchun varaqlar',
+      'tank.frame.bg': 'Sahna foni',
+      'tank.frame.fish': 'Sahnadagi rasmlar',
+      'tank.frame.capture': 'Rasmni suratga olish',
+      'tank.crash': '<b>Sahna ishga tushmadi</b><br>{msg}',
+      'menu.link.text': 'O‘zim nusxalay olmadim — shu yerdan ol. Bu havola bilan sahna istalgan qurilmada ochiladi.',
+      'menu.link.ok': 'Tayyor',
+      'menu.share.title': 'Boshqa ekranda ochish',
+      'menu.share.sub': 'QR va havola: televizor, planshet, ikkinchi telefon',
+      'menu.share.hint': 'Telefon kamerasini to‘g‘rila — sahna o‘sha yerda ochiladi',
+      'menu.share.copy': 'Havolani nusxalash',
+      'menu.share.copy.sub': 'messenjerga yubor — va istalgan joyda och',
+      'menu.share.send': 'Havolani yuborish…',
+      'menu.share.send.sub': 'odatda nima orqali ulashsang, o‘sha orqali',
+      'menu.share.pin': 'Televizor uchun kod',
+      'menu.share.pin.sub': 'besh raqam — pultda terish oson',
+      'menu.share.pin.text': 'Bu raqamlarni televizorda ter — bosh sahifadagi «Sahnani kod bilan ochish» maydoniga. Kod 5 daqiqa yashaydi.',
+      'menu.share.pin.fail': 'Kod berilmadi — yana urinib ko‘r',
+      'demo.title': '🫧 Bu — namuna',
+      'demo.text': 'Tanishish uchun umumiy sahna — bu yerdagi rasmlar hech kimniki emas. O‘zingniki alohida sahnada yashaydi: uni yaratish bir soniya, chizish va suratga olish o‘sha yerda bo‘ladi.',
+      'demo.own': 'O‘z sahnamni yaratish',
+      'demo.own.sub': 'chop etish, suratga olish va o‘z rasmlaring — o‘sha yerda',
+
+      'tank.loading': 'Sahnani to‘ldiryapman…',
+      'tank.nofish': 'hozircha rasm yo‘q',
+      'tank.notank': 'Sahna topilmadi — o‘chirilgan bo‘lishi yoki kodda xato bo‘lishi mumkin.',
+      'tank.tolist': 'Mening sahnalarimga →',
+      'tank.noserver': 'Server ishlamayapti. <code>node server.js</code> ni ishga tushir va sahifani yangila.',
+      'tank.nopick': 'Sahna tanlanmagan.',
+      'tank.home': 'Bosh sahifaga →',
+
+      // ── suratga olish ──
+      'cap.title': '🐠 Rasmingni jonlantir!',
+      'cap.sub': 'Varaqdagi baliqni rangla, suratga ol — u sahnada suzib ketadi',
+      'cap.back': '← sahnaga',
+      'cap.shoot': 'Varaqni suratga olish',
+      'cap.hint': 'Varaqni stolga qo‘y, to‘rttala qora kvadrat kadrga tushsin',
+      'cap.qr': 'Telefondan qulayroq: kamerani kodga to‘g‘rila — suratga olish o‘sha yerda ochiladi',
+      'cap.searching': 'Fotodan baliqni qidiryapman…',
+      'cap.reviving': 'baliq jonlanyapti…',
+      'cap.release': 'Sahnaga qo‘yib yuborish! 🌊',
+      'cap.retake': 'Qayta suratga olish',
+      'cap.boost': 'Ranglar yorqinroq',
+      'cap.done': 'Baliq sahnaga suzib ketdi!',
+      'cap.done.sub': 'Katta ekranga qara — u allaqachon o‘sha yerda',
+      'cap.done.sub.embed': 'Oynani yop — u allaqachon suzyapti',
+      'cap.again': 'Yana bittasini suratga olish',
+      'cap.retry': 'Yana urinib ko‘rish',
+      'cap.sending': 'Baliq sahnaga suzib boryapti…',
+      'cap.err.manifest': 'manifest.json yuklanmadi — server ishga tushganini tekshir.',
+      'cap.err.photo': 'Fotoni ocholmadim, yana urinib ko‘r.',
+      'cap.itis': 'Bu — {name}!',
+      'cap.photo': 'Sening baliging',
+      'cap.err.nofish': 'Baliq yo‘qoldi — varaqni qaytadan suratga ol.',
+      'cap.err.status': 'Server {code} deb javob berdi',
+      'cap.err.markers': '{n} ta belgi topildi, 4 tadan. Butun varaqni to‘liq, yaxshi yorug‘likda va yaltiramasdan suratga ol — to‘rttala qora kvadrat kadrda bo‘lishi kerak.',
+      'cap.err.send': 'Yuborilmadi: {msg}',
+
+      // ── boshqaruv ──
+      'adm.doctitle': 'Sahna — rasmlarni boshqarish',
+      'adm.title': 'boshqaruv',
+      'adm.tank': 'Sahna',
+      'adm.capture': 'Suratga olish',
+      'adm.print': 'Varaqlar',
+      'adm.home': 'Mening sahnalarim',
+      'adm.pass': 'Parol:',
+      'adm.pass.change': 'Parolni almashtirish',
+      'adm.pass.show': 'Parolni ko‘rsatish',
+      'adm.bg': 'Sahna foni',
+      'adm.bg.one': 'Fon {n}',
+      'adm.bg.own': 'O‘z fonim',
+      'adm.bg.add': 'o‘z fonim',
+      'adm.bg.busy': 'yuklanyapti…',
+      'adm.bg.del': 'Bu fonni o‘chirish',
+      'adm.bg.del.title': 'Fon o‘chirilsinmi?',
+      'adm.bg.del.text': 'Fayl butunlay o‘chadi — rasmlardan farqli, nusxasi qolmaydi.',
+      'adm.bg.fail': 'Fon yuklanmadi',
+      'adm.bg.err.read': 'faylni o‘qib bo‘lmadi',
+      'adm.bg.err.img': 'bu rasm emas',
+      'adm.fish.count': 'rasmlar: {n}',
+      'adm.fish.pack': 'to‘plamdan · ',
+      'adm.fish.del': 'O‘chirish',
+      'adm.fish.del.title': 'Rasm o‘chirilsinmi?',
+      'adm.fish.del.pack': 'U sahnadan ketadi. Xuddi shunaqasini istalgan payt yana qo‘yib yuborsa bo‘ladi.',
+      'adm.fish.del.painted': 'Rasm serverdagi savatga ko‘chadi — kerak bo‘lsa qaytarish mumkin.',
+      'adm.empty': 'Sahnada hozircha chizilgan rasm yo‘q.',
+      'adm.empty.sub': 'Planshetda chiz yoki varaqni ranglab telefonda suratga ol — yuqoridagi havolalar.',
+      'adm.clear': 'Hamma rasmni o‘chirish',
+      'adm.clear.title': 'Sahna tozalansinmi?',
+      'adm.clear.text': 'Sahnadan hamma rasm ketadi — {n} ta. Rasmlar serverdagi savatga ko‘chadi, qaytarish mumkin, lekin ro‘yxatdan yo‘qoladi.',
+      'adm.noserver': 'server ishlamayapti — node server.js ni ishga tushir',
+      'adm.gate.title': '🔒 Boshqaruv parol ostida',
+      'adm.gate.text': 'Sahnani parolsiz ham ko‘rsa bo‘ladi — parol fonni almashtirish, nom berish va rasm o‘chirish uchun kerak.',
+      'adm.gate.ph': 'parol',
+      'adm.gate.enter': 'Kirish',
+      'adm.gate.back': '← sahnaga',
+      'adm.gate.bad': 'Parol to‘g‘ri kelmadi.',
+      'adm.gate.old': 'Parol eskirgan — yangisini kirit.',
+      'adm.gate.many': 'Urinish juda ko‘p bo‘ldi, bir daqiqa kut.',
+      'adm.gate.wait': 'Urinish juda ko‘p bo‘ldi. {n} soniya kut.',
+      'adm.gate.noserver': 'Server javob bermayapti.',
+      'adm.gate.need': 'Sahna paroli kerak.',
+
+      // ── varaqlar ──
+      'print.title': 'Varaqlar — chop etish uchun shablonlar',
+      'print.home': '← mening sahnalarim',
+      'print.all': 'Hammasini chop etish',
+      'print.pdf': 'PDF yuklab olish',
+      'print.pdf.file': 'varaqlar-akvarium.pdf',
+      'print.one': 'Shu varaqni chop etish',
+      'print.note': 'Oddiy A4 ga, ko‘ndalang holatda, 100% masshtabda chop et («sahifaga sig‘dirish»siz) — belgilar o‘lchami tanish uchun muhim. Burchakdagi qora kvadratlarni ranglamang!',
+      'print.note2': 'Yaqinda printer yo‘qmi? Hamma varaqni bitta PDF qilib yuklab ol (yuqoridagi tugma) va printer bor joyga yubor. Hozircha planshetda chizib ko‘ringlar — printer umuman kerak emas.',
+      'print.nomanifest': 'manifest.json yuklanmadi — server ishga tushganini tekshir.',
+
+      // ── umumiy ──
+      'pass.ask.title': 'Sahna paroli',
+      'pass.ask.text': 'Parol faqat boshqaruv uchun so‘raladi. Sahnani parolsiz ham ko‘rsa bo‘ladi.',
+      'pass.ask.ph': 'masalan, 481902',
+      'pass.ask.ok': 'Kirish',
+      'pass.bad.title': 'Parol to‘g‘ri kelmadi',
+      'pass.bad.text': 'Parolni tekshir — sahna yaratilganda ko‘rsatilgani.',
+      'pass.many.title': 'Urinish juda ko‘p bo‘ldi',
+      'pass.many.text': '{n} soniya kutib, yana urinib ko‘r.',
+      'modal.cancel': 'Bekor qilish',
+      'modal.delete': 'O‘chirish',
+      'modal.ok': 'Tushunarli',
+      'modal.save': 'Saqlash',
+      'modal.copyHint': 'Nusxalash uchun bos',
+      'modal.copied': 'nusxalandi',
+
+      // ── chizish (planshet/telefon) ──
+      'draw.title': 'Chizish',
+      'draw.back': '← sahnaga',
+      'draw.name.ph': 'Isming',
+      'draw.hint': 'Bu yerga chiz',
+      'draw.erase': 'O‘chirg‘ich',
+      'draw.undo': 'Orqaga',
+      'draw.clear': 'Tozalash',
+      'draw.go': 'Jonlantirish',
+      'draw.sending': 'Yuborilyapti…',
+      'draw.sent': 'Tayyor! Katta ekranga qara',
+      'draw.err.empty': 'Avval biror narsa chiz',
+      'draw.err.notank': 'Sahna tanlanmagan — bosh sahifadan och',
+      'draw.err.send': 'Yuborilmadi',
+      'draw.err.net': 'Server javob bermayapti',
+
+      // ── katta ekran ──
+      'alive.title': 'Sketch Alive',
+      'alive.empty': 'Hali hech kim chizmagan',
+      'alive.join': 'Chizish uchun',
+      'alive.code': 'Kod',
+      'alive.names': 'Ismlar',
+      'alive.fullscreen': 'Butun ekran',
+      'alive.close': 'Yopish',
+      'menu.draw.title': 'Chizish',
+    },
     ru: {
       'lang.name': 'Русский',
 
@@ -269,7 +537,33 @@
       'modal.ok': 'Понятно',
       'modal.save': 'Сохранить',
       'modal.copyHint': 'Нажми, чтобы скопировать',
-      'modal.copied': 'скопировано'
+      'modal.copied': 'скопировано',
+
+      // ── рисование (планшет/телефон) ──
+      'draw.title': 'Рисование',
+      'draw.back': '← в сцену',
+      'draw.name.ph': 'Как тебя зовут',
+      'draw.hint': 'Рисуй здесь',
+      'draw.erase': 'Ластик',
+      'draw.undo': 'Назад',
+      'draw.clear': 'Очистить',
+      'draw.go': 'Оживить',
+      'draw.sending': 'Отправляю…',
+      'draw.sent': 'Готово! Смотри на большой экран',
+      'draw.err.empty': 'Сначала нарисуй что-нибудь',
+      'draw.err.notank': 'Сцена не выбрана — открой с главной',
+      'draw.err.send': 'Не отправилось',
+      'draw.err.net': 'Сервер не отвечает',
+
+      // ── большой экран ──
+      'alive.title': 'Sketch Alive',
+      'alive.empty': 'Пока никто не нарисовал',
+      'alive.join': 'Рисовать тут',
+      'alive.code': 'Код',
+      'alive.names': 'Имена',
+      'alive.fullscreen': 'Во весь экран',
+      'alive.close': 'Закрыть',
+      'menu.draw.title': 'Рисовать',
     },
 
     en: {
@@ -502,7 +796,33 @@
       'modal.ok': 'Got it',
       'modal.save': 'Save',
       'modal.copyHint': 'Click to copy',
-      'modal.copied': 'copied'
+      'modal.copied': 'copied',
+
+      // ── drawing (tablet/phone) ──
+      'draw.title': 'Drawing',
+      'draw.back': '← to the scene',
+      'draw.name.ph': 'Your name',
+      'draw.hint': 'Draw here',
+      'draw.erase': 'Eraser',
+      'draw.undo': 'Undo',
+      'draw.clear': 'Clear',
+      'draw.go': 'Bring it alive',
+      'draw.sending': 'Sending…',
+      'draw.sent': 'Done! Look at the big screen',
+      'draw.err.empty': 'Draw something first',
+      'draw.err.notank': 'No scene picked — open one from the home page',
+      'draw.err.send': 'Could not send it',
+      'draw.err.net': 'The server is not answering',
+
+      // ── the big screen ──
+      'alive.title': 'Sketch Alive',
+      'alive.empty': 'Nobody has drawn anything yet',
+      'alive.join': 'Draw at',
+      'alive.code': 'Code',
+      'alive.names': 'Names',
+      'alive.fullscreen': 'Fullscreen',
+      'alive.close': 'Close',
+      'menu.draw.title': 'Draw',
     },
 
     pl: {
@@ -735,7 +1055,33 @@
       'modal.ok': 'Jasne',
       'modal.save': 'Zapisz',
       'modal.copyHint': 'Kliknij, żeby skopiować',
-      'modal.copied': 'skopiowano'
+      'modal.copied': 'skopiowano',
+
+      // ── rysowanie (tablet/telefon) ──
+      'draw.title': 'Rysowanie',
+      'draw.back': '← do sceny',
+      'draw.name.ph': 'Jak masz na imię',
+      'draw.hint': 'Rysuj tutaj',
+      'draw.erase': 'Gumka',
+      'draw.undo': 'Cofnij',
+      'draw.clear': 'Wyczyść',
+      'draw.go': 'Ożyw rysunek',
+      'draw.sending': 'Wysyłam…',
+      'draw.sent': 'Gotowe! Spójrz na duży ekran',
+      'draw.err.empty': 'Najpierw coś narysuj',
+      'draw.err.notank': 'Nie wybrano sceny — otwórz ją ze strony głównej',
+      'draw.err.send': 'Nie udało się wysłać',
+      'draw.err.net': 'Serwer nie odpowiada',
+
+      // ── duży ekran ──
+      'alive.title': 'Sketch Alive',
+      'alive.empty': 'Nikt jeszcze nic nie narysował',
+      'alive.join': 'Rysuj na',
+      'alive.code': 'Kod',
+      'alive.names': 'Imiona',
+      'alive.fullscreen': 'Pełny ekran',
+      'alive.close': 'Zamknij',
+      'menu.draw.title': 'Rysuj',
     }
   };
 
@@ -743,12 +1089,16 @@
   // Считаем сами: Intl.PluralRules есть не везде, где эта игра запускается,
   // а правил тут всего два языка.
   var PLURALS = {
+    // O'zbekchada son bilan kelgan ot ko'plik qo'shimchasini olmaydi:
+    // «3 rasm», «21 rasm». Shuning uchun uchala shakl ham bir xil.
+    uz: { fish: ['rasm', 'rasm', 'rasm'] },
     ru: { fish: ['рыбка', 'рыбки', 'рыбок'] },
     pl: { fish: ['rybka', 'rybki', 'rybek'] },
     en: { fish: ['fish', 'fish', 'fish'] }
   };
 
   function pluralIndex(lang, n) {
+    if (lang === 'uz') return 0;              // bitta shakl
     if (lang === 'en') return n === 1 ? 0 : 1;
     // русский и польский: 1 — одна, 2–4 — две, остальное — много
     var t = n % 10, h = n % 100;
@@ -762,8 +1112,8 @@
     try { saved = localStorage.getItem(KEY); } catch (e) { /* приватный режим */ }
     if (saved && DICT[saved]) return saved;
 
-    // Настройки устройства: ru-RU → русский, pl-PL → польский, остальное —
-    // английский как язык по умолчанию для всех прочих.
+    // Настройки устройства: uz-UZ → узбекский, ru-RU → русский,
+    // pl-PL → польский, остальное — английский.
     var list = (navigator.languages && navigator.languages.length)
       ? navigator.languages : [navigator.language || 'en'];
     for (var i = 0; i < list.length; i++) {
@@ -817,8 +1167,8 @@
     window.dispatchEvent(new CustomEvent('aqua:lang', { detail: next }));
   }
 
-  // Переключатель: три коротких кнопки. Место занимает мало, а объяснять
-  // ничего не надо — RU EN PL читается на любом из трёх языков.
+  // Переключатель: короткие кнопки, по одной на язык. Места занимает мало,
+  // а объяснять ничего не надо — UZ RU EN PL читается на любом из них.
   function mount(host) {
     if (!host) return null;
     host.classList.add('langpick');

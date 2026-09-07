@@ -784,7 +784,13 @@ function handleTankApi(req, res, t, url) {
         scene: SCENES.has(merged.scene) ? merged.scene : (cur.scene || SCENES.defaultId)
       };
       writeSettings(t, clean);
-      send(res, 200, JSON.stringify(clean));
+      // Отвечаем тем же, что и GET: с backgroundUrl. Иначе клиент, который
+      // применяет ответ сразу (сцену переключили — фон должен смениться),
+      // получает undefined и остаётся без картинки до следующего опроса.
+      send(res, 200, JSON.stringify(Object.assign({}, clean, {
+        backgroundUrl: backgroundUrl(t, clean.background),
+        feedAt: ev.feedAt
+      })));
     });
   }
 
