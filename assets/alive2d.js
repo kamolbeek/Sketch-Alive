@@ -63,11 +63,96 @@
     });
   }
 
+  // Rasmdagi jonivorning haqiqiy chegarasini o'lchaymiz.
+  //
+  // Rasm fayli va undagi jonivor bir narsa emas: Twemoji kvadrat, jonivor
+  // esa uning turli qismini egallaydi — krevetka burchakdan burchakka
+  // cho'zilgan, chig'anoq o'rtada kichkina. Fayl balandligi bo'yicha
+  // o'lchansa, krevetka kitdek katta bo'lib chiqadi. Bolaning rasmida ham
+  // xuddi shunday: atrofida bo'sh joy bo'lishi mumkin.
+  //
+  // Shuning uchun shaffof bo'lmagan piksellarning chegarasi o'lchanadi.
+  // O'lchov kichraytirilgan nusxada olinadi — bizga aniq piksel emas,
+  // nisbat kerak, 96 px esa har qanday rasm uchun yetarli va tez.
+  function measure(img) {
+    var M = 96;
+    var w = Math.max(1, Math.min(M, img.width || M));
+    var h = Math.max(1, Math.min(M, img.height || M));
+    var cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    var cx = cv.getContext('2d', { willReadFrequently: true });
+    var box = { x0: 0, y0: 0, x1: 1, y1: 1 };
+    try {
+      cx.drawImage(img, 0, 0, w, h);
+      var d = cx.getImageData(0, 0, w, h).data;
+      var minX = w, minY = h, maxX = -1, maxY = -1;
+      for (var y = 0; y < h; y++) {
+        for (var x = 0; x < w; x++) {
+          if (d[(y * w + x) * 4 + 3] > 24) {
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+      if (maxX >= 0) {
+        box = { x0: minX / w, y0: minY / h, x1: (maxX + 1) / w, y1: (maxY + 1) / h };
+      }
+    } catch (e) {
+      // Boshqa manbadan kelgan rasm canvas'ni "iflos" qiladi va o'qib
+      // bo'lmaydi. Bunda butun rasmni jonivor deb hisoblaymiz — bu
+      // ishlamay qolishdan yaxshiroq.
+    }
+    return box;
+  }
+
   // ── personaj ─────────────────────────────────────────────────────────────
   //
   // Bitta jonlangan rasm. O'zining joyini, tezligini va "hayot fazasi"ni
   // biladi. Faza har bir personajda tasodifiy boshlanadi: aks holda ekrandagi
   // hamma baliq bir vaqtda, bir xil qimirlab, mashinaga o'xshab qolardi.
+
+  // FE'L-ATVOR
+  //
+  // Hamma personaj bir xil harakat qilsa, ekran mexanik ko'rinadi: yigirmata
+  // baliq bir tezlikda, bir yo'nalishda, bir xil to'lqinlanib suzadi va bola
+  // ularni jonli deb qabul qilmaydi.
+  //
+  // Shuning uchun har bir personajga tug'ilganda **tabiat** beriladi va u
+  // umr bo'yi o'zgarmaydi: kimdir shoshmasdan kesib o'tadi, kimdir joyida
+  // aylanadi, kimdir tubda sekin yuradi. Ustiga vaqti-vaqti bilan qisqa
+  // **harakat** qo'shiladi — aylanish, otilish, to'xtab atrofga qarash.
+  //
+  // Tabiat qaysi harakat qanchalik tez-tez uchrashini belgilaydi. Shunda
+  // yigirmata baliqning yigirmatasi ham boshqacha yuradi, lekin har biri
+  // o'ziga izchil qoladi: bugun aylangan baliq ertaga ham aylanadi.
+
+  var NATURES = [
+    // id           tezlik   aylanish  suzish  otilish  to'xtash  uy
+    { id: 'cruiser',  spd: 1.00, turn: 0.5, w: { swim: 6, loop: 1, dash: 2, rest: 1 } },
+    { id: 'darter',   spd: 1.25, turn: 0.9, w: { swim: 3, loop: 1, dash: 6, rest: 1 } },
+    { id: 'wanderer', spd: 0.85, turn: 1.5, w: { swim: 3, loop: 6, dash: 1, rest: 2 } },
+    { id: 'calm',     spd: 0.60, turn: 0.4, w: { swim: 6, loop: 1, dash: 0, rest: 5 } },
+    { id: 'shy',      spd: 0.75, turn: 1.1, w: { swim: 3, loop: 2, dash: 3, rest: 6 } }
+  ];
+
+  function pickNature() {
+    return NATURES[(Math.random() * NATURES.length) | 0];
+  }
+
+  // Tabiatning og'irliklariga qarab navbatdagi harakatni tanlaymiz.
+  function pickAction(nature) {
+    var w = nature.w;
+    var total = w.swim + w.loop + w.dash + w.rest;
+    var r = Math.random() * total;
+    if ((r -= w.swim) < 0) return 'swim';
+    if ((r -= w.loop) < 0) return 'loop';
+    if ((r -= w.dash) < 0) return 'dash';
+    return 'rest';
+  }
+
+  // ── personaj ─────────────────────────────────────────────────────────────
 
   function Character(img, opts) {
     this.img = img;
@@ -82,22 +167,66 @@
     // ta'sir qiladi, shuning uchun sahna tekis emas, hajmli ko'rinadi.
     this.z = rand(Z_MIN, Z_MAX);
 
-    this.dir = Math.random() < 0.5 ? -1 : 1;
+    this.nature = pickNature();
+
+    // TANA HARAKATNI BELGILAYDI
+    //
+    // Kit bilan krevetka bir xil qimirlasa, ikkalasi ham qog'oz bo'lib
+    // ko'rinadi. Haqiqatda o'lcham va shakl harakatni to'g'ridan-to'g'ri
+    // belgilaydi: katta tana suvni og'ir kesadi — dumini sekin, lekin keng
+    // uradi; mayda baliq esa tez-tez va mayda qimirlaydi. Uzun yassi tana
+    // bo'ylab to'lqin uzoq yuradi, kalta dumaloq tanada esa deyarli yo'q.
+    //
+    // Ikkala kattalik ham o'lchanadi, taxmin qilinmaydi:
+    //   bulk   — turning tabiiy o'lchami (manifestdan; bolaning rasmi 1),
+    //   aspect — rasmning eni/bo'yi, ya'ni tana cho'ziqmi yoki dumaloqmi.
+    this.bulk = clamp(opts.scale || 1, 0.35, 2.4);
+
+    // Jonivorning rasm ichidagi haqiqiy chegarasi.
+    this.box = measure(img);
+    var bw = Math.max(0.02, this.box.x1 - this.box.x0);
+    var bh = Math.max(0.02, this.box.y1 - this.box.y0);
+    this.boxH = bh;
+
+    // Nisbat fayl o'lchamidan emas, jonivorning o'zidan olinadi.
+    this.aspect = clamp((bw * (img.width || 1)) / (bh * (img.height || 1)), 0.4, 4);
+
+    // Dum urish chastotasi. Kvadrat ildizga yaqin bog'liqlik — biologiyada
+    // ham shunday: o'lcham ikki barobar oshsa, chastota ikki barobar emas,
+    // undan kamroq tushadi.
+    this.beat = 4.4 / Math.pow(this.bulk, 0.62);
+
+    // To'lqinning tana bo'ylab kuchi. Cho'ziq tanada to'lqin uzoq yuradi,
+    // dumaloq tanada (meduza, qisqichbaqa) deyarli bilinmaydi — ular
+    // umuman boshqacha, "nafas olib" qimirlaydi.
+    this.wave = clamp((this.aspect - 0.9) / 1.6, 0.12, 1.15);
+
+    // Katta tana bir joydan ikkinchisiga uzoqroq yo'l bosadi, lekin
+    // ko'rinishidan shoshmaydi; maydasi tez-tez yo'nalish o'zgartiradi.
+    this.tempo = 1 / Math.pow(this.bulk, 0.45);
+
+    // Yo'nalish burchak bilan saqlanadi, "chapga/o'ngga" bilan emas. Faqat
+    // burchak bo'lgandagina aylanish, egri yo'l va yumshoq burilish tabiiy
+    // chiqadi: ularning hammasi burchakni asta o'zgartirishdan iborat.
+    this.ang = Math.random() * Math.PI * 2;
+    this.turn = 0;             // hozirgi burilish tezligi, rad/s
+
+    this.dir = Math.cos(this.ang) < 0 ? -1 : 1;
     // Ko'rinadigan yo'nalish alohida: burilish bir zumda emas, sprayt
     // gorizontal siqilib, keyin ochilib buriladi — shunda burilish
     // "sakrash" emas, harakat bo'lib ko'rinadi.
     this.face = this.dir;
 
     this.phase = rand(0, Math.PI * 2);
-    this.speedScale = rand(0.75, 1.35);
+    // Ekrandagi tezlik: katta baliq sekinroq ko'rinadi, lekin butunlay
+    // to'xtab qolmaydi — 0.2 daraja bu ikkisi orasidagi muvozanat.
+    this.speedScale = rand(0.8, 1.25) * this.nature.spd / Math.pow(this.bulk, 0.2);
 
-    // Tezlik doimiy emas. Haqiqiy baliq bir tekis suzmaydi: bir oz sirg'anib
-    // boradi, keyin dumini urib oldinga otiladi, keyin yana sekinlashadi.
-    // Doimiy tezlik ekranda darrov bilinadi — personaj suzayotgandek emas,
-    // konveyerda ketayotgandek ko'rinadi.
-    this.gas = 1;              // hozirgi tezlik ko'paytirgichi
-    this.gasTarget = 1;        // qayerga intilyapti
-    this.nextDart = rand(1.5, 6);   // navbatdagi otilishgacha qolgan vaqt
+    // Hozirgi harakat va u tugaguncha qolgan vaqt.
+    this.action = 'swim';
+    this.actionLeft = rand(1, 3);
+    this.gas = 1;              // tezlik ko'paytirgichi, harakatga qarab
+    this.gasTarget = 1;
 
     // Burilishdagi og'ish. Baliq chuqurlikni o'zgartirganda tanasi biroz
     // qiyshayadi — bu harakatni tekis sirg'anishdan ajratib turadigan
@@ -116,6 +245,40 @@
     this.entering = true;
   }
 
+  // Navbatdagi harakatga o'tish. Har bir harakat o'z burilish tezligi va
+  // o'z gazini o'rnatadi, qolganini step() bir xil hisoblaydi.
+  Character.prototype.nextAction = function () {
+    var a = pickAction(this.nature);
+    this.action = a;
+
+    if (a === 'loop') {
+      // Aylanish: burilish tezligi doimiy, davomiyligi to'liq aylanaga
+      // yaqin. Yo'nalish tasodifiy — hammasi bir tomonga aylansa, bu yana
+      // bir xillik bo'lardi.
+      var side = Math.random() < 0.5 ? -1 : 1;
+      this.turn = side * rand(1.1, 2.0) * this.tempo;
+      this.actionLeft = rand(2.2, 4.5) / this.tempo;
+      this.gasTarget = rand(0.8, 1.2);
+    } else if (a === 'dash') {
+      // Otilish: to'g'riga va tez, lekin qisqa.
+      this.turn = rand(-0.15, 0.15);
+      this.actionLeft = rand(0.6, 1.4) / this.tempo;
+      this.gasTarget = rand(2.0, 3.2);
+    } else if (a === 'rest') {
+      // To'xtab turish: deyarli joyida, faqat atrofga qaraydi. Dum ham
+      // sekin qimirlaydi — buni tezlikka bog'langan animatsiya o'zi qiladi.
+      this.turn = rand(-0.5, 0.5);
+      this.actionLeft = rand(1.5, 3.5) / this.tempo;
+      this.gasTarget = rand(0.05, 0.25);
+    } else {
+      // Oddiy suzish: sekin va tasodifiy egiladi, shuning uchun yo'l
+      // to'g'ri chiziq emas.
+      this.turn = rand(-1, 1) * this.nature.turn * 0.5;
+      this.actionLeft = rand(2, 5) / this.tempo;
+      this.gasTarget = rand(0.7, 1.3);
+    }
+  };
+
   Character.prototype.step = function (dt, t, scene, view) {
     var m = this.motion;
 
@@ -127,37 +290,44 @@
 
     if (m === 'place') return;   // xonadagi narsa joyidan jilmaydi
 
-    // Otilish. Vaqti-vaqti bilan personaj tezlashadi va yana sekinlashadi.
-    // `gas` maqsadga asta yetib boradi — keskin sakrash sun'iy ko'rinadi.
-    this.nextDart -= dt;
-    if (this.nextDart <= 0) {
-      this.gasTarget = rand(0.45, 2.1);
-      this.nextDart = rand(1.5, 6);
-    }
-    this.gas += (this.gasTarget - this.gas) * clamp(dt * 1.4, 0, 1);
+    // Yer bo'ylab yuradiganlar burchak bilan emas, oddiy chap-o'ng bilan
+    // harakatlanadi: ular uchun aylanish ham, ko'tarilish ham ma'nosiz.
+    if (m === 'walk') return this.stepWalk(dt, scene);
 
-    var base = (m === 'walk') ? 0.045 : (m === 'fly' ? 0.085 : 0.06);
+    this.actionLeft -= dt;
+    if (this.actionLeft <= 0) this.nextAction();
+
+    this.gas += (this.gasTarget - this.gas) * clamp(dt * 2, 0, 1);
+
+    // Chetdan qaytish. Devorga urilib emas, o'zi burilib qaytadi: chegaraga
+    // yaqinlashgan sari markazga qaragan burchakka tortiladi.
+    var steer = this.turn;
+    var margin = 0.10;
+    if (this.x < margin) steer += (0 - Math.cos(this.ang)) * 3 + (this.x < 0 ? 4 : 0);
+    if (this.x > 1 - margin) steer += (0 - Math.cos(this.ang)) * -3 + (this.x > 1 ? -4 : 0);
+    if (this.y < 0.12) steer += Math.sin(this.ang) < 0 ? 3 * (this.dir > 0 ? 1 : -1) : 0;
+    if (this.y > 0.88) steer += Math.sin(this.ang) > 0 ? -3 * (this.dir > 0 ? 1 : -1) : 0;
+
+    this.ang += steer * dt;
+
+    var base = (m === 'fly') ? 0.085 : 0.06;
     // Uzoqdagilar sekinroq suzadi — perspektivada shunday ko'rinadi.
     var speed = base * this.speedScale * this.gas * (0.55 + 0.45 * this.z);
 
-    this.x += this.dir * speed * dt;
+    // Vertikal harakat gorizontaldan sekinroq: ekran keng, baland emas, va
+    // to'liq tenglikda baliqlar tepa-pastga otilib yurgandek ko'rinadi.
+    this.x += Math.cos(this.ang) * speed * dt;
+    this.y += Math.sin(this.ang) * speed * dt * 0.55;
 
-    // Chetga yetganda yo'qolib ketmaydi, buriladi. Ekrandan chiqib ketish
-    // katta ekranda "rasmim yo'qoldi" degan taassurot beradi. Burilish
-    // chekkaga tegmasdan oldin boshlanadi — devorga urilgandek emas,
-    // o'zi qaytgandek ko'rinsin.
-    if (this.x > 0.98 && this.dir > 0) this.dir = -1;
-    if (this.x < 0.02 && this.dir < 0) this.dir = 1;
     this.x = clamp(this.x, -0.04, 1.04);
+    this.y = clamp(this.y, 0.08, 0.9);
 
-    if (m === 'swim' || m === 'fly') {
-      // Vertikal siljish — sekin, uzun to'lqin. Tananing to'lqinlanishi
-      // (pastda, chizishda) tez; ikkalasi bir xil chastotada bo'lsa,
-      // harakat sun'iy ko'rinadi.
-      this.driftPhase += dt * (m === 'fly' ? 0.9 : 0.55) * this.speedScale;
-      var amp = (m === 'fly') ? 0.10 : 0.06;
-      this.y = clamp(this.y + Math.sin(this.driftPhase) * amp * dt, 0.08, 0.88);
-    }
+    // Ko'rinadigan yo'nalish — harakat yo'nalishining belgisi. Deyarli
+    // vertikal ketayotganda belgi tez-tez almashib, sprayt titrab qolmasligi
+    // uchun kichik o'lik zona qoldiriladi.
+    var cx = Math.cos(this.ang);
+    if (cx > 0.12) this.dir = 1;
+    else if (cx < -0.12) this.dir = -1;
 
     // Og'ish balandlik o'zgarishidan hisoblanadi: yuqoriga ketayotgan
     // personajning boshi ko'tariladi. Formulaga emas, haqiqiy harakatga
@@ -167,12 +337,31 @@
       this.tilt += (clamp(vy * 1.6, -0.5, 0.5) - this.tilt) * clamp(dt * 3, 0, 1);
     }
     this.prevY = this.y;
+  };
 
-    // Yuradiganlar hammasi bitta chiziqda tursa, ekranda bir-birining ustiga
-    // mingashib, tirbandlik bo'lib qoladi. Shuning uchun yer chizig'i
-    // chuqurlikka bog'liq: uzoqdagisi balandroq turadi va kichikroq
-    // chiziladi — bu tekis rasmga chuqurlik beradigan eng arzon usul.
-    if (m === 'walk' && scene.ground) this.y = footLine(scene, this.z);
+  Character.prototype.stepWalk = function (dt, scene) {
+    this.actionLeft -= dt;
+    if (this.actionLeft <= 0) {
+      // Yerdagilarga aylanish to'g'ri kelmaydi — ular yo yuradi, yo
+      // to'xtaydi, yo yugurib qo'yadi.
+      this.action = Math.random() < 0.3 ? 'rest' : (Math.random() < 0.25 ? 'dash' : 'swim');
+      this.gasTarget = this.action === 'rest' ? rand(0, 0.15)
+        : (this.action === 'dash' ? rand(1.8, 2.6) : rand(0.7, 1.2));
+      this.actionLeft = rand(1.5, 4);
+      // Vaqti-vaqti bilan orqaga buriladi — hamma bir tomonga yursa,
+      // qator bo'lib ketayotgandek ko'rinadi.
+      if (Math.random() < 0.25) this.dir = -this.dir;
+    }
+    this.gas += (this.gasTarget - this.gas) * clamp(dt * 2, 0, 1);
+
+    var speed = 0.045 * this.speedScale * this.gas * (0.55 + 0.45 * this.z);
+    this.x += this.dir * speed * dt;
+
+    if (this.x > 0.98 && this.dir > 0) this.dir = -1;
+    if (this.x < 0.02 && this.dir < 0) this.dir = 1;
+    this.x = clamp(this.x, -0.04, 1.04);
+
+    if (scene.ground) this.y = footLine(scene, this.z);
   };
 
   // ── sahna ────────────────────────────────────────────────────────────────
@@ -183,6 +372,11 @@
     this.scene = scene;
     this.chars = [];
     this.loading = {};       // id → true, bir rasmni ikki marta yuklamaslik uchun
+    // Yuklanmagan rasmlar. Ularsiz sahna har so'rovda (3 soniyada bir)
+    // o'sha yo'q faylni qayta so'rayveradi: server jurnali 404 bilan
+    // to'lib ketadi va haqiqiy nosozlik shu shovqin ichida ko'rinmay
+    // qoladi. Bu odatiy hol — masalan, o'z rasmini papkadan o'chirgan.
+    this.failed = {};
     this.bg = null;          // sahna fon rasmi (bo'lsa)
     this.ambient = [];
     this.running = false;
@@ -268,16 +462,19 @@
     this.chars.forEach(function (c) { have[c.id] = true; });
 
     list.forEach(function (c) {
-      if (have[c.id] || self.loading[c.id]) return;
+      if (have[c.id] || self.loading[c.id] || self.failed[c.id]) return;
       self.loading[c.id] = true;
       loadImage(c.url).then(function (img) {
         delete self.loading[c.id];
         self.chars.push(new Character(img, {
-          id: c.id, name: c.name, flip: c.flip,
+          id: c.id, name: c.name, flip: c.flip, scale: c.scale,
           motion: c.motion || self.scene.motion
         }));
       }, function () {
-        delete self.loading[c.id];   // rasm buzuq — sahna baribir ishlayveradi
+        // Rasm buzuq yoki o'chirilgan — sahna baribir ishlayveradi, faqat
+        // buni eslab qolamiz va qayta so'ramaymiz.
+        delete self.loading[c.id];
+        self.failed[c.id] = true;
       });
     });
   };
@@ -419,7 +616,19 @@
 
     // O'lcham sahna balandligiga bog'liq: televizorda ham, telefonda ham
     // personaj bir xil ulushni egallaydi.
-    var target = h * (0.13 + 0.19 * (c.z - Z_MIN) / (Z_MAX - Z_MIN));
+    // Ekrandagi o'lcham: chuqurlik + turning tabiiy kattaligi. Kub ildiz
+    // bilan yumshatiladi — aks holda ko'k kit ekranning yarmini egallab,
+    // krevetka nuqta bo'lib qolardi.
+    // Kerakli balandlik — **jonivorning** balandligi. Fayl undan kattaroq
+    // bo'lgani uchun rasm shunga mos kattalashtiriladi: c.boxH rasmdagi
+    // jonivor egallagan ulush.
+    // Sonlar o'lchovga moslangan: jonivor egallagan ulush (c.boxH) odatda
+    // 0.7 atrofida, ya'ni bo'luv rasmni ~1.4 barobar kattalashtiradi —
+    // asosiy koeffitsient shuni hisobga oladi. 0.7 darajasi o'lcham
+    // farqini ko'rinadigan qiladi: ko'k kit krevetkadan uch barobar
+    // kattaroq bo'lib chiqadi, lekin ekranni egallab ketmaydi.
+    var target = h * (0.07 + 0.10 * (c.z - Z_MIN) / (Z_MAX - Z_MIN))
+      * Math.pow(c.bulk, 0.70) / c.boxH;
     var scale = target / img.height;
     var dw = img.width * scale, dh = img.height * scale;
 
@@ -461,7 +670,7 @@
       ctx.globalAlpha = 0.18 * (1 - hop * 0.4);
       ctx.fillStyle = '#000';
       ctx.beginPath();
-      ctx.ellipse(x, footY, dw * 0.32, dh * 0.05, 0, 0, Math.PI * 2);
+      ctx.ellipse(x, footY, dw * (c.box.x1 - c.box.x0) * 0.34, dh * 0.04, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
       ctx.globalAlpha = 1;
@@ -482,7 +691,11 @@
     // Ism personajning ostida turadi: yuradiganda — oyoq chizig'idan sal
     // pastda, suzayotganda — spraytning ostida.
     if (this.showNames && c.name) {
-      this.drawName(ctx, c, x, (c.motion === 'walk' ? footY + dh * 0.04 : y + dh * 0.55));
+      // Yorliq jonivorning ostida turadi. Rasmning pastida bo'sh joy
+      // bo'lsa (ko'p rasmda shunday), fayl chetiga qo'yilgan ism jonivordan
+      // uzilib qolardi.
+      var below = y + dh * (c.box.y1 - 0.5) + dh * 0.04;
+      this.drawName(ctx, c, x, (c.motion === 'walk' ? footY + dh * 0.04 : below));
     }
   };
 
@@ -498,12 +711,16 @@
     var n = SLICES;
     var sw = img.width / n;
     var dsw = dw / n;
-    // Dum urishi tezlikka bog'liq: otilayotgan baliq dumini tez-tez uradi,
-    // sirg'anayotgani esa deyarli qimirlatmaydi. Bu ikkisi bog'lanmasa,
-    // harakat va animatsiya bir-biridan ajralib, o'yinchoqqa o'xshab qoladi.
-    var speed = (c.motion === 'fly' ? 7.5 : 4.2) * c.speedScale
+    // Dum urishi ikki narsadan hisoblanadi: tanadan (katta sekin, mayda
+    // tez — `beat`) va hozirgi tezlikdan (otilayotgani tez-tez uradi,
+    // sirg'anayotgani deyarli qimirlatmaydi). Ikkisi bog'lanmasa, harakat
+    // va animatsiya bir-biridan ajralib, o'yinchoqqa o'xshab qoladi.
+    var speed = (c.motion === 'fly' ? c.beat * 1.7 : c.beat)
       * (0.5 + 0.7 * (c.gas || 1));
-    var maxAmp = dh * (c.motion === 'fly' ? 0.05 : 0.07)
+    // Kuch: katta tana keng, mayda tana tor uradi. `wave` cho'ziqlikdan
+    // keladi — dumaloq tanada to'lqin deyarli yo'q.
+    var maxAmp = dh * (c.motion === 'fly' ? 0.05 : 0.075)
+      * c.wave * Math.pow(c.bulk, 0.35)
       * (0.6 + 0.5 * clamp(c.gas || 1, 0, 2));
 
     for (var i = 0; i < n; i++) {

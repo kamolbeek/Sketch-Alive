@@ -166,7 +166,8 @@ canvas { display: block; width: 100vw; height: 100vh; }
               url: f.type === 'creature'
                 ? (f.url || '/assets/creatures/' + f.creature + '.svg')
                 : window.Tank.api + '/fish/' + f.id + '/texture.png',
-              flip: !!f.flip
+              flip: !!f.flip,
+              scale: f.type === 'creature' ? (scaleById[f.creature] || 1) : 1
             };
           });
         eng.setCharacters(chars);
@@ -276,10 +277,23 @@ canvas { display: block; width: 100vw; height: 100vh; }
   var picker = document.getElementById('picker');
   var creatures = null;
 
+  // Turlarning tabiiy o'lchamlari. Ular sahnaga darhol kerak — kit
+  // krevetkadan katta bo'lib chiqishi va sekinroq qimirlashi uchun —
+  // shuning uchun ro'yxat tanlash oynasini kutmasdan, boshida so'raladi.
+  var scaleById = {};
+  fetch('/api/creatures')
+    .then(function (r) { return r.json(); })
+    .then(function (list) {
+      if (!Array.isArray(list)) return;
+      creatures = list;
+      list.forEach(function (c) { scaleById[c.id] = c.scale || 1; });
+    })
+    .catch(function () { /* kelmasa hammasi bir xil o'lchamda suzadi */ });
+
   function openPicker() {
     panel.classList.remove('open');
     picker.classList.add('open');
-    if (creatures) return;
+    if (creatures) { paintPicker(); return; }
     fetch('/api/creatures')
       .then(function (r) { return r.json(); })
       .then(function (list) {

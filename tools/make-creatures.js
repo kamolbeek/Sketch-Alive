@@ -45,31 +45,35 @@ const OUT = path.join(ROOT, 'assets', 'creatures');
 // ── turlar ─────────────────────────────────────────────────────────────────
 //
 // `flip` — manba rasm chapga qaraydimi.
+// `scale` — jonivorning tabiiy o'lchami. Ekranda kit bilan krevetka bir xil
+// kattalikda suzsa, sahna o'yinchoqqa o'xshaydi; bundan tashqari o'lcham
+// harakatni ham belgilaydi — katta tana dumini sekin va kuchli uradi,
+// maydasi tez-tez qimirlaydi (assets/alive2d.js).
 // `nick` — jonivorning ismi. Bolalar «bu Otabek baliq» deb eslab qolishadi,
 // quruq «masxaraboz baliq»dan ko'ra bu yaxshiroq yopishadi; ism chop
 // etiladigan varaqda ham turadi.
 
 const SPECIES = [
-  { id: 'clownfish',  flip: true,  nick: 'Otabek',  titles: { uz: 'Masxaraboz baliq', ru: 'Рыба-клоун', en: 'Clownfish' } },
-  { id: 'fish',       flip: true,  nick: 'Sardor',  titles: { uz: 'Baliq', ru: 'Рыбка', en: 'Fish' } },
-  { id: 'pufferfish', flip: true,  nick: 'Anvar',   titles: { uz: 'Kirpi baliq', ru: 'Рыба-ёж', en: 'Pufferfish' } },
-  { id: 'shark',      flip: true,  nick: 'Bahodir', titles: { uz: 'Akula', ru: 'Акула', en: 'Shark' } },
-  { id: 'dolphin',    flip: true,  nick: 'Dilnoza', titles: { uz: 'Delfin', ru: 'Дельфин', en: 'Dolphin' } },
-  { id: 'whale',      flip: true,  nick: 'Bekzod',  titles: { uz: 'Kit', ru: 'Кит', en: 'Whale' } },
-  { id: 'bluewhale',  flip: true,  nick: 'Rustam',  titles: { uz: 'Ko‘k kit', ru: 'Синий кит', en: 'Blue whale' } },
-  { id: 'octopus',    flip: false, nick: 'Sakkiz',  titles: { uz: 'Sakkizoyoq', ru: 'Осьминог', en: 'Octopus' } },
-  { id: 'squid',      flip: false, nick: 'Kamol',   titles: { uz: 'Kalmar', ru: 'Кальмар', en: 'Squid' } },
-  { id: 'shrimp',     flip: true,  nick: 'Nodira',  titles: { uz: 'Krevetka', ru: 'Креветка', en: 'Shrimp' } },
-  { id: 'lobster',    flip: false, nick: 'Temur',   titles: { uz: 'Omar', ru: 'Омар', en: 'Lobster' } },
-  { id: 'crab',       flip: false, nick: 'Qisqich', titles: { uz: 'Qisqichbaqa', ru: 'Краб', en: 'Crab' } },
-  { id: 'shell',      flip: false, nick: 'Sadaf',   titles: { uz: 'Chig‘anoq', ru: 'Ракушка', en: 'Shell' } },
-  { id: 'turtle',     flip: true,  nick: 'Toshbo‘', titles: { uz: 'Toshbaqa', ru: 'Черепаха', en: 'Turtle' } },
-  { id: 'jellyfish',  flip: false, nick: 'Malika',  titles: { uz: 'Meduza', ru: 'Медуза', en: 'Jellyfish' } },
-  { id: 'seal',       flip: true,  nick: 'Zilola',  titles: { uz: 'Tyulen', ru: 'Тюлень', en: 'Seal' } },
-  { id: 'crocodile',  flip: true,  nick: 'Alisher', titles: { uz: 'Timsoh', ru: 'Крокодил', en: 'Crocodile' } },
-  { id: 'otter',      flip: true,  nick: 'Doston',  titles: { uz: 'Suvsar', ru: 'Выдра', en: 'Otter' } },
-  { id: 'penguin',    flip: false, nick: 'Jasur',   titles: { uz: 'Pingvin', ru: 'Пингвин', en: 'Penguin' } },
-  { id: 'coral',      flip: false, nick: 'Marjon',  titles: { uz: 'Marjon', ru: 'Коралл', en: 'Coral' } }
+  { id: 'clownfish',  scale: 0.70, flip: true,  nick: 'Otabek',  titles: { uz: 'Masxaraboz baliq', ru: 'Рыба-клоун', en: 'Clownfish' } },
+  { id: 'fish',       scale: 0.65, flip: true,  nick: 'Sardor',  titles: { uz: 'Baliq', ru: 'Рыбка', en: 'Fish' } },
+  { id: 'pufferfish', scale: 0.85, flip: true,  nick: 'Anvar',   titles: { uz: 'Kirpi baliq', ru: 'Рыба-ёж', en: 'Pufferfish' } },
+  { id: 'shark',      scale: 1.70, flip: true,  nick: 'Bahodir', titles: { uz: 'Akula', ru: 'Акула', en: 'Shark' } },
+  { id: 'dolphin',    scale: 1.50, flip: true,  nick: 'Dilnoza', titles: { uz: 'Delfin', ru: 'Дельфин', en: 'Dolphin' } },
+  { id: 'whale',      scale: 1.85, flip: true,  nick: 'Bekzod',  titles: { uz: 'Kit', ru: 'Кит', en: 'Whale' } },
+  { id: 'bluewhale',  scale: 2.10, flip: true,  nick: 'Rustam',  titles: { uz: 'Ko‘k kit', ru: 'Синий кит', en: 'Blue whale' } },
+  { id: 'octopus',    scale: 1.15, flip: false, nick: 'Sakkiz',  titles: { uz: 'Sakkizoyoq', ru: 'Осьминог', en: 'Octopus' } },
+  { id: 'squid',      scale: 1.05, flip: false, nick: 'Kamol',   titles: { uz: 'Kalmar', ru: 'Кальмар', en: 'Squid' } },
+  { id: 'shrimp',     scale: 0.45, flip: true,  nick: 'Nodira',  titles: { uz: 'Krevetka', ru: 'Креветка', en: 'Shrimp' } },
+  { id: 'lobster',    scale: 0.80, flip: false, nick: 'Temur',   titles: { uz: 'Omar', ru: 'Омар', en: 'Lobster' } },
+  { id: 'crab',       scale: 0.85, flip: false, nick: 'Qisqich', titles: { uz: 'Qisqichbaqa', ru: 'Краб', en: 'Crab' } },
+  { id: 'shell',      scale: 0.40, flip: false, nick: 'Sadaf',   titles: { uz: 'Chig‘anoq', ru: 'Ракушка', en: 'Shell' } },
+  { id: 'turtle',     scale: 1.15, flip: true,  nick: 'Toshbo‘', titles: { uz: 'Toshbaqa', ru: 'Черепаха', en: 'Turtle' } },
+  { id: 'jellyfish',  scale: 0.95, flip: false, nick: 'Malika',  titles: { uz: 'Meduza', ru: 'Медуза', en: 'Jellyfish' } },
+  { id: 'seal',       scale: 1.35, flip: true,  nick: 'Zilola',  titles: { uz: 'Tyulen', ru: 'Тюлень', en: 'Seal' } },
+  { id: 'crocodile',  scale: 1.55, flip: true,  nick: 'Alisher', titles: { uz: 'Timsoh', ru: 'Крокодил', en: 'Crocodile' } },
+  { id: 'otter',      scale: 1.05, flip: true,  nick: 'Doston',  titles: { uz: 'Suvsar', ru: 'Выдра', en: 'Otter' } },
+  { id: 'penguin',    scale: 1.00, flip: false, nick: 'Jasur',   titles: { uz: 'Pingvin', ru: 'Пингвин', en: 'Penguin' } },
+  { id: 'coral',      scale: 1.20, flip: false, nick: 'Marjon',  titles: { uz: 'Marjon', ru: 'Коралл', en: 'Coral' } }
 ];
 
 // ── manba SVG'ni qismlarga ajratish ────────────────────────────────────────
@@ -158,6 +162,7 @@ for (const sp of SPECIES) {
   manifest.creatures.push({
     id: sp.id,
     scene: 'aquarium',
+    scale: sp.scale || 1,
     nick: sp.nick,
     titles: sp.titles,
     url: '/assets/creatures/' + sp.id + '.svg'

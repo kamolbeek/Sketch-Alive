@@ -5,6 +5,7 @@
   {
    "id": "clownfish",
    "scene": "aquarium",
+   "scale": 0.7,
    "nick": "Otabek",
    "titles": {
     "uz": "Masxaraboz baliq",
@@ -16,6 +17,7 @@
   {
    "id": "fish",
    "scene": "aquarium",
+   "scale": 0.65,
    "nick": "Sardor",
    "titles": {
     "uz": "Baliq",
@@ -27,6 +29,7 @@
   {
    "id": "pufferfish",
    "scene": "aquarium",
+   "scale": 0.85,
    "nick": "Anvar",
    "titles": {
     "uz": "Kirpi baliq",
@@ -38,6 +41,7 @@
   {
    "id": "shark",
    "scene": "aquarium",
+   "scale": 1.7,
    "nick": "Bahodir",
    "titles": {
     "uz": "Akula",
@@ -49,6 +53,7 @@
   {
    "id": "dolphin",
    "scene": "aquarium",
+   "scale": 1.5,
    "nick": "Dilnoza",
    "titles": {
     "uz": "Delfin",
@@ -60,6 +65,7 @@
   {
    "id": "whale",
    "scene": "aquarium",
+   "scale": 1.85,
    "nick": "Bekzod",
    "titles": {
     "uz": "Kit",
@@ -71,6 +77,7 @@
   {
    "id": "bluewhale",
    "scene": "aquarium",
+   "scale": 2.1,
    "nick": "Rustam",
    "titles": {
     "uz": "Ko‘k kit",
@@ -82,6 +89,7 @@
   {
    "id": "octopus",
    "scene": "aquarium",
+   "scale": 1.15,
    "nick": "Sakkiz",
    "titles": {
     "uz": "Sakkizoyoq",
@@ -93,6 +101,7 @@
   {
    "id": "squid",
    "scene": "aquarium",
+   "scale": 1.05,
    "nick": "Kamol",
    "titles": {
     "uz": "Kalmar",
@@ -104,6 +113,7 @@
   {
    "id": "shrimp",
    "scene": "aquarium",
+   "scale": 0.45,
    "nick": "Nodira",
    "titles": {
     "uz": "Krevetka",
@@ -115,6 +125,7 @@
   {
    "id": "lobster",
    "scene": "aquarium",
+   "scale": 0.8,
    "nick": "Temur",
    "titles": {
     "uz": "Omar",
@@ -126,6 +137,7 @@
   {
    "id": "crab",
    "scene": "aquarium",
+   "scale": 0.85,
    "nick": "Qisqich",
    "titles": {
     "uz": "Qisqichbaqa",
@@ -137,6 +149,7 @@
   {
    "id": "shell",
    "scene": "aquarium",
+   "scale": 0.4,
    "nick": "Sadaf",
    "titles": {
     "uz": "Chig‘anoq",
@@ -148,6 +161,7 @@
   {
    "id": "turtle",
    "scene": "aquarium",
+   "scale": 1.15,
    "nick": "Toshbo‘",
    "titles": {
     "uz": "Toshbaqa",
@@ -159,6 +173,7 @@
   {
    "id": "jellyfish",
    "scene": "aquarium",
+   "scale": 0.95,
    "nick": "Malika",
    "titles": {
     "uz": "Meduza",
@@ -170,6 +185,7 @@
   {
    "id": "seal",
    "scene": "aquarium",
+   "scale": 1.35,
    "nick": "Zilola",
    "titles": {
     "uz": "Tyulen",
@@ -181,6 +197,7 @@
   {
    "id": "crocodile",
    "scene": "aquarium",
+   "scale": 1.55,
    "nick": "Alisher",
    "titles": {
     "uz": "Timsoh",
@@ -192,6 +209,7 @@
   {
    "id": "otter",
    "scene": "aquarium",
+   "scale": 1.05,
    "nick": "Doston",
    "titles": {
     "uz": "Suvsar",
@@ -203,6 +221,7 @@
   {
    "id": "penguin",
    "scene": "aquarium",
+   "scale": 1,
    "nick": "Jasur",
    "titles": {
     "uz": "Pingvin",
@@ -214,6 +233,7 @@
   {
    "id": "coral",
    "scene": "aquarium",
+   "scale": 1.2,
    "nick": "Marjon",
    "titles": {
     "uz": "Marjon",

@@ -64,6 +64,27 @@ Har bir sahna personaj o‘zini qanday tutishini belgilaydi:
 Sahna istalgan payt almashtiriladi va bolalarning rasmlari yo‘qolmaydi —
 ular yangi sahnada boshqacha harakatlanadi.
 
+## Harakat
+
+Hamma personaj bir xil qimirlasa, ekran mexanik ko‘rinadi. Shuning uchun
+harakat ikki narsadan yig‘iladi.
+
+**Tanadan.** Rasmdagi jonivorning haqiqiy chegarasi o‘lchanadi (fayl
+chegarasi emas — Twemoji kvadrat, jonivor esa uning bir qismini egallaydi).
+Undan o‘lcham va cho‘ziqlik chiqadi, ular esa harakatni belgilaydi: katta
+tana dumini **sekin, lekin keng** uradi, mayda baliq **tez-tez va mayda**
+qimirlaydi, uzun yassi tana bo‘ylab to‘lqin uzoq yuradi, dumaloq tanada
+(meduza, qisqichbaqa) deyarli yo‘q.
+
+**Tabiatdan.** Har bir personajga tug‘ilganda beshta tabiatdan bittasi
+tegadi va u o‘zgarmaydi: kimdir shoshmasdan kesib o‘tadi, kimdir joyida
+aylanadi, kimdir to‘xtab-to‘xtab qaraydi. Tabiat qaysi harakat qanchalik
+tez-tez uchrashini belgilaydi — aylanish, otilish, to‘xtash yoki oddiy
+suzish.
+
+Natijada yigirmata baliqning yigirmatasi ham boshqacha yuradi, lekin har
+biri o‘ziga izchil qoladi.
+
 ## Bog‘chada sinab ko‘rish
 
 Birinchi sinov uchun bosqichma-bosqich yo‘riqnoma —
