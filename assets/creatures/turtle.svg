@@ -1,27 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 154" width="648" height="462">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="432" height="432">
 <title>Turtle</title>
-<defs><clipPath id="c"><path d="M42,76 C42,40 76,22 116,22 C156,22 186,40 186,76 C186,112 156,130 116,130 C76,130 42,112 42,76 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#79a586"/><stop offset="0.45" stop-color="#3f7f52"/><stop offset="1" stop-color="#2c5939"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="10.8"/></filter></defs>
-<path d="M62,34 C40,14 20,14 14,26 C22,38 40,46 58,48 Z" fill="#4f8f4a"/>
-      <path d="M62,118 C40,138 20,138 14,126 C22,114 40,106 58,104 Z" fill="#4f8f4a"/>
-      <path d="M160,34 C180,18 198,20 202,32 C194,42 178,48 162,48 Z" fill="#4f8f4a"/>
-      <path d="M160,118 C180,134 198,132 202,120 C194,110 178,104 162,104 Z" fill="#4f8f4a"/>
-      <path d="M170,76 C170,58 186,46 200,48 C212,50 214,66 208,78 C202,92 186,96 176,92 Z" fill="#5aa254"/>
-      <path d="M42,76 C42,40 76,22 116,22 C156,22 186,40 186,76 C186,112 156,130 116,130 C76,130 42,112 42,76 Z" fill="url(#vol)"/>
-      <g clip-path="url(#c)">
-        <g fill="none" stroke="#2c5f3c" stroke-width="5" opacity=".8">
-          <path d="M74,22 L74,130 M116,20 L116,132 M158,22 L158,130"/>
-          <path d="M42,54 L186,54 M42,98 L186,98"/>
-        </g>
-        <ellipse cx="116" cy="76" rx="26" ry="18" fill="#4f9463"/>
-      </g>
-      <circle cx="198" cy="62" r="7" fill="#fff"/><circle cx="199.26" cy="62" r="3.36" fill="#17202a"/><circle cx="198.14" cy="59.62" r="1.33" fill="#fff"/>
-<g clip-path="url(#c)">
-  <path d="M42,76 C42,40 76,22 116,22 C156,22 186,40 186,76 C186,112 156,130 116,130 C76,130 42,112 42,76 Z" fill="none" stroke="#ffffff" stroke-width="8.5" opacity=".28"/>
-  <ellipse cx="99" cy="40"
-           rx="65" ry="23"
-           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
-  <ellipse cx="108" cy="163"
-           rx="134" ry="52"
-           fill="#1c3925" opacity=".42" filter="url(#soft)"/>
+<defs>
+  <g id="sa-art" transform="translate(36,0) scale(-1,1)">
+<path fill="#77B255" d="M9.842 19.922c0 9.842 6.575 9.673 5.158 10.078-7 2-8.803-7.618-9.464-7.618-2.378 0-5.536-.423-5.536-2.46C0 17.883 2.46 15 6.151 15c2.379 0 3.691 2.883 3.691 4.922zM36 28.638c0 1.104-3.518-.741-5 0-2 1-2-.896-2-2s1.343-1 3-1 4 1.895 4 3z"/><path fill="#77B255" d="M16.715 33.143c0 2.761-1.279 2.857-2.857 2.857S11 35.903 11 33.143c0-.489.085-1.029.234-1.587.69-2.59 2.754-5.556 4.052-5.556 1.578 0 1.429 4.382 1.429 7.143zm8.571 0c0 2.761 1.278 2.857 2.856 2.857C29.721 36 31 35.903 31 33.143a6.26 6.26 0 0 0-.234-1.587C30.075 28.966 28.012 26 26.714 26c-1.578 0-1.428 4.382-1.428 7.143z"/><path fill="#3E721D" d="M32 27c0 4-5.149 4-11.5 4S9 31 9 27c0-6.627 5.149-12 11.5-12S32 20.373 32 27z"/><circle cx="5" cy="18" r="1" fill="#292F33"/><path fill="#5C913B" d="M23.667 25.1c0 3.591-1.418 3.9-3.167 3.9s-3.167-.31-3.167-3.9S18.75 17 20.5 17s3.167 4.51 3.167 8.1zM30 24c.871 3.482-.784 4-2.533 4-1.749 0-2.533.69-2.533-2.9s-1.116-6.5.633-6.5C27.315 18.6 29 20 30 24zm-13.933 1.1c0 3.591-.785 2.9-2.534 2.9s-3.404-.518-2.533-4c1-4 3.251-5.4 5-5.4 1.75 0 .067 2.91.067 6.5z"/>
+  </g>
+  <filter id="sa-alpha">
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/>
+  </filter>
+  <filter id="sa-soft" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="4.32"/>
+  </filter>
+  <mask id="sa-mask">
+    <g filter="url(#sa-alpha)"><use href="#sa-art"/></g>
+  </mask>
+  <linearGradient id="sa-vol" x1="0.2" y1="0" x2="0.5" y2="1">
+    <stop offset="0"    stop-color="#ffffff" stop-opacity="0.34"/>
+    <stop offset="0.42" stop-color="#ffffff" stop-opacity="0"/>
+    <stop offset="0.68" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="1"    stop-color="#000000" stop-opacity="0.34"/>
+  </linearGradient>
+</defs>
+<use href="#sa-art"/>
+<g mask="url(#sa-mask)">
+  <rect x="0" y="0" width="36" height="36" fill="url(#sa-vol)"/>
+  <ellipse cx="15.12" cy="10.08"
+           rx="9.36" ry="5.76"
+           fill="#ffffff" opacity="0.22" filter="url(#sa-soft)"/>
 </g>
 </svg>

@@ -1,27 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 244 158" width="732" height="474">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="432" height="432">
 <title>Whale</title>
-<defs><clipPath id="c"><path d="M44,90 C44,54 88,34 140,34 C192,34 228,58 234,90 C228,122 192,140 140,140 C88,140 44,126 44,90 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#77a1c4"/><stop offset="0.45" stop-color="#3d78ab"/><stop offset="1" stop-color="#2b5478"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="11.1"/></filter></defs>
-<path d="M52,90 L6,36 Q28,90 6,144 Z" fill="#2f5f8a"/>
-      <path d="M138,38 C150,10 174,4 184,14 L172,42 Z" fill="#2f5f8a"/>
-      <path d="M96,130 C90,150 74,158 62,154 L80,126 Z" fill="#2f5f8a"/>
-      <path d="M44,90 C44,54 88,34 140,34 C192,34 228,58 234,90 C228,122 192,140 140,140 C88,140 44,126 44,90 Z" fill="url(#vol)"/>
-      <g clip-path="url(#c)">
-        <path d="M44,100 C110,124 190,120 234,96 L234,158 L44,158 Z" fill="#e3edf5"/>
-        <g stroke="#2f5f8a" stroke-width="4" opacity=".45" fill="none">
-          <path d="M120,110 L234,104 M120,122 L226,116 M124,134 L212,128"/>
-        </g>
-      </g>
-      <path d="M186,36 C186,18 176,6 168,2 C180,4 196,16 200,34 Z" fill="#cfe6f5" opacity=".8"/>
-      <path d="M196,36 C200,18 212,8 222,6 C212,14 206,26 206,38 Z" fill="#cfe6f5" opacity=".8"/>
-      <circle cx="200" cy="76" r="9" fill="#fff"/><circle cx="201.62" cy="76" r="4.32" fill="#17202a"/><circle cx="200.18" cy="72.94" r="1.71" fill="#fff"/>
-      <path d="M198,98 q8,5.44 16,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
-<g clip-path="url(#c)">
-  <path d="M44,90 C44,54 88,34 140,34 C192,34 228,58 234,90 C228,122 192,140 140,140 C88,140 44,126 44,90 Z" fill="none" stroke="#ffffff" stroke-width="8.7" opacity=".28"/>
-  <ellipse cx="112" cy="41"
-           rx="73" ry="24"
-           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
-  <ellipse cx="122" cy="167"
-           rx="151" ry="54"
-           fill="#1b364d" opacity=".42" filter="url(#soft)"/>
+<defs>
+  <g id="sa-art" transform="translate(36,0) scale(-1,1)">
+<path fill="#3B88C3" d="M32 12c2.122-2.122 5 14.312-3 21-2.757 2.305-6 2.969-8 2.969-2.371 0-10.029.031-13 .031-7.18 0-8-4.925-8-11s.82-11 8-11c6 0 10 2 13 3.996 4.977 3.312 5.992 3.861 8 2.004 3.213-2.97 1-6 3-8z"/><path fill="#55ACEE" d="M34.003 23c-.465 3.727-2.041 7.523-5.003 10-2.757 2.305-6 2.969-8 2.969-2.371 0-10.029.031-13 .031-4.035 0-6.062-1.555-7.062-3.996C.157 30.102 4 33 15 33c14 0 17-5 19.003-10z"/><path fill="#3B88C3" d="M32 14c4.123 0 4-5 4-7s-2 1-5 2-7-2-6 0 3 5 7 5z"/><path fill="#55ACEE" d="M10 7c0 2.209-.896 6-2 6S6 9.209 6 7s.896-2 2-2 2-.209 2 2z"/><path fill="#55ACEE" d="M8 5c0-3-6-2-6 0s3 1 4 3 2-3 2-3zm0 0c0-3 6-2 6 0s-3 1-4 3-2-3-2-3z"/><circle cx="6.5" cy="25.5" r="1.5" fill="#292F33"/>
+  </g>
+  <filter id="sa-alpha">
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/>
+  </filter>
+  <filter id="sa-soft" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="4.32"/>
+  </filter>
+  <mask id="sa-mask">
+    <g filter="url(#sa-alpha)"><use href="#sa-art"/></g>
+  </mask>
+  <linearGradient id="sa-vol" x1="0.2" y1="0" x2="0.5" y2="1">
+    <stop offset="0"    stop-color="#ffffff" stop-opacity="0.34"/>
+    <stop offset="0.42" stop-color="#ffffff" stop-opacity="0"/>
+    <stop offset="0.68" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="1"    stop-color="#000000" stop-opacity="0.34"/>
+  </linearGradient>
+</defs>
+<use href="#sa-art"/>
+<g mask="url(#sa-mask)">
+  <rect x="0" y="0" width="36" height="36" fill="url(#sa-vol)"/>
+  <ellipse cx="15.12" cy="10.08"
+           rx="9.36" ry="5.76"
+           fill="#ffffff" opacity="0.22" filter="url(#sa-soft)"/>
 </g>
 </svg>

@@ -31,19 +31,23 @@ chiziladi, bironta ham fayl yuklab olinmaydi.
 
 ## Tayyor jonivorlar
 
-Sahna bo'sh ochilmasligi uchun loyihada **20 ta tayyor dengiz jonivori**
-bor: masxaraboz baliq, ko'k tang, farishta baliq, kapalak baliq, dengiz oti,
-toshbaqa, meduza, sakkizoyoq, qisqichbaqa, dengiz yulduzi, kirpi baliq,
-akula, delfin, kit, skat, murena, koi, oltin baliq, krevetka va dengiz
-shilliqqurti.
+Sahna bo‘sh ochilmasligi uchun loyihada **20 ta tayyor dengiz jonivori**
+bor: baliq, masxaraboz baliq, kirpi baliq, akula, delfin, kit, ko‘k kit,
+sakkizoyoq, kalmar, krevetka, omar, qisqichbaqa, chig‘anoq, toshbaqa,
+meduza, tyulen, timsoh, suvsar, pingvin va marjon.
 
-Ular SVG — jami 100 KB ga yetmaydi, 4K televizorda ham donadorlashmaydi va
-o'zimizniki, ya'ni hech qanday litsenziya cheklovi yo'q. Sahnada
-«Tayyor jonivorlar» tugmasi orqali qo'yib yuboriladi.
+Rasmlarni biz chizmaymiz — ular **Twemoji** to‘plamidan (CC-BY 4.0),
+professional dizaynerlar ishi. `tools/make-creatures.js` ularni o‘ngga
+qaratadi va ustiga hajm qatlami — yorug‘lik va soya — qo‘shadi, shunda
+tekis emoji televizor ekranida hajmli ko‘rinadi. Mualliflik va litsenziya:
+[NOTICE.md](NOTICE.md).
 
-Shakl yoki rangni o'zgartirish kerak bo'lsa `tools/make-creatures.js` ni
-tahrirlab, qayta ishga tushiring; hammasini yonma-yon ko'rish uchun —
-`/tools/creature-sheet.html`.
+Har birining **ismi** ham bor — Otabek, Dilnoza, Bahodir. Bolalar «bu
+Otabek baliq» deb eslab qolishadi, quruq tur nomidan ko‘ra bu yaxshiroq
+yopishadi.
+
+Sahnada «Tayyor jonivorlar» tugmasi orqali qo‘yib yuboriladi. Hammasini
+yonma-yon ko‘rish uchun — `/tools/creature-sheet.html`.
 
 ## Sahnalar
 

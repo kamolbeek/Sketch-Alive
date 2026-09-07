@@ -1,31 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 132" width="756" height="396">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="432" height="432">
 <title>Shark</title>
-<defs><clipPath id="c"><path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#a4b3bf"/><stop offset="0.45" stop-color="#7d93a4"/><stop offset="1" stop-color="#586773"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9.2"/></filter></defs>
-<path d="M44,70 L6,20 Q26,70 6,120 Z" fill="#5f7484"/>
-      <path d="M110,30 C122,2 142,-4 152,4 L146,34 Z" fill="#5f7484"/>
-      <path d="M96,108 C92,126 80,134 70,132 L82,104 Z" fill="#5f7484"/>
-      <path d="M160,108 C164,124 178,130 188,126 L176,104 Z" fill="#5f7484"/>
-      <path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z" fill="url(#vol)"/>
-      <g clip-path="url(#c)">
-        <path d="M40,86 C90,102 180,104 240,86 L240,132 L40,132 Z" fill="#e6edf2"/>
-      </g>
-      <path d="M196,88 C210,86 226,82 236,78 C226,90 210,94 198,94 Z" fill="#fff"/>
-      <g fill="#7d93a4">
-        <path d="M204,86 L208,93 L200,93 Z"/><path d="M214,84 L218,91 L210,91 Z"/>
-        <path d="M224,81 L228,88 L220,88 Z"/>
-      </g>
-      <g stroke="#5f7484" stroke-width="3" opacity=".6" fill="none">
-        <path d="M170,44 C176,54 176,68 170,78"/>
-        <path d="M182,46 C188,56 188,68 182,76"/>
-      </g>
-      <circle cx="206" cy="60" r="9" fill="#fff"/><circle cx="207.62" cy="60" r="4.32" fill="#17202a"/><circle cx="206.18" cy="56.94" r="1.71" fill="#fff"/>
-<g clip-path="url(#c)">
-  <path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z" fill="none" stroke="#ffffff" stroke-width="7.3" opacity=".28"/>
-  <ellipse cx="116" cy="34"
-           rx="76" ry="20"
-           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
-  <ellipse cx="126" cy="140"
-           rx="156" ry="45"
-           fill="#38424a" opacity=".42" filter="url(#soft)"/>
+<defs>
+  <g id="sa-art" transform="translate(36,0) scale(-1,1)">
+<path fill="#66757F" d="M36 21c0 5-3 9-11 11-7.062 1.766-21-.934-21-2 0-1.129 2.503-1.371 6.812-1.125 10.938.625 13.75-3.857 12-5.25-3.062-2.437-6.437.375-12.062-.125C3.782 22.881 0 17.472 0 16c0-2 11.716-8 20-8s16 4.25 16 13z"/><path fill="#292F33" d="M15 12.5a1.5 1.5 0 1 1-3 0c0-.829.671-.5 1.5-.5s1.5-.329 1.5.5z"/><path fill="#66757F" d="M14 9c2-5 5.291-9 7.958-9S21 2 26 10 14 9 14 9zM3 30c0-4-1.04-6 .146-6s6.011 4.031 6.011 6.24c0 2.209-4.826 5.76-6.011 5.76C1.96 36 3 34 3 30z"/><path fill="#292F33" d="m26.921 22.5 7.996 7.5s-3.242 1.833-7.996-7.5z"/><path fill="#66757F" d="m26.921 22.5 5.537-3.833S36.333 28.584 34.917 30c-2.583-1-7.996-7.5-7.996-7.5z"/><path fill="#FFF" d="M9 20.307c0 .493-.508 2.673-1 2.673s-1-2.18-1-2.673v-1.779c0-.493.508.889 1 .889s1-1.382 1-.889v1.779zm3 0c0 .493-.508 2.673-1 2.673s-1-2.18-1-2.673v-1.779c0-.493.508.889 1 .889s1-1.382 1-.889v1.779zm3-1c0 .493-.508 2.673-1 2.673s-1-2.18-1-2.673v-1.779c0-.493.508.889 1 .889s1-1.382 1-.889v1.779zm3 0c0 .493-.508 2.673-1 2.673s-1-2.18-1-2.673v-1.779c0-.493.508.889 1 .889s1-1.382 1-.889v1.779z"/><path fill="#66757F" d="m6 20 7-1h6v-2H6z"/><path fill="#292F33" d="M18.417 19.167c-4-2.083-13.385-.011-14.917 1.513.469.36.988.707 1.547 1.028 6.109-3.281 14.082-2.169 13.37-2.541z"/>
+  </g>
+  <filter id="sa-alpha">
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/>
+  </filter>
+  <filter id="sa-soft" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="4.32"/>
+  </filter>
+  <mask id="sa-mask">
+    <g filter="url(#sa-alpha)"><use href="#sa-art"/></g>
+  </mask>
+  <linearGradient id="sa-vol" x1="0.2" y1="0" x2="0.5" y2="1">
+    <stop offset="0"    stop-color="#ffffff" stop-opacity="0.34"/>
+    <stop offset="0.42" stop-color="#ffffff" stop-opacity="0"/>
+    <stop offset="0.68" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="1"    stop-color="#000000" stop-opacity="0.34"/>
+  </linearGradient>
+</defs>
+<use href="#sa-art"/>
+<g mask="url(#sa-mask)">
+  <rect x="0" y="0" width="36" height="36" fill="url(#sa-vol)"/>
+  <ellipse cx="15.12" cy="10.08"
+           rx="9.36" ry="5.76"
+           fill="#ffffff" opacity="0.22" filter="url(#sa-soft)"/>
 </g>
 </svg>

@@ -1,27 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 132" width="660" height="396">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="432" height="432">
 <title>Clownfish</title>
-<defs><clipPath id="c"><path d="M56,66 C56,34 92,16 136,18 C178,20 206,42 212,66 C206,90 178,112 136,114 C92,116 56,98 56,66 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#f8a86d"/><stop offset="0.45" stop-color="#f5822f"/><stop offset="1" stop-color="#ac5b21"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9.2"/></filter></defs>
-<path d="M60,66 L12,18 Q28,66 12,114 Z" fill="#d8551a"/>
-      <path d="M96,28 C118,6 152,8 162,22 L146,40 Z" fill="#d8551a"/>
-      <path d="M104,106 C124,126 152,124 160,112 L142,94 Z" fill="#d8551a"/>
-      <path d="M56,66 C56,34 92,16 136,18 C178,20 206,42 212,66 C206,90 178,112 136,114 C92,116 56,98 56,66 Z" fill="url(#vol)"/>
-      <g clip-path="url(#c)">
-        <path d="M60,0 L90,0 L76,132 L46,132 Z" fill="#1b232c"/>
-        <path d="M66,0 L85,0 L71,132 L52,132 Z" fill="#ffffff"/>
-        <path d="M118,0 L148,0 L136,132 L106,132 Z" fill="#1b232c"/>
-        <path d="M124,0 L143,0 L131,132 L112,132 Z" fill="#ffffff"/>
-        <path d="M164,0 L188,0 L180,132 L156,132 Z" fill="#1b232c"/>
-        <path d="M169,0 L183,0 L175,132 L161,132 Z" fill="#ffffff"/>
-      </g>
-      <circle cx="197" cy="57" r="9" fill="#fff"/><circle cx="198.62" cy="57" r="4.32" fill="#17202a"/><circle cx="197.18" cy="53.94" r="1.71" fill="#fff"/>
-      <path d="M200,78 q6,4.08 12,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
-<g clip-path="url(#c)">
-  <path d="M56,66 C56,34 92,16 136,18 C178,20 206,42 212,66 C206,90 178,112 136,114 C92,116 56,98 56,66 Z" fill="none" stroke="#ffffff" stroke-width="7.3" opacity=".28"/>
-  <ellipse cx="101" cy="34"
-           rx="66" ry="20"
-           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
-  <ellipse cx="110" cy="140"
-           rx="136" ry="45"
-           fill="#6e3b15" opacity=".42" filter="url(#soft)"/>
+<defs>
+  <g id="sa-art" transform="translate(36,0) scale(-1,1)">
+<path fill="#FFAC33" d="M8.231 10c6-8 14-10 18-10 1 0 1 1 0 1s-6 2-7 9-11 0-11 0zm-1 18c4 3 13 8 18 8 3 0 2-1 1-1s-9-3-10-7-9 0-9 0z"/><path fill="#FFCC4D" d="M35 9c-1.611 0-4.059 2.972-5.268 6.294-1.475-5.62-6.166-10.739-12.945-10.739-8.273 0-12.061 10.216-14.524 14.479-.629 1.091-4.091 1.034-.989 3.103-3.103 2.068.449 2.243 1.222 3.103 2.625 2.92 8.997 6.205 14.291 6.205 5.655 0 11.12-3.786 12.863-8.958C30.828 25.896 33.353 29 35 29c2.209 0-2-5.582-2-10s4.209-10 2-10z"/><g fill="#F4900C"><path d="M18.001 17.967a.998.998 0 0 0 .966 1.032l.034.001a1 1 0 0 0 .998-.967c.201-6.065 5.758-8.816 6.35-9.092a13.767 13.767 0 0 0-1.51-1.467c-1.885 1.057-6.634 4.323-6.838 10.493zm5.018-2.163a1 1 0 0 0 1.962.392c.516-2.581 2.296-3.574 3.592-3.956a15.674 15.674 0 0 0-1.028-1.768c-1.877.691-3.908 2.246-4.526 5.332z"/><path d="M13 20a1 1 0 1 0 2 0c0-8.97 5.841-12.544 8.266-13.641a12.403 12.403 0 0 0-2.205-1.067C17.888 7.169 13 11.446 13 20z"/></g><circle cx="9.5" cy="15.5" r="1.5" fill="#292F33"/>
+  </g>
+  <filter id="sa-alpha">
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/>
+  </filter>
+  <filter id="sa-soft" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="4.32"/>
+  </filter>
+  <mask id="sa-mask">
+    <g filter="url(#sa-alpha)"><use href="#sa-art"/></g>
+  </mask>
+  <linearGradient id="sa-vol" x1="0.2" y1="0" x2="0.5" y2="1">
+    <stop offset="0"    stop-color="#ffffff" stop-opacity="0.34"/>
+    <stop offset="0.42" stop-color="#ffffff" stop-opacity="0"/>
+    <stop offset="0.68" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="1"    stop-color="#000000" stop-opacity="0.34"/>
+  </linearGradient>
+</defs>
+<use href="#sa-art"/>
+<g mask="url(#sa-mask)">
+  <rect x="0" y="0" width="36" height="36" fill="url(#sa-vol)"/>
+  <ellipse cx="15.12" cy="10.08"
+           rx="9.36" ry="5.76"
+           fill="#ffffff" opacity="0.22" filter="url(#sa-soft)"/>
 </g>
 </svg>

@@ -1,31 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186 172" width="558" height="516">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="432" height="432">
 <title>Pufferfish</title>
-<defs><clipPath id="c"><path d="M28,86 C28,44 62,18 100,18 C138,18 168,44 168,86 C168,128 138,152 100,152 C62,152 28,128 28,86 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#f3d378"/><stop offset="0.45" stop-color="#eec03e"/><stop offset="1" stop-color="#a7862b"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="12.0"/></filter></defs>
-<path d="M34,86 L4,52 Q16,86 4,120 Z" fill="#c9a02c"/>
-      <g fill="#c9a02c">
-        <path d="M100,18 L108,0 L116,20 Z"/><path d="M60,30 L60,10 L74,26 Z"/>
-        <path d="M140,30 L150,12 L152,32 Z"/><path d="M166,72 L186,64 L172,84 Z"/>
-        <path d="M166,102 L186,108 L170,116 Z"/><path d="M140,142 L150,160 L132,150 Z"/>
-        <path d="M100,152 L106,172 L88,158 Z"/><path d="M60,142 L52,160 L48,140 Z"/>
-        <path d="M32,110 L14,124 L24,102 Z"/><path d="M32,60 L14,48 L26,44 Z"/>
-      </g>
-      <path d="M28,86 C28,44 62,18 100,18 C138,18 168,44 168,86 C168,128 138,152 100,152 C62,152 28,128 28,86 Z" fill="url(#vol)"/>
-      <g clip-path="url(#c)" opacity=".4">
-        <ellipse cx="100" cy="122" rx="52" ry="24" fill="#fff"/>
-        <circle cx="70" cy="46" r="6" fill="#8a6a10"/>
-        <circle cx="112" cy="40" r="5" fill="#8a6a10"/>
-        <circle cx="140" cy="66" r="5" fill="#8a6a10"/>
-      </g>
-      <circle cx="134" cy="78" r="13" fill="#fff"/><circle cx="136.34" cy="78" r="6.24" fill="#17202a"/><circle cx="134.26" cy="73.58" r="2.47" fill="#fff"/>
-      <circle cx="96" cy="80" r="13" fill="#fff"/><circle cx="98.34" cy="80" r="6.24" fill="#17202a"/><circle cx="96.26" cy="75.58" r="2.47" fill="#fff"/>
-      <path d="M106,108 q11,7.48 22,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
-<g clip-path="url(#c)">
-  <path d="M28,86 C28,44 62,18 100,18 C138,18 168,44 168,86 C168,128 138,152 100,152 C62,152 28,128 28,86 Z" fill="none" stroke="#ffffff" stroke-width="9.5" opacity=".28"/>
-  <ellipse cx="86" cy="45"
-           rx="56" ry="26"
-           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
-  <ellipse cx="93" cy="182"
-           rx="115" ry="58"
-           fill="#6b561c" opacity=".42" filter="url(#soft)"/>
+<defs>
+  <g id="sa-art" transform="translate(36,0) scale(-1,1)">
+<path fill="#D99E82" d="M33 17c.461.184.902 3-1 3-6 0-11 11-20 11S1 18.5 1 16 5.82 6 13 6s15 9 20 11z"/><path fill="#D99E82" d="M3 19c0 .553-.671 1-1.5 1S0 19.553 0 19s0-2 1.5-1c.689.46 1.5.447 1.5 1z"/><path fill="#C1694F" d="M33 17c.461.184.876.688-1 1-6 1-10.045-.896-19 0-10 1-12 1-12-2C1 13.5 5.82 6 13 6s15 9 20 11z"/><path fill="#D99E82" d="M30 17.5c0 2.485 3.343 4.5 5 4.5s0-2.015 0-4.5 1.657-4.5 0-4.5-5 2.015-5 4.5z"/><circle cx="7" cy="13" r="1" fill="#292F33"/><path fill="#D99E82" d="M19.16 25S22 29 24 29s0-5 0-5h-2.84c-3 0-2 1-2 1z"/><path fill="#C1694F" d="M21.351 8.923S24.211 6.106 26 7c4.074 2.036-2 4-2 4l-1.593-.106c-2.993-.201-1.056-1.971-1.056-1.971z"/><circle cx="16" cy="25" r="2" fill="#C1694F"/><circle cx="20" cy="21" r="1" fill="#C1694F"/><circle cx="24.5" cy="20.5" r="1.5" fill="#C1694F"/><circle cx="16.5" cy="14.5" r="1.5" fill="#662113"/><circle cx="23.5" cy="15.5" r="1.5" fill="#662113"/><circle cx="20" cy="11" r="1" fill="#662113"/><path fill="#C1694F" d="M3 17c0 .552 1 2-1.5 1-.77-.308-1.5-.448-1.5-1s.671-1 1.5-1 1.5.448 1.5 1z"/>
+  </g>
+  <filter id="sa-alpha">
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/>
+  </filter>
+  <filter id="sa-soft" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="4.32"/>
+  </filter>
+  <mask id="sa-mask">
+    <g filter="url(#sa-alpha)"><use href="#sa-art"/></g>
+  </mask>
+  <linearGradient id="sa-vol" x1="0.2" y1="0" x2="0.5" y2="1">
+    <stop offset="0"    stop-color="#ffffff" stop-opacity="0.34"/>
+    <stop offset="0.42" stop-color="#ffffff" stop-opacity="0"/>
+    <stop offset="0.68" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="1"    stop-color="#000000" stop-opacity="0.34"/>
+  </linearGradient>
+</defs>
+<use href="#sa-art"/>
+<g mask="url(#sa-mask)">
+  <rect x="0" y="0" width="36" height="36" fill="url(#sa-vol)"/>
+  <ellipse cx="15.12" cy="10.08"
+           rx="9.36" ry="5.76"
+           fill="#ffffff" opacity="0.22" filter="url(#sa-soft)"/>
 </g>
 </svg>

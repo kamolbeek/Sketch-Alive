@@ -1,10 +1,11 @@
 {
- "version": 1,
+ "version": 2,
  "scene": "aquarium",
  "creatures": [
   {
    "id": "clownfish",
    "scene": "aquarium",
+   "nick": "Otabek",
    "titles": {
     "uz": "Masxaraboz baliq",
     "ru": "Рыба-клоун",
@@ -13,98 +14,20 @@
    "url": "/assets/creatures/clownfish.svg"
   },
   {
-   "id": "bluetang",
+   "id": "fish",
    "scene": "aquarium",
+   "nick": "Sardor",
    "titles": {
-    "uz": "Ko‘k tang",
-    "ru": "Голубой хирург",
-    "en": "Blue tang"
+    "uz": "Baliq",
+    "ru": "Рыбка",
+    "en": "Fish"
    },
-   "url": "/assets/creatures/bluetang.svg"
-  },
-  {
-   "id": "angelfish",
-   "scene": "aquarium",
-   "titles": {
-    "uz": "Farishta baliq",
-    "ru": "Скалярия",
-    "en": "Angelfish"
-   },
-   "url": "/assets/creatures/angelfish.svg"
-  },
-  {
-   "id": "butterflyfish",
-   "scene": "aquarium",
-   "titles": {
-    "uz": "Kapalak baliq",
-    "ru": "Рыба-бабочка",
-    "en": "Butterflyfish"
-   },
-   "url": "/assets/creatures/butterflyfish.svg"
-  },
-  {
-   "id": "seahorse",
-   "scene": "aquarium",
-   "titles": {
-    "uz": "Dengiz oti",
-    "ru": "Морской конёк",
-    "en": "Seahorse"
-   },
-   "url": "/assets/creatures/seahorse.svg"
-  },
-  {
-   "id": "turtle",
-   "scene": "aquarium",
-   "titles": {
-    "uz": "Toshbaqa",
-    "ru": "Черепаха",
-    "en": "Turtle"
-   },
-   "url": "/assets/creatures/turtle.svg"
-  },
-  {
-   "id": "jellyfish",
-   "scene": "aquarium",
-   "titles": {
-    "uz": "Meduza",
-    "ru": "Медуза",
-    "en": "Jellyfish"
-   },
-   "url": "/assets/creatures/jellyfish.svg"
-  },
-  {
-   "id": "octopus",
-   "scene": "aquarium",
-   "titles": {
-    "uz": "Sakkizoyoq",
-    "ru": "Осьминог",
-    "en": "Octopus"
-   },
-   "url": "/assets/creatures/octopus.svg"
-  },
-  {
-   "id": "crab",
-   "scene": "aquarium",
-   "titles": {
-    "uz": "Qisqichbaqa",
-    "ru": "Краб",
-    "en": "Crab"
-   },
-   "url": "/assets/creatures/crab.svg"
-  },
-  {
-   "id": "starfish",
-   "scene": "aquarium",
-   "titles": {
-    "uz": "Dengiz yulduzi",
-    "ru": "Морская звезда",
-    "en": "Starfish"
-   },
-   "url": "/assets/creatures/starfish.svg"
+   "url": "/assets/creatures/fish.svg"
   },
   {
    "id": "pufferfish",
    "scene": "aquarium",
+   "nick": "Anvar",
    "titles": {
     "uz": "Kirpi baliq",
     "ru": "Рыба-ёж",
@@ -115,6 +38,7 @@
   {
    "id": "shark",
    "scene": "aquarium",
+   "nick": "Bahodir",
    "titles": {
     "uz": "Akula",
     "ru": "Акула",
@@ -125,6 +49,7 @@
   {
    "id": "dolphin",
    "scene": "aquarium",
+   "nick": "Dilnoza",
    "titles": {
     "uz": "Delfin",
     "ru": "Дельфин",
@@ -135,6 +60,7 @@
   {
    "id": "whale",
    "scene": "aquarium",
+   "nick": "Bekzod",
    "titles": {
     "uz": "Kit",
     "ru": "Кит",
@@ -143,48 +69,42 @@
    "url": "/assets/creatures/whale.svg"
   },
   {
-   "id": "stingray",
+   "id": "bluewhale",
    "scene": "aquarium",
+   "nick": "Rustam",
    "titles": {
-    "uz": "Skat",
-    "ru": "Скат",
-    "en": "Stingray"
+    "uz": "Ko‘k kit",
+    "ru": "Синий кит",
+    "en": "Blue whale"
    },
-   "url": "/assets/creatures/stingray.svg"
+   "url": "/assets/creatures/bluewhale.svg"
   },
   {
-   "id": "moray",
+   "id": "octopus",
    "scene": "aquarium",
+   "nick": "Sakkiz",
    "titles": {
-    "uz": "Murena",
-    "ru": "Мурена",
-    "en": "Moray eel"
+    "uz": "Sakkizoyoq",
+    "ru": "Осьминог",
+    "en": "Octopus"
    },
-   "url": "/assets/creatures/moray.svg"
+   "url": "/assets/creatures/octopus.svg"
   },
   {
-   "id": "koi",
+   "id": "squid",
    "scene": "aquarium",
+   "nick": "Kamol",
    "titles": {
-    "uz": "Koi baliq",
-    "ru": "Карп кои",
-    "en": "Koi carp"
+    "uz": "Kalmar",
+    "ru": "Кальмар",
+    "en": "Squid"
    },
-   "url": "/assets/creatures/koi.svg"
-  },
-  {
-   "id": "goldfish",
-   "scene": "aquarium",
-   "titles": {
-    "uz": "Oltin baliq",
-    "ru": "Золотая рыбка",
-    "en": "Goldfish"
-   },
-   "url": "/assets/creatures/goldfish.svg"
+   "url": "/assets/creatures/squid.svg"
   },
   {
    "id": "shrimp",
    "scene": "aquarium",
+   "nick": "Nodira",
    "titles": {
     "uz": "Krevetka",
     "ru": "Креветка",
@@ -193,14 +113,114 @@
    "url": "/assets/creatures/shrimp.svg"
   },
   {
-   "id": "seasnail",
+   "id": "lobster",
    "scene": "aquarium",
+   "nick": "Temur",
    "titles": {
-    "uz": "Dengiz shilliqqurti",
-    "ru": "Морская улитка",
-    "en": "Sea snail"
+    "uz": "Omar",
+    "ru": "Омар",
+    "en": "Lobster"
    },
-   "url": "/assets/creatures/seasnail.svg"
+   "url": "/assets/creatures/lobster.svg"
+  },
+  {
+   "id": "crab",
+   "scene": "aquarium",
+   "nick": "Qisqich",
+   "titles": {
+    "uz": "Qisqichbaqa",
+    "ru": "Краб",
+    "en": "Crab"
+   },
+   "url": "/assets/creatures/crab.svg"
+  },
+  {
+   "id": "shell",
+   "scene": "aquarium",
+   "nick": "Sadaf",
+   "titles": {
+    "uz": "Chig‘anoq",
+    "ru": "Ракушка",
+    "en": "Shell"
+   },
+   "url": "/assets/creatures/shell.svg"
+  },
+  {
+   "id": "turtle",
+   "scene": "aquarium",
+   "nick": "Toshbo‘",
+   "titles": {
+    "uz": "Toshbaqa",
+    "ru": "Черепаха",
+    "en": "Turtle"
+   },
+   "url": "/assets/creatures/turtle.svg"
+  },
+  {
+   "id": "jellyfish",
+   "scene": "aquarium",
+   "nick": "Malika",
+   "titles": {
+    "uz": "Meduza",
+    "ru": "Медуза",
+    "en": "Jellyfish"
+   },
+   "url": "/assets/creatures/jellyfish.svg"
+  },
+  {
+   "id": "seal",
+   "scene": "aquarium",
+   "nick": "Zilola",
+   "titles": {
+    "uz": "Tyulen",
+    "ru": "Тюлень",
+    "en": "Seal"
+   },
+   "url": "/assets/creatures/seal.svg"
+  },
+  {
+   "id": "crocodile",
+   "scene": "aquarium",
+   "nick": "Alisher",
+   "titles": {
+    "uz": "Timsoh",
+    "ru": "Крокодил",
+    "en": "Crocodile"
+   },
+   "url": "/assets/creatures/crocodile.svg"
+  },
+  {
+   "id": "otter",
+   "scene": "aquarium",
+   "nick": "Doston",
+   "titles": {
+    "uz": "Suvsar",
+    "ru": "Выдра",
+    "en": "Otter"
+   },
+   "url": "/assets/creatures/otter.svg"
+  },
+  {
+   "id": "penguin",
+   "scene": "aquarium",
+   "nick": "Jasur",
+   "titles": {
+    "uz": "Pingvin",
+    "ru": "Пингвин",
+    "en": "Penguin"
+   },
+   "url": "/assets/creatures/penguin.svg"
+  },
+  {
+   "id": "coral",
+   "scene": "aquarium",
+   "nick": "Marjon",
+   "titles": {
+    "uz": "Marjon",
+    "ru": "Коралл",
+    "en": "Coral"
+   },
+   "url": "/assets/creatures/coral.svg"
   }
  ]
 }

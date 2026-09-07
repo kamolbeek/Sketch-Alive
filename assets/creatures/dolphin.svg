@@ -1,22 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 138" width="750" height="414">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="432" height="432">
 <title>Dolphin</title>
-<defs><clipPath id="c"><path d="M40,74 C48,44 88,28 138,30 C180,32 208,44 226,58 C236,66 240,72 246,76 C238,84 216,96 186,102 C140,112 88,110 60,98 C46,92 40,84 40,74 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#85accb"/><stop offset="0.45" stop-color="#5089b4"/><stop offset="1" stop-color="#38607e"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9.7"/></filter></defs>
-<path d="M44,74 L8,26 Q26,74 8,122 Z" fill="#3f6c92"/>
-      <path d="M116,34 C124,4 148,-2 158,8 L150,38 Z" fill="#3f6c92"/>
-      <path d="M104,104 C100,124 86,132 76,128 L90,100 Z" fill="#3f6c92"/>
-      <path d="M40,74 C48,44 88,28 138,30 C180,32 208,44 226,58 C236,66 240,72 246,76 C238,84 216,96 186,102 C140,112 88,110 60,98 C46,92 40,84 40,74 Z" fill="url(#vol)"/>
-      <g clip-path="url(#c)">
-        <path d="M40,84 C96,104 172,104 246,80 L246,138 L40,138 Z" fill="#dfeaf2"/>
-      </g>
-      <path d="M228,70 C238,70 250,74 250,78 C242,82 230,82 224,80 Z" fill="#dfeaf2"/>
-      <circle cx="206" cy="62" r="8" fill="#fff"/><circle cx="207.44" cy="62" r="3.84" fill="#17202a"/><circle cx="206.16" cy="59.28" r="1.52" fill="#fff"/>
-<g clip-path="url(#c)">
-  <path d="M40,74 C48,44 88,28 138,30 C180,32 208,44 226,58 C236,66 240,72 246,76 C238,84 216,96 186,102 C140,112 88,110 60,98 C46,92 40,84 40,74 Z" fill="none" stroke="#ffffff" stroke-width="7.6" opacity=".28"/>
-  <ellipse cx="115" cy="36"
-           rx="75" ry="21"
-           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
-  <ellipse cx="125" cy="146"
-           rx="155" ry="47"
-           fill="#243e51" opacity=".42" filter="url(#soft)"/>
+<defs>
+  <g id="sa-art" transform="translate(36,0) scale(-1,1)">
+<path fill="#4292E0" d="M30.584 7.854A10.437 10.437 0 0 1 33.559 2c.704-.704.25-2-1-2 0 0-6.061.007-9.893 3.327A15.003 15.003 0 0 0 19.559 3c-8 0-12 4-14 12-.444 1.778-.865 1.399-3 3-1.195.896-2.117 3 1 3 3 0 5 .954 9 1 3.629.042 9.504-3.229 11.087-1.292 2.211 2.706 1.396 5.438.597 6.666-2.904 3.396-5.939.541-8.685-.374-3-1-1 1 0 2s1.312 4 0 6 3 0 5-3c.011-.017.022-.028.032-.045C28.392 31.5 34.559 25.936 34.559 18c0-3.918-1.515-7.474-3.975-10.146z"/><circle cx="13.117" cy="14" r="2" fill="#1F2326"/><path fill="#77BCF7" d="M10.396 21.896s4-.876 7.167-2.688c4.625-2.646 7.26-2.594 8.885-.823s1.99 6.594-2.885 9.677c2.604-2.75 1.146-8.349-2.014-7.588-8.153 1.964-8.903 1.547-11.153 1.422z"/><path fill="#4292E0" d="m19.383 17.744-2.922 1.285a.54.54 0 0 0-.412.561c.122 1.504.756 3.625 2.263 4.629 2.354 1.569 2.367 1.897 3 0 .768-2.303-.182-4.462-1.333-6.24a.553.553 0 0 0-.596-.235z"/>
+  </g>
+  <filter id="sa-alpha">
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/>
+  </filter>
+  <filter id="sa-soft" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="4.32"/>
+  </filter>
+  <mask id="sa-mask">
+    <g filter="url(#sa-alpha)"><use href="#sa-art"/></g>
+  </mask>
+  <linearGradient id="sa-vol" x1="0.2" y1="0" x2="0.5" y2="1">
+    <stop offset="0"    stop-color="#ffffff" stop-opacity="0.34"/>
+    <stop offset="0.42" stop-color="#ffffff" stop-opacity="0"/>
+    <stop offset="0.68" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="1"    stop-color="#000000" stop-opacity="0.34"/>
+  </linearGradient>
+</defs>
+<use href="#sa-art"/>
+<g mask="url(#sa-mask)">
+  <rect x="0" y="0" width="36" height="36" fill="url(#sa-vol)"/>
+  <ellipse cx="15.12" cy="10.08"
+           rx="9.36" ry="5.76"
+           fill="#ffffff" opacity="0.22" filter="url(#sa-soft)"/>
 </g>
 </svg>
