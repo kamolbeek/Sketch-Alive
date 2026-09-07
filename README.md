@@ -60,6 +60,12 @@ Har bir sahna personaj o‘zini qanday tutishini belgilaydi:
 Sahna istalgan payt almashtiriladi va bolalarning rasmlari yo‘qolmaydi —
 ular yangi sahnada boshqacha harakatlanadi.
 
+## Bog‘chada sinab ko‘rish
+
+Birinchi sinov uchun bosqichma-bosqich yo‘riqnoma —
+[SINAB-KORISH.md](SINAB-KORISH.md). Internet kerak emas, hammasi
+bog‘chaning o‘z Wi-Fi’sida ishlaydi.
+
 ## Ishga tushirish
 
 ```bash

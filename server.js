@@ -892,7 +892,12 @@ function handleApi(req, res, url) {
     if (demo && TANK_ID_RE.test(demo) && fs.existsSync(tank(demo).meta)) {
       return send(res, 200, JSON.stringify({ id: demo }));
     }
-    return send(res, 404, '{"error":"демо не настроено"}');
+    // «Витрины нет» — это ответ, а не отсутствующий ресурс: витрина
+    // настраивается переменной AQUA_DEMO_TANK и у большинства серверов её
+    // просто нет. С 404 браузер на каждой загрузке главной пишет ошибку в
+    // консоль, и в ней тонут настоящие поломки — а искать их будет тот,
+    // кто первый раз запускает всё это в детском саду.
+    return send(res, 200, '{"id":null}');
   }
 
   if (req.method === 'POST' && url === '/api/tanks') {
@@ -959,6 +964,9 @@ function pageFor(url) {
 // уезжает и .git, и детские рисунки из data/, и купленный пак моделей —
 // папка с ним лежит в том же каталоге проекта.
 const STATIC_DIRS = ['/assets/', '/vendor/', '/demos/', '/tools/'];
+// favicon.ico o'rniga SVG: u assets/ ichida yotadi va sahifalarga <link>
+// bilan ulanadi. Eski manzil ham qoldirildi — ba'zi brauzerlar <link> ni
+// o'qimasdan turib /favicon.ico ni so'raydi.
 const STATIC_FILES = ['/print.html', '/terms.html', '/favicon.ico'];
 // Из data наружу смотрят только две вещи: свои фоны и снимок сцены.
 // Текстуры рыбок отдаёт API, всё остальное — не для сети.
@@ -1028,6 +1036,14 @@ http.createServer((req, res) => {
 
   if (url.startsWith('/api/')) return handleApi(req, res, url);
 
+  // Brauzer <link> ni ko'rmasdan /favicon.ico ni so'rasa ham belgi olsin:
+  // aks holda har sahifa ochilishida jurnalga 404 tushadi va haqiqiy
+  // xatolar shu shovqin ichida ko'rinmay qoladi.
+  if (url === '/favicon.ico') {
+    res.writeHead(302, { Location: '/assets/favicon.svg' });
+    return res.end();
+  }
+
   if (url === '/raskraski.pdf') {
     res.writeHead(302, {
       Location: '/assets/coloring/raskraski.' + coloringPdf(req) + '.pdf',
@@ -1070,15 +1086,32 @@ http.createServer((req, res) => {
   res.writeHead(200, headers);
   fs.createReadStream(file).pipe(res);
 }).listen(PORT, '0.0.0.0', () => {
-  console.log(`Аквариумы: http://localhost:${PORT}/`);
+  // Ishga tushgandagi xabar — loyihaning birinchi ko'rinadigan qismi va uni
+  // odatda kod yozmaydigan odam (tarbiyachi, ota-ona) o'qiydi. Shuning uchun
+  // u loyiha tilida va faqat kerakli narsani aytadi: qayerni ochish kerak.
+  console.log('');
+  console.log('  Sketch Alive tayyor.');
+  console.log('');
+  console.log(`  Shu kompyuterda:  http://localhost:${PORT}/`);
+
   const nets = os.networkInterfaces();
+  const lan = [];
   for (const name of Object.keys(nets)) {
     for (const net of nets[name]) {
-      if (net.family === 'IPv4' && !net.internal) {
-        console.log(`С телефона (Wi-Fi ${name}): http://${net.address}:${PORT}/`);
-      }
+      if (net.family === 'IPv4' && !net.internal) lan.push({ name, address: net.address });
     }
   }
+  for (const net of lan) {
+    console.log(`  Telefon/televizordan: http://${net.address}:${PORT}/   (${net.name})`);
+  }
+  if (!lan.length) {
+    // Tarmoq manzili topilmasa, telefon hech qachon ulanmaydi — buni
+    // jimgina o'tkazib yuborish "nega ishlamayapti" degan savolni tug'diradi.
+    console.log('  Tarmoq manzili topilmadi — Wi-Fi ulanganini tekshiring.');
+  }
+  console.log('');
+  console.log('  To\'xtatish: Ctrl+C');
+  console.log('');
 
   // Корзину чистим при старте и раз в сутки: сервер домашний, его перезапускают
   // редко, а обещание «через 30 дней» должно выполняться и без перезапуска.

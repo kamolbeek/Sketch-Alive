@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<!-- Brauzer yorlig'idagi belgi. Bog'chada tarbiyachida bir vaqtda bir nechta
+     yorliq ochiq bo'ladi: sahna, chizish, boshqaruv — belgisiz ularni
+     ajratib bo'lmaydi. Shakl ataylab oddiy: 16px da ham baliq bo'lib
+     ko'rinishi kerak. -->
+<rect width="64" height="64" rx="14" fill="#0d3a5c"/>
+<path d="M20,32 L8,18 Q13,32 8,46 Z" fill="#e2601f"/>
+<ellipse cx="34" cy="32" rx="21" ry="14" fill="#f5822f"/>
+<circle cx="46" cy="28" r="4.4" fill="#fff"/>
+<circle cx="47" cy="28" r="2.2" fill="#17202a"/>
+</svg>
