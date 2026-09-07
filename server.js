@@ -24,6 +24,7 @@
 // Общее для всех аквариумов:
 //   POST   /api/tanks {name, password?} — создать → {id, name, created, password}
 //   GET    /api/pack                  — покупные модели рыб [{name, title, url}]
+//   GET    /api/creatures             — готовые персонажи [{id, scene, titles, url}]
 //
 // Внутри аквариума, префикс /api/t/<id>. Помеченные 🔒 требуют заголовок
 // X-Tank-Pass с паролем аквариума:
@@ -38,6 +39,8 @@
 //   POST   …/fish {kind, texture,     — добавить рисунок ребёнка
 //                  name?, scene?,       (dataURL png/jpeg; name — подпись на
 //                  render?}             экране, render — 'sprite2d'|'texture3d')
+//   POST   …/fish {type:'creature',    — выпустить готового персонажа
+//                  creature, name?}     из assets/creatures/
 //   POST   …/fish {type:'pack',model} — добавить покупную из пака
 //   DELETE …/fish/<fid>            🔒 — удалить одну рыбку
 //   DELETE …/fish                  🔒 — очистить аквариум
@@ -192,6 +195,25 @@ const PACK_FILE = path.join(ROOT, 'assets', 'models', 'pack', 'pack.json');
 // Виды, у которых есть лист раскраски. Список один на весь проект —
 // манифест раскрасок; дублировать его тут нельзя, иначе однажды разойдётся.
 const SHEET_FILE = path.join(ROOT, 'assets', 'coloring', 'manifest.json');
+
+// Готовые персонажи — наши собственные SVG в assets/creatures/. В отличие от
+// покупного пака они лежат в репозитории, поэтому список читается один раз
+// при старте: файлы меняются только вместе с кодом.
+const CREATURES_FILE = path.join(ROOT, 'assets', 'creatures', 'manifest.json');
+let creaturesCache = null;
+
+function listCreatures() {
+  if (creaturesCache) return creaturesCache;
+  try {
+    const m = JSON.parse(fs.readFileSync(CREATURES_FILE, 'utf8'));
+    creaturesCache = Array.isArray(m.creatures) ? m.creatures : [];
+  } catch (e) {
+    // Манифеста нет — значит, tools/make-creatures.js не запускали.
+    // Это не поломка: сцена работает и на одних детских рисунках.
+    creaturesCache = [];
+  }
+  return creaturesCache;
+}
 
 function sheetKinds() {
   try {
@@ -655,6 +677,25 @@ function handleTankApi(req, res, t, url) {
     return readBody(req, res, (data) => {
       const fid = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
 
+      // Готовый персонаж: картинки не присылают, файл уже лежит в
+      // assets/creatures/. Храним только имя вида — адрес клиент соберёт
+      // сам, и переезд папки не сломает записи в старых сценах.
+      if (data.type === 'creature') {
+        const c = listCreatures().find((x) => x.id === data.creature);
+        if (!c) return send(res, 400, '{"error":"нет такого персонажа"}');
+        ensureTank(t);
+        fs.writeFileSync(path.join(t.fish, fid + '.json'), JSON.stringify({
+          id: fid,
+          type: 'creature',
+          creature: c.id,
+          name: String(data.name || '').trim().slice(0, 24),
+          scene: SCENES.has(data.scene) ? data.scene : SCENES.defaultId,
+          created: new Date().toISOString()
+        }));
+        console.log(`+ готовый персонаж ${c.id} в ${t.id} — всего ${listFish(t).length}`);
+        return send(res, 200, JSON.stringify({ ok: true, id: fid }));
+      }
+
       if (data.type === 'pack') {
         const model = listPack().find((m) => m.name === data.model);
         if (!model) return send(res, 400, '{"error":"нет такой модели в паке"}');
@@ -819,6 +860,11 @@ function handleApi(req, res, url) {
   // Пак один на все аквариумы, поэтому ручка общая.
   if (req.method === 'GET' && url === '/api/pack') {
     return send(res, 200, JSON.stringify(listPack()));
+  }
+
+  // Готовые персонажи одни на все сцены, как и пак, — ручка общая.
+  if (req.method === 'GET' && url === '/api/creatures') {
+    return send(res, 200, JSON.stringify(listCreatures()));
   }
 
   // Обмен пина на код аквариума. Перебор душится той же растущей паузой,

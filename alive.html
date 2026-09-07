@@ -44,6 +44,31 @@ canvas { display: block; width: 100vw; height: 100vh; }
 }
 .panel button[aria-pressed=true] { background: #2a6df4; border-color: #2a6df4; }
 
+/* Tayyor personajlar oynasi. Kartochkalar katta: uni televizor oldida
+   turgan tarbiyachi ham, telefon ushlab turgan bola ham bosadi. */
+.picker {
+  position: fixed; inset: 0; padding: 16px; overflow: auto;
+  background: rgba(6,18,29,.96); display: none; flex-direction: column; gap: 12px;
+}
+.picker.open { display: flex; }
+.picker .grid {
+  display: grid; gap: 10px; flex: 1 1 auto;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  align-content: start;
+}
+.picker .card {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 10px; border-radius: 14px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06);
+  color: #eef3f8; font-size: 13px; font-family: inherit;
+}
+.picker .card:disabled { opacity: .4; }
+.picker .card img { width: 100%; height: 76px; object-fit: contain; }
+.picker .wide {
+  min-height: 48px; border-radius: 12px; border: 1px solid #3c4a5c;
+  background: #131a24; color: #eef3f8; font-size: 15px; cursor: pointer;
+}
+
 .empty {
   position: fixed; inset: 0; display: grid; place-items: center; text-align: center;
   padding: 32px; pointer-events: none; transition: opacity .5s;
@@ -65,6 +90,7 @@ canvas { display: block; width: 100vw; height: 100vh; }
 </div>
 
 <div class="panel" id="panel"></div>
+<div class="picker" id="picker"></div>
 
 <script src="/assets/i18n.js"></script>
 <script src="/assets/scenes.js"></script>
@@ -132,7 +158,11 @@ canvas { display: block; width: 100vw; height: 100vh; }
             return {
               id: f.id,
               name: f.name || '',
-              url: window.Tank.api + '/fish/' + f.id + '/texture.png'
+              // Tayyor personajning fayli loyihada yotadi, bola chizgani esa
+              // serverda — shuning uchun manzili ikki xil joydan olinadi.
+              url: f.type === 'creature'
+                ? '/assets/creatures/' + f.creature + '.svg'
+                : window.Tank.api + '/fish/' + f.id + '/texture.png'
             };
           });
         eng.setCharacters(chars);
@@ -174,6 +204,14 @@ canvas { display: block; width: 100vw; height: 100vh; }
       draw.textContent = t('menu.draw.title');
       draw.onclick = function () { location.href = window.Tank.url + '/draw'; };
       panel.appendChild(draw);
+    }
+
+    if (window.Tank && window.Tank.id) {
+      var ready = document.createElement('button');
+      ready.type = 'button';
+      ready.textContent = t('alive.ready');
+      ready.onclick = openPicker;
+      panel.appendChild(ready);
     }
 
     var names = document.createElement('button');
@@ -223,9 +261,78 @@ canvas { display: block; width: 100vw; height: 100vh; }
     }).catch(function () { /* saqlanmadi — ekranda baribir almashdi */ });
   }
 
+  // ── tayyor personajlar ───────────────────────────────────────────────────
+  //
+  // Bo'sh ekran bog'chada eng yomon boshlanish: tarbiyachi televizorni
+  // yoqadi, bolalar qaraydi, u yerda esa hech kim yo'q. Shuning uchun
+  // yigirmata tayyor jonivor loyihaning o'zida yotadi — bittasini bosib
+  // qo'yib yuborsa, sahna darrov jonlanadi va bolalar «men ham shunaqa
+  // chizaman» deydi.
+
+  var picker = document.getElementById('picker');
+  var creatures = null;
+
+  function openPicker() {
+    panel.classList.remove('open');
+    picker.classList.add('open');
+    if (creatures) return;
+    fetch('/api/creatures')
+      .then(function (r) { return r.json(); })
+      .then(function (list) {
+        creatures = Array.isArray(list) ? list : [];
+        paintPicker();
+      }, function () { creatures = []; paintPicker(); });
+  }
+
+  function paintPicker() {
+    var lang = window.I18N ? window.I18N.lang : 'uz';
+    picker.textContent = '';
+
+    var grid = document.createElement('div');
+    grid.className = 'grid';
+    (creatures || []).forEach(function (c) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'card';
+      var img = document.createElement('img');
+      img.src = c.url;
+      img.alt = '';
+      var cap = document.createElement('span');
+      cap.textContent = (c.titles && (c.titles[lang] || c.titles.uz)) || c.id;
+      b.appendChild(img);
+      b.appendChild(cap);
+      b.onclick = function () { release(c, b); };
+      grid.appendChild(b);
+    });
+    picker.appendChild(grid);
+
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'wide';
+    close.textContent = t('alive.close');
+    close.onclick = function () { picker.classList.remove('open'); };
+    picker.appendChild(close);
+  }
+
+  function release(c, btn) {
+    btn.disabled = true;
+    window.Tank.send(window.Tank.api + '/fish', {
+      body: JSON.stringify({ type: 'creature', creature: c.id, scene: scene.id })
+    }).then(function (r) {
+      btn.disabled = false;
+      // Kutmasdan darhol so'raymiz: bola tugmani bosgach personaj ekranda
+      // uch soniya emas, darrov paydo bo'lishi kerak.
+      if (r.ok) pull();
+    }, function () { btn.disabled = false; });
+  }
+
   if (!tvMode) {
     document.addEventListener('pointerdown', function (e) {
-      if (panel.contains(e.target)) return;
+      if (panel.contains(e.target) || picker.contains(e.target)) return;
+      if (picker.classList.contains('open')) {
+        picker.classList.remove('open');
+        return;
+      }
       panel.classList.toggle('open');
     });
   }

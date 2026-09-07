@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 212" width="468" height="636">
+<title>Jellyfish</title>
+<defs><clipPath id="c"><path d="M14,88 C14,44 46,14 78,14 C110,14 142,44 142,88 C142,100 132,106 118,102 C104,98 96,104 78,104 C60,104 52,98 38,102 C24,106 14,100 14,88 Z"/></clipPath></defs>
+<g fill="none" stroke="#d17ab8" stroke-width="7" stroke-linecap="round" opacity=".85">
+        <path d="M34,100 C26,130 42,150 32,182"/>
+        <path d="M52,104 C46,138 60,158 50,196"/>
+        <path d="M78,106 C74,142 88,164 78,204"/>
+        <path d="M104,104 C110,138 96,158 106,196"/>
+        <path d="M122,100 C130,130 114,150 124,182"/>
+      </g>
+      <path d="M14,88 C14,44 46,14 78,14 C110,14 142,44 142,88 C142,100 132,106 118,102 C104,98 96,104 78,104 C60,104 52,98 38,102 C24,106 14,100 14,88 Z" fill="#e79ccd" opacity=".92"/>
+      <g clip-path="url(#c)" opacity=".55">
+        <ellipse cx="52" cy="46" rx="18" ry="12" fill="#fff"/>
+        <ellipse cx="96" cy="40" rx="10" ry="7" fill="#fff"/>
+        <path d="M14,78 L142,78 L142,86 L14,86 Z" fill="#c96fb0"/>
+      </g>
+      <circle cx="94" cy="62" r="9" fill="#fff"/><circle cx="95.62" cy="62" r="4.32" fill="#17202a"/><circle cx="94.18" cy="58.94" r="1.71" fill="#fff"/>
+      <circle cx="58" cy="64" r="9" fill="#fff"/><circle cx="59.62" cy="64" r="4.32" fill="#17202a"/><circle cx="58.18" cy="60.94" r="1.71" fill="#fff"/>
+      <path d="M70,82 q7,4.760000000000001 14,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+</svg>

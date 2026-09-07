@@ -29,6 +29,22 @@ asosiy yo‘lda 3D modelga umuman muhtoj emas — rasm 2D personaj bo‘lib
 jonlanadi (teamLab ham aynan shunday qiladi). Fonlar ham gradient bilan
 chiziladi, bironta ham fayl yuklab olinmaydi.
 
+## Tayyor jonivorlar
+
+Sahna bo'sh ochilmasligi uchun loyihada **20 ta tayyor dengiz jonivori**
+bor: masxaraboz baliq, ko'k tang, farishta baliq, kapalak baliq, dengiz oti,
+toshbaqa, meduza, sakkizoyoq, qisqichbaqa, dengiz yulduzi, kirpi baliq,
+akula, delfin, kit, skat, murena, koi, oltin baliq, krevetka va dengiz
+shilliqqurti.
+
+Ular SVG — jami 100 KB ga yetmaydi, 4K televizorda ham donadorlashmaydi va
+o'zimizniki, ya'ni hech qanday litsenziya cheklovi yo'q. Sahnada
+«Tayyor jonivorlar» tugmasi orqali qo'yib yuboriladi.
+
+Shakl yoki rangni o'zgartirish kerak bo'lsa `tools/make-creatures.js` ni
+tahrirlab, qayta ishga tushiring; hammasini yonma-yon ko'rish uchun —
+`/tools/creature-sheet.html`.
+
 ## Sahnalar
 
 Har bir sahna personaj o‘zini qanday tutishini belgilaydi:
@@ -125,6 +141,8 @@ bog‘chaning ma’lumotlari, o‘yinning qismi emas.
       ([Meta Animated Drawings](https://github.com/facebookresearch/AnimatedDrawings), MIT)
 - [ ] Ochiq litsenziyali (CC0) 3D modellar to‘plami — 3D yo‘l ham
       sotib olmasdan ishlashi uchun
+- [ ] Boshqa sahnalar uchun ham tayyor jonivorlar: dinozavr, hayvonot bog‘i,
+      uy jihozlari
 
 ## Litsenziya
 

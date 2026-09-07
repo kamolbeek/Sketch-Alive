@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 158" width="570" height="474">
+<title>Butterflyfish</title>
+<defs><clipPath id="c"><path d="M40,80 C40,40 76,20 114,22 C152,24 178,50 182,80 C178,110 152,136 114,138 C76,140 40,120 40,80 Z"/></clipPath></defs>
+<path d="M46,80 L8,34 Q22,80 8,126 Z" fill="#f0a92c"/>
+      <path d="M78,28 C104,6 136,12 146,28 L128,42 Z" fill="#f7c53f"/>
+      <path d="M82,132 C108,152 136,146 146,130 L128,116 Z" fill="#f7c53f"/>
+      <path d="M40,80 C40,40 76,20 114,22 C152,24 178,50 182,80 C178,110 152,136 114,138 C76,140 40,120 40,80 Z" fill="#fbd651"/>
+      <g clip-path="url(#c)">
+        <path d="M60,0 L86,0 L120,158 L94,158 Z" fill="#fff" opacity=".45"/>
+        <path d="M100,0 L126,0 L160,158 L134,158 Z" fill="#fff" opacity=".45"/>
+        <path d="M146,0 L172,0 L172,158 L146,158 Z" fill="#22303c" opacity=".9"/>
+      </g>
+      <circle cx="158" cy="62" r="9" fill="#fff"/><circle cx="159.62" cy="62" r="4.32" fill="#17202a"/><circle cx="158.18" cy="58.94" r="1.71" fill="#fff"/>
+      <path d="M166,88 q5,3.4000000000000004 10,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+</svg>

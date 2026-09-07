@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 148" width="528" height="444">
+<title>Sea snail</title>
+<defs><clipPath id="c"><path d="M30,112 C30,96 44,88 66,88 C96,88 120,90 140,96 C160,102 166,112 158,120 C148,130 110,134 76,134 C46,134 30,126 30,112 Z"/></clipPath></defs>
+<path d="M30,112 C30,96 44,88 66,88 C96,88 120,90 140,96 C160,102 166,112 158,120 C148,130 110,134 76,134 C46,134 30,126 30,112 Z" fill="#e8c37a"/>
+      <g stroke="#c9a35c" stroke-width="4" fill="none" stroke-linecap="round">
+        <path d="M148,96 C160,84 166,74 166,64"/>
+        <path d="M156,102 C170,94 176,86 178,78"/>
+      </g>
+      <circle cx="164" cy="60" r="7" fill="#e8c37a"/>
+      <circle cx="176" cy="74" r="6" fill="#e8c37a"/>
+      <path d="M84,26 C118,26 142,50 142,78 C142,98 126,110 108,110
+               C92,110 80,100 80,86 C80,74 90,66 100,66 C110,66 116,74 114,82
+               C112,88 104,90 100,86" fill="none" stroke="#b5763a" stroke-width="15"
+               stroke-linecap="round"/>
+      <path d="M84,26 C118,26 142,50 142,78 C142,98 126,110 108,110
+               C92,110 80,100 80,86 C80,74 90,66 100,66 C110,66 116,74 114,82
+               C112,88 104,90 100,86" fill="none" stroke="#d99a54" stroke-width="8"
+               stroke-linecap="round"/>
+      <circle cx="158" cy="104" r="7" fill="#fff"/><circle cx="159.26" cy="104" r="3.36" fill="#17202a"/><circle cx="158.14" cy="101.62" r="1.33" fill="#fff"/>
+      <path d="M150,116 q5,3.4000000000000004 10,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+</svg>

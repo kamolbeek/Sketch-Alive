@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 222 176" width="666" height="528">
+<title>Stingray</title>
+<defs><clipPath id="c"><path d="M204,88 C172,38 122,14 70,24 C28,32 6,56 22,88 C6,120 28,144 70,152 C122,162 172,138 204,88 Z"/></clipPath></defs>
+<g fill="none" stroke="#8a6f4a" stroke-width="8" stroke-linecap="round">
+        <path d="M26,88 C16,88 10,88 4,88"/>
+      </g>
+      <path d="M204,88 C214,90 220,94 222,100 C214,102 206,98 200,94 Z" fill="#8a6f4a"/>
+      <path d="M204,88 C172,38 122,14 70,24 C28,32 6,56 22,88 C6,120 28,144 70,152 C122,162 172,138 204,88 Z" fill="#b08f60"/>
+      <g clip-path="url(#c)">
+        <path d="M22,88 C70,72 140,72 204,88 C140,104 70,104 22,88 Z" fill="#9a7c50" opacity=".55"/>
+        <g opacity=".3" fill="#5e4a2c">
+          <circle cx="86" cy="52" r="9"/><circle cx="130" cy="46" r="7"/>
+          <circle cx="96" cy="126" r="8"/><circle cx="142" cy="122" r="6"/>
+          <circle cx="58" cy="88" r="6"/>
+        </g>
+      </g>
+      <circle cx="176" cy="68" r="9" fill="#fff"/><circle cx="177.62" cy="68" r="4.32" fill="#17202a"/><circle cx="176.18" cy="64.94" r="1.71" fill="#fff"/>
+      <circle cx="170" cy="106" r="9" fill="#fff"/><circle cx="171.62" cy="106" r="4.32" fill="#17202a"/><circle cx="170.18" cy="102.94" r="1.71" fill="#fff"/>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212 152" width="636" height="456">
+<title>Crab</title>
+<defs><clipPath id="c"><path d="M34,84 C34,52 68,32 106,32 C144,32 178,52 178,84 C178,106 148,118 106,118 C64,118 34,106 34,84 Z"/></clipPath></defs>
+<g fill="none" stroke="#c0391f" stroke-width="9" stroke-linecap="round">
+        <path d="M46,110 C34,126 22,132 12,132"/>
+        <path d="M70,118 C62,136 52,144 40,146"/>
+        <path d="M142,118 C150,136 160,144 172,146"/>
+        <path d="M166,110 C178,126 190,132 200,132"/>
+      </g>
+      <path d="M42,60 C22,44 12,26 18,14 C30,16 44,30 52,48 Z" fill="#d84a2c"/>
+      <path d="M18,14 C8,20 6,34 14,42 C22,38 26,26 24,18 Z" fill="#e2593a"/>
+      <path d="M170,60 C190,44 200,26 194,14 C182,16 168,30 160,48 Z" fill="#d84a2c"/>
+      <path d="M194,14 C204,20 206,34 198,42 C190,38 186,26 188,18 Z" fill="#e2593a"/>
+      <path d="M34,84 C34,52 68,32 106,32 C144,32 178,52 178,84 C178,106 148,118 106,118 C64,118 34,106 34,84 Z" fill="#e2593a"/>
+      <g clip-path="url(#c)" opacity=".28">
+        <ellipse cx="106" cy="52" rx="46" ry="14" fill="#fff"/>
+      </g>
+      <circle cx="132" cy="58" r="11" fill="#fff"/><circle cx="133.98" cy="58" r="5.279999999999999" fill="#17202a"/><circle cx="132.22" cy="54.26" r="2.09" fill="#fff"/>
+      <circle cx="82" cy="58" r="11" fill="#fff"/><circle cx="83.98" cy="58" r="5.279999999999999" fill="#17202a"/><circle cx="82.22" cy="54.26" r="2.09" fill="#fff"/>
+      <path d="M94,88 q12,8.16 24,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+</svg>

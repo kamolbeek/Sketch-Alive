@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 206 152" width="618" height="456">
+<title>Shrimp</title>
+<defs><clipPath id="c"><path d="M164,50 C184,66 186,96 168,112 C148,130 116,128 94,116 C74,104 56,106 46,118 C36,130 20,126 18,112 C16,96 28,86 44,86 C64,86 78,72 92,54 C108,32 140,30 164,50 Z"/></clipPath></defs>
+<path d="M22,120 C8,132 2,144 2,152 C16,150 30,142 40,130 Z" fill="#d9694e"/>
+      <g stroke="#d9694e" stroke-width="5" fill="none" stroke-linecap="round">
+        <path d="M172,46 C190,28 200,20 204,16"/>
+        <path d="M178,58 C194,50 202,44 206,40"/>
+        <path d="M78,120 C74,134 68,144 60,150"/>
+        <path d="M100,124 C98,138 94,146 88,152"/>
+        <path d="M124,124 C124,138 122,146 118,152"/>
+        <path d="M146,118 C150,132 150,140 148,148"/>
+      </g>
+      <path d="M164,50 C184,66 186,96 168,112 C148,130 116,128 94,116 C74,104 56,106 46,118 C36,130 20,126 18,112 C16,96 28,86 44,86 C64,86 78,72 92,54 C108,32 140,30 164,50 Z" fill="#f2917a"/>
+      <g clip-path="url(#c)" opacity=".34">
+        <path d="M74,0 L90,0 L64,152 L48,152 Z" fill="#c04f36"/>
+        <path d="M102,0 L118,0 L94,152 L78,152 Z" fill="#c04f36"/>
+        <path d="M130,0 L146,0 L124,152 L108,152 Z" fill="#c04f36"/>
+      </g>
+      <circle cx="168" cy="62" r="8" fill="#fff"/><circle cx="169.44" cy="62" r="3.84" fill="#17202a"/><circle cx="168.16" cy="59.28" r="1.52" fill="#fff"/>
+      <path d="M172,84 q5,3.4000000000000004 10,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+</svg>

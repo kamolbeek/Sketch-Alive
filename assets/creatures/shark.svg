@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 132" width="756" height="396">
+<title>Shark</title>
+<defs><clipPath id="c"><path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z"/></clipPath></defs>
+<path d="M44,70 L6,20 Q26,70 6,120 Z" fill="#5f7484"/>
+      <path d="M110,30 C122,2 142,-4 152,4 L146,34 Z" fill="#5f7484"/>
+      <path d="M96,108 C92,126 80,134 70,132 L82,104 Z" fill="#5f7484"/>
+      <path d="M160,108 C164,124 178,130 188,126 L176,104 Z" fill="#5f7484"/>
+      <path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z" fill="#7d93a4"/>
+      <g clip-path="url(#c)">
+        <path d="M40,86 C90,102 180,104 240,86 L240,132 L40,132 Z" fill="#e6edf2"/>
+      </g>
+      <path d="M196,88 C210,86 226,82 236,78 C226,90 210,94 198,94 Z" fill="#fff"/>
+      <g fill="#7d93a4">
+        <path d="M204,86 L208,93 L200,93 Z"/><path d="M214,84 L218,91 L210,91 Z"/>
+        <path d="M224,81 L228,88 L220,88 Z"/>
+      </g>
+      <g stroke="#5f7484" stroke-width="3" opacity=".6" fill="none">
+        <path d="M170,44 C176,54 176,68 170,78"/>
+        <path d="M182,46 C188,56 188,68 182,76"/>
+      </g>
+      <circle cx="206" cy="60" r="9" fill="#fff"/><circle cx="207.62" cy="60" r="4.32" fill="#17202a"/><circle cx="206.18" cy="56.94" r="1.71" fill="#fff"/>
+</svg>

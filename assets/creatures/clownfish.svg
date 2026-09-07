@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 132" width="660" height="396">
+<title>Clownfish</title>
+<defs><clipPath id="c"><path d="M56,66 C56,34 92,16 136,18 C178,20 206,42 212,66 C206,90 178,112 136,114 C92,116 56,98 56,66 Z"/></clipPath></defs>
+<path d="M60,66 L12,18 Q28,66 12,114 Z" fill="#d8551a"/>
+      <path d="M96,28 C118,6 152,8 162,22 L146,40 Z" fill="#d8551a"/>
+      <path d="M104,106 C124,126 152,124 160,112 L142,94 Z" fill="#d8551a"/>
+      <path d="M56,66 C56,34 92,16 136,18 C178,20 206,42 212,66 C206,90 178,112 136,114 C92,116 56,98 56,66 Z" fill="#f5822f"/>
+      <g clip-path="url(#c)">
+        <path d="M60,0 L90,0 L76,132 L46,132 Z" fill="#1b232c"/>
+        <path d="M66,0 L85,0 L71,132 L52,132 Z" fill="#ffffff"/>
+        <path d="M118,0 L148,0 L136,132 L106,132 Z" fill="#1b232c"/>
+        <path d="M124,0 L143,0 L131,132 L112,132 Z" fill="#ffffff"/>
+        <path d="M164,0 L188,0 L180,132 L156,132 Z" fill="#1b232c"/>
+        <path d="M169,0 L183,0 L175,132 L161,132 Z" fill="#ffffff"/>
+      </g>
+      <circle cx="197" cy="57" r="9" fill="#fff"/><circle cx="198.62" cy="57" r="4.32" fill="#17202a"/><circle cx="197.18" cy="53.94" r="1.71" fill="#fff"/>
+      <path d="M200,78 q6,4.08 12,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 174" width="540" height="522">
+<title>Starfish</title>
+<defs><clipPath id="c"><path d="M90,10 C102,44 108,54 142,58 C176,62 178,66 154,90 C130,114 126,124 134,158 C142,192 138,194 108,176 C78,158 66,158 36,176 C6,194 2,192 10,158 C18,124 14,114 -10,90 L14,90 C-6,68 -4,62 30,58 C64,54 78,44 90,10 Z"/></clipPath></defs>
+<path d="M90,8 C104,46 110,54 150,58 C186,62 188,68 160,92
+               C134,114 130,124 138,160 C146,196 140,200 108,180
+               C78,162 66,162 36,180 C4,200 -2,196 6,160
+               C14,124 10,114 -16,92 C-44,68 -42,62 -6,58
+               C34,54 40,46 54,8 C68,-30 76,-30 90,8 Z" fill="#f2913c" transform="translate(28,14) scale(0.78)"/>
+      <g opacity=".32" fill="#fff">
+        <circle cx="90" cy="60" r="7"/>
+        <circle cx="62" cy="86" r="5"/>
+        <circle cx="118" cy="86" r="5"/>
+        <circle cx="76" cy="118" r="5"/>
+        <circle cx="106" cy="118" r="5"/>
+      </g>
+      <circle cx="104" cy="74" r="10" fill="#fff"/><circle cx="105.8" cy="74" r="4.8" fill="#17202a"/><circle cx="104.2" cy="70.6" r="1.9" fill="#fff"/>
+      <circle cx="74" cy="74" r="10" fill="#fff"/><circle cx="75.8" cy="74" r="4.8" fill="#17202a"/><circle cx="74.2" cy="70.6" r="1.9" fill="#fff"/>
+      <path d="M80,98 q10,6.800000000000001 20,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+</svg>

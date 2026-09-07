@@ -1,0 +1,206 @@
+{
+ "version": 1,
+ "scene": "aquarium",
+ "creatures": [
+  {
+   "id": "clownfish",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Masxaraboz baliq",
+    "ru": "Рыба-клоун",
+    "en": "Clownfish"
+   },
+   "url": "/assets/creatures/clownfish.svg"
+  },
+  {
+   "id": "bluetang",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Ko‘k tang",
+    "ru": "Голубой хирург",
+    "en": "Blue tang"
+   },
+   "url": "/assets/creatures/bluetang.svg"
+  },
+  {
+   "id": "angelfish",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Farishta baliq",
+    "ru": "Скалярия",
+    "en": "Angelfish"
+   },
+   "url": "/assets/creatures/angelfish.svg"
+  },
+  {
+   "id": "butterflyfish",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Kapalak baliq",
+    "ru": "Рыба-бабочка",
+    "en": "Butterflyfish"
+   },
+   "url": "/assets/creatures/butterflyfish.svg"
+  },
+  {
+   "id": "seahorse",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Dengiz oti",
+    "ru": "Морской конёк",
+    "en": "Seahorse"
+   },
+   "url": "/assets/creatures/seahorse.svg"
+  },
+  {
+   "id": "turtle",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Toshbaqa",
+    "ru": "Черепаха",
+    "en": "Turtle"
+   },
+   "url": "/assets/creatures/turtle.svg"
+  },
+  {
+   "id": "jellyfish",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Meduza",
+    "ru": "Медуза",
+    "en": "Jellyfish"
+   },
+   "url": "/assets/creatures/jellyfish.svg"
+  },
+  {
+   "id": "octopus",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Sakkizoyoq",
+    "ru": "Осьминог",
+    "en": "Octopus"
+   },
+   "url": "/assets/creatures/octopus.svg"
+  },
+  {
+   "id": "crab",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Qisqichbaqa",
+    "ru": "Краб",
+    "en": "Crab"
+   },
+   "url": "/assets/creatures/crab.svg"
+  },
+  {
+   "id": "starfish",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Dengiz yulduzi",
+    "ru": "Морская звезда",
+    "en": "Starfish"
+   },
+   "url": "/assets/creatures/starfish.svg"
+  },
+  {
+   "id": "pufferfish",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Kirpi baliq",
+    "ru": "Рыба-ёж",
+    "en": "Pufferfish"
+   },
+   "url": "/assets/creatures/pufferfish.svg"
+  },
+  {
+   "id": "shark",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Akula",
+    "ru": "Акула",
+    "en": "Shark"
+   },
+   "url": "/assets/creatures/shark.svg"
+  },
+  {
+   "id": "dolphin",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Delfin",
+    "ru": "Дельфин",
+    "en": "Dolphin"
+   },
+   "url": "/assets/creatures/dolphin.svg"
+  },
+  {
+   "id": "whale",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Kit",
+    "ru": "Кит",
+    "en": "Whale"
+   },
+   "url": "/assets/creatures/whale.svg"
+  },
+  {
+   "id": "stingray",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Skat",
+    "ru": "Скат",
+    "en": "Stingray"
+   },
+   "url": "/assets/creatures/stingray.svg"
+  },
+  {
+   "id": "moray",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Murena",
+    "ru": "Мурена",
+    "en": "Moray eel"
+   },
+   "url": "/assets/creatures/moray.svg"
+  },
+  {
+   "id": "koi",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Koi baliq",
+    "ru": "Карп кои",
+    "en": "Koi carp"
+   },
+   "url": "/assets/creatures/koi.svg"
+  },
+  {
+   "id": "goldfish",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Oltin baliq",
+    "ru": "Золотая рыбка",
+    "en": "Goldfish"
+   },
+   "url": "/assets/creatures/goldfish.svg"
+  },
+  {
+   "id": "shrimp",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Krevetka",
+    "ru": "Креветка",
+    "en": "Shrimp"
+   },
+   "url": "/assets/creatures/shrimp.svg"
+  },
+  {
+   "id": "seasnail",
+   "scene": "aquarium",
+   "titles": {
+    "uz": "Dengiz shilliqqurti",
+    "ru": "Морская улитка",
+    "en": "Sea snail"
+   },
+   "url": "/assets/creatures/seasnail.svg"
+  }
+ ]
+}

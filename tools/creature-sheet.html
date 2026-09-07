@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>Tayyor jonivorlar — hammasi bir ekranda</title>
+<style>
+/* Yigirmata jonivorni yonma-yon ko'rish uchun. Ular sahnada bir-birining
+   yonida suzadi, ya'ni bir uslubda bo'lishi kerak: bittasi qolganidan
+   yorqinroq yoki mayda chizilgan bo'lsa, bu faqat shu yerda bilinadi.
+   Fon ataylab akvariumnikiga yaqin — och rangdagi jonivor qorong'i suvda
+   yo'qolib ketmasligini shu yerda tekshiramiz.
+
+   node tools/make-creatures.js dan keyin: /tools/creature-sheet.html */
+body { margin: 0; background: #0d3a5c; font: 13px system-ui, sans-serif; color: #cfe3f2; }
+h1 { font-size: 15px; font-weight: 600; padding: 14px 14px 0; margin: 0; opacity: .8; }
+.grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 8px; padding: 12px;
+}
+.card {
+  background: rgba(255,255,255,.06); border-radius: 12px; padding: 10px; text-align: center;
+}
+.card img { width: 100%; height: 130px; object-fit: contain; display: block; }
+.card b { display: block; margin-top: 6px; font-weight: 600; }
+.card span { opacity: .55; font-size: 11px; }
+.err { padding: 14px; color: #ff9b9b; }
+</style>
+</head>
+<body>
+<h1></h1>
+<div class="grid" id="g"></div>
+<script>
+fetch('/assets/creatures/manifest.json')
+  .then(function (r) { return r.json(); })
+  .then(function (m) {
+    var list = m.creatures || [];
+    document.querySelector('h1').textContent = list.length + ' ta tayyor jonivor';
+    document.getElementById('g').innerHTML = list.map(function (c) {
+      return '<div class="card"><img src="' + c.url + '" alt="">'
+        + '<b>' + (c.titles.uz || c.id) + '</b><span>' + c.id + '</span></div>';
+    }).join('');
+  })
+  .catch(function () {
+    document.body.insertAdjacentHTML('beforeend',
+      '<div class="err">manifest.json yo‘q — avval <code>node tools/make-creatures.js</code></div>');
+  });
+</script>
+</body>
+</html>
