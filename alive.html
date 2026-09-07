@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title data-t="alive.title">Sketch Alive</title>
+<style>
+/* Bu sahifa televizorda ochiladi va unga hech kim tegmaydi: sichqoncha ham,
+   barmoq ham yo'q. Shuning uchun ekranda faqat sahna turadi, boshqaruv esa
+   yashiringan — telefonda. */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden; background: #06121d; color: #eef3f8;
+  font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+canvas { display: block; width: 100vw; height: 100vh; }
+
+/* Pastdagi lavha: bu ekranga qanday qo'shilishini aytadi. Bog'chada uni
+   tarbiyachi ham, mehmon ham o'qiydi, shuning uchun u doim ko'rinib turadi —
+   lekin sahnaga xalaqit bermaydi. */
+.badge {
+  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 18px; border-radius: 999px;
+  background: rgba(6,18,29,.62); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.14);
+  font-size: clamp(14px, 1.5vw, 20px);
+  transition: opacity .4s;
+}
+.badge.dim { opacity: .25; }
+.badge b { font-size: clamp(18px, 2.2vw, 30px); letter-spacing: .12em; font-weight: 700; }
+.badge .lbl { opacity: .75; }
+
+.panel {
+  position: fixed; inset: auto 0 0 0; padding: 16px;
+  background: rgba(6,18,29,.94); border-top: 1px solid rgba(255,255,255,.14);
+  display: none; gap: 10px; flex-wrap: wrap; justify-content: center;
+}
+.panel.open { display: flex; }
+.panel button {
+  min-height: 44px; padding: 0 16px; border-radius: 12px;
+  border: 1px solid #3c4a5c; background: #131a24; color: #eef3f8;
+  font-size: 15px; cursor: pointer;
+}
+.panel button[aria-pressed=true] { background: #2a6df4; border-color: #2a6df4; }
+
+.empty {
+  position: fixed; inset: 0; display: grid; place-items: center; text-align: center;
+  padding: 32px; pointer-events: none; transition: opacity .5s;
+}
+.empty div { max-width: 22ch; font-size: clamp(20px, 3vw, 40px); font-weight: 600; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+.empty.gone { opacity: 0; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div class="empty" id="empty"><div data-t="alive.empty">Hali hech kim chizmagan</div></div>
+
+<div class="badge" id="badge">
+  <span class="lbl" data-t="alive.join">Chizish uchun</span>
+  <span id="host"></span>
+  <span class="lbl" data-t="alive.code">Kod</span>
+  <b id="code"></b>
+</div>
+
+<div class="panel" id="panel"></div>
+
+<script src="/assets/i18n.js"></script>
+<script src="/assets/scenes.js"></script>
+<script src="/assets/tank.js"></script>
+<script src="/assets/alive2d.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var t = function (k, v) { return window.I18N ? window.I18N.t(k, v) : k; };
+  var qs = new URLSearchParams(location.search);
+  // ?tv — televizor rejimi: bu ekran faqat tomosha uchun, unda boshqaruv
+  // paneli o'z-o'zidan ochilmaydi. Boshqaruv telefonda.
+  var tvMode = qs.has('tv');
+
+  var scene = window.SCENES.get(window.SCENES.defaultId);
+  var eng = window.Alive2D.create(document.getElementById('c'), scene);
+  eng.start();
+
+  var emptyBox = document.getElementById('empty');
+  var badge = document.getElementById('badge');
+
+  document.getElementById('host').textContent = location.host;
+  document.getElementById('code').textContent = (window.Tank && window.Tank.id) || '—';
+
+  // ── serverdan yangilanish ────────────────────────────────────────────────
+  //
+  // Server hodisa oqimini (SSE) bermaydi, shuning uchun sahifa o'zi so'raydi.
+  // 3 soniya — bola rasmni yuborgach ekranga chiqishini kutadigan eng uzun
+  // vaqt; undan sekinroq bo'lsa "ishlamadi" deb o'ylaydi, tezroq so'rash esa
+  // bog'chaning Wi-Fi'siga behuda yuk.
+  var POLL_MS = 3000;
+  var lastSceneId = null;
+
+  function pull() {
+    if (!window.Tank || !window.Tank.id) return;
+
+    fetch(window.Tank.api + '/settings')
+      .then(function (r) { return r.json(); })
+      .then(function (s) {
+        if (!s) return;
+        if (s.scene && s.scene !== lastSceneId) {
+          lastSceneId = s.scene;
+          scene = window.SCENES.get(s.scene);
+          eng.setScene(scene);
+          // Akvariumda tayyor fon bor, qolgan sahnalarda yo'q: fon rasmini
+          // faqat uni qo'llaydigan sahnaga qo'yamiz, aks holda hayvonot
+          // bog'i suv tagida qolib ketardi.
+          eng.setBackground(scene.backgrounds ? s.backgroundUrl : null);
+          paintPanel();
+        }
+      })
+      .catch(function () { /* tarmoq uzildi — sahna baribir suzaveradi */ });
+
+    fetch(window.Tank.api + '/fish')
+      .then(function (r) { return r.json(); })
+      .then(function (list) {
+        if (!Array.isArray(list)) return;
+        var chars = list
+          // Sotib olingan paketdagi 3D baliqlarning tekstura fayli yo'q —
+          // ular upstream'ning 3D sahnasiga tegishli, bu yerda tashlab
+          // ketiladi.
+          .filter(function (f) { return f.type !== 'pack'; })
+          .map(function (f) {
+            return {
+              id: f.id,
+              name: f.name || '',
+              url: window.Tank.api + '/fish/' + f.id + '/texture.png'
+            };
+          });
+        eng.setCharacters(chars);
+        emptyBox.classList.toggle('gone', chars.length > 0);
+        badge.classList.toggle('dim', chars.length > 0);
+      })
+      .catch(function () { /* xuddi shunday */ });
+  }
+
+  pull();
+  setInterval(pull, POLL_MS);
+
+  // ── boshqaruv paneli ─────────────────────────────────────────────────────
+  //
+  // Ekranga tegish (yoki sichqoncha) panelni ochadi. Televizor rejimida
+  // panel yo'q: u yerda tegish uchun hech narsa ham yo'q.
+
+  var panel = document.getElementById('panel');
+
+  function paintPanel() {
+    panel.textContent = '';
+    var lang = window.I18N ? window.I18N.lang : 'uz';
+
+    window.SCENES.list.forEach(function (s) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = window.SCENES.title(s.id, lang);
+      b.setAttribute('aria-pressed', s.id === scene.id ? 'true' : 'false');
+      b.onclick = function () { setScene(s.id); };
+      panel.appendChild(b);
+    });
+
+    var names = document.createElement('button');
+    names.type = 'button';
+    names.textContent = t('alive.names');
+    names.setAttribute('aria-pressed', eng.showNames ? 'true' : 'false');
+    names.onclick = function () {
+      eng.showNames = !eng.showNames;
+      names.setAttribute('aria-pressed', eng.showNames ? 'true' : 'false');
+    };
+    panel.appendChild(names);
+
+    var full = document.createElement('button');
+    full.type = 'button';
+    full.textContent = t('alive.fullscreen');
+    full.onclick = function () {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen().catch(function () { /* ruxsat berilmadi */ });
+    };
+    panel.appendChild(full);
+
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.textContent = t('alive.close');
+    close.onclick = function () { panel.classList.remove('open'); };
+    panel.appendChild(close);
+  }
+
+  // Sahna almashishi — aquarium'dagi rasm dinozavr bog'ida ham o'sha rasm
+  // bo'lib qoladi: bola chizganini yo'qotmaymiz, faqat u boshqacha
+  // harakatlanadi. Sahna sozlamada saqlanadi, ya'ni televizorda ham,
+  // telefonda ham bir xil.
+  function setScene(id) {
+    scene = window.SCENES.get(id);
+    lastSceneId = id;
+    eng.setScene(scene);
+    paintPanel();
+    if (!window.Tank || !window.Tank.id) return;
+    window.Tank.send(window.Tank.api + '/settings', {
+      method: 'POST',
+      body: JSON.stringify({ scene: id })
+    }).then(function (r) {
+      if (!r.ok) return;
+      return r.json().then(function (s) {
+        eng.setBackground(scene.backgrounds ? s.backgroundUrl : null);
+      });
+    }).catch(function () { /* saqlanmadi — ekranda baribir almashdi */ });
+  }
+
+  if (!tvMode) {
+    document.addEventListener('pointerdown', function (e) {
+      if (panel.contains(e.target)) return;
+      panel.classList.toggle('open');
+    });
+  }
+
+  paintPanel();
+  window.addEventListener('aqua:lang', paintPanel);
+})();
+</script>
+</body>
+</html>

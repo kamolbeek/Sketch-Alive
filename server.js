@@ -12,10 +12,13 @@
 //                               хранится только scrypt-хеш.
 //
 // Страницы:
-//   /                     — список своих аквариумов
-//   /t/<id>               — сам аквариум
+//   /                     — список своих сцен
+//   /t/<id>               — сцена на большом экране (2D, alive.html)
+//   /t/<id>/alive         — то же самое явным адресом
+//   /t/<id>/draw          — рисование пальцем с телефона или планшета
+//   /t/<id>/tank          — старая 3D-сцена, нужен купленный пак моделей
 //   /t/<id>/admin         — управление
-//   /t/<id>/capture       — съёмка листа с телефона
+//   /t/<id>/capture       — съёмка раскрашенного листа с телефона
 //   /print.html           — раскраски (общие для всех)
 //
 // Общее для всех аквариумов:
@@ -32,12 +35,14 @@
 //   DELETE …                       🔒 — удалить аквариум целиком (в data/trash-tanks)
 //   GET    …/fish                     — список рыбок [{id, kind, created}]
 //   GET    …/fish/<fid>/texture.png   — текстура рыбки
-//   POST   …/fish {kind, texture}     — добавить раскрашенную (dataURL png/jpeg)
+//   POST   …/fish {kind, texture,     — добавить рисунок ребёнка
+//                  name?, scene?,       (dataURL png/jpeg; name — подпись на
+//                  render?}             экране, render — 'sprite2d'|'texture3d')
 //   POST   …/fish {type:'pack',model} — добавить покупную из пака
 //   DELETE …/fish/<fid>            🔒 — удалить одну рыбку
 //   DELETE …/fish                  🔒 — очистить аквариум
 //   GET    …/settings                 — настройки сцены + метки событий
-//   POST   …/settings {…}             — изменить настройки (фон)
+//   POST   …/settings {…}             — изменить настройки (фон, сцена)
 //   POST   …/feed                     — покормить
 //   GET    …/backgrounds              — фоны [{name, url, custom}]
 //   POST   …/backgrounds {image}      — загрузить свой фон
@@ -65,6 +70,12 @@ const MAX_BODY = 12 * 1024 * 1024;
 // нет), но диск от него надо чем-то прикрыть.
 //
 // Числа с запасом на семью и меняются переменными окружения.
+// Сцены (аквариум, парк динозавров, зоопарк, дом, небо) описаны один раз
+// в assets/scenes.js и читаются и сервером, и браузером. Отдельный список на
+// сервере разошёлся бы с клиентским — и сцена, которую можно выбрать на
+// экране, не сохранялась бы на сервере.
+const SCENES = require('./assets/scenes.js');
+
 const LIMITS = {
   tanks: Number(process.env.AQUA_MAX_TANKS) || 200,          // всего аквариумов
   tanksPerHour: Number(process.env.AQUA_TANKS_PER_HOUR) || 5, // с одного адреса
@@ -502,7 +513,7 @@ function randomBackground() {
 }
 
 // ── настройки ──────────────────────────────────────────────────────────────
-const DEFAULT_SETTINGS = { background: null };
+const DEFAULT_SETTINGS = { background: null, scene: SCENES.defaultId };
 
 function readSettings(t) {
   let s;
@@ -666,7 +677,21 @@ function handleTankApi(req, res, t, url) {
       const png = Buffer.from(data.texture.split(',')[1], 'base64');
       fs.writeFileSync(path.join(t.fish, fid + '.png'), png);
       fs.writeFileSync(path.join(t.fish, fid + '.json'), JSON.stringify({
-        id: fid, kind: String(data.kind), created: new Date().toISOString()
+        id: fid,
+        kind: String(data.kind),
+        // Имя ребёнка подписывается под рисунком на большом экране. Это
+        // не учётная запись: строка как строка, её вводит тот же телефон,
+        // с которого пришёл рисунок. Режем длину, чтобы подпись помещалась.
+        name: String(data.name || '').trim().slice(0, 24),
+        // Как рисунок оживает: 'sprite2d' — сам рисунок ходит по сцене
+        // (свободное рисование, ничего покупать не нужно), 'texture3d' —
+        // старый путь: рисунок ложится текстурой на купленную модель.
+        render: data.render === 'texture3d' ? 'texture3d' : 'sprite2d',
+        // Сцена, в которой рисунок появился. Сцену аквариума можно
+        // переключить, и рисунок переедет вместе с ней — поле нужно, чтобы
+        // помнить, откуда он родом.
+        scene: SCENES.has(data.scene) ? data.scene : SCENES.defaultId,
+        created: new Date().toISOString()
       }));
       console.log(`+ рыбка ${data.kind} в ${t.id} (${Math.round(png.length / 1024)} КБ) — всего ${listFish(t).length}`);
       send(res, 200, JSON.stringify({ ok: true, id: fid }));
@@ -753,7 +778,10 @@ function handleTankApi(req, res, t, url) {
       // аквариум пустым, а сохраняет прежнюю картинку.
       const clean = {
         background: (typeof merged.background === 'string' && backgroundUrl(t, merged.background))
-          ? merged.background : cur.background
+          ? merged.background : cur.background,
+        // Незнакомая сцена не должна оставлять экран пустым: неизвестное имя
+        // просто не применяется, а прежняя сцена остаётся на месте.
+        scene: SCENES.has(merged.scene) ? merged.scene : (cur.scene || SCENES.defaultId)
       };
       writeSettings(t, clean);
       send(res, 200, JSON.stringify(clean));
@@ -863,11 +891,16 @@ function handleApi(req, res, url) {
 // достают id из location.pathname, поэтому файл один на все аквариумы.
 function pageFor(url) {
   if (url === '/') return 'index.html';
-  const m = url.match(/^\/t\/([^/]+)(?:\/(admin|capture))?\/?$/);
+  const m = url.match(/^\/t\/([^/]+)(?:\/(admin|capture|draw|alive|tank))?\/?$/);
   if (!m || !TANK_ID_RE.test(m[1])) return null;
   if (m[2] === 'admin') return 'admin.html';
   if (m[2] === 'capture') return 'capture.html';
-  return 'demos/realistic-tank.html';
+  if (m[2] === 'draw') return 'draw.html';
+  if (m[2] === 'alive') return 'alive.html';
+  // Сцена по умолчанию — 2D: она работает без купленного пака моделей,
+  // а значит открывается у всех. Старая 3D-сцена осталась на /t/<id>/tank.
+  if (m[2] === 'tank') return 'demos/realistic-tank.html';
+  return 'alive.html';
 }
 
 // Раздаём перечисленное, а не всё, что лежит рядом с сервером. Иначе по сети

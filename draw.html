@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title data-t="draw.title">Chizish</title>
+<link rel="stylesheet" href="/assets/ui.css">
+<style>
+/* Chizish sahifasi telefon va planshetda barmoq bilan ishlatiladi, shuning
+   uchun hamma tugma kattaligi kamida 44px: bog'chada uni besh yoshli bola
+   bosadi, sichqoncha bilan emas. */
+:root { --pad: 10px; }
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden;
+  background: #1b2430; color: #eef3f8;
+  font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Barmoq bilan chizganda sahifa aylanib ketmasligi kerak. */
+  touch-action: none; -webkit-user-select: none; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.wrap { display: flex; flex-direction: column; height: 100%; }
+
+header {
+  display: flex; align-items: center; gap: 10px;
+  padding: calc(var(--pad) + env(safe-area-inset-top)) var(--pad) var(--pad);
+  flex: 0 0 auto;
+}
+header .who { flex: 1 1 auto; min-width: 0; }
+header input[type=text] {
+  width: 100%; max-width: 260px;
+  padding: 10px 12px; border-radius: 10px;
+  border: 1px solid #3c4a5c; background: #131a24; color: #eef3f8; font-size: 16px;
+}
+.scene-name { font-weight: 600; opacity: .8; white-space: nowrap; }
+
+/* Qog'oz. Rasm shaffof fonda chiziladi (sahnaga kesib olinishi uchun), lekin
+   bolaga oq varaq ko'rinishi kerak — shuning uchun oqlik canvas'ning o'zida
+   emas, uning ortidagi elementda. */
+.paper {
+  flex: 1 1 auto; margin: 0 var(--pad); border-radius: 14px;
+  background: #fff; position: relative; overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,.35);
+}
+canvas { display: block; width: 100%; height: 100%; }
+.hint {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: #9fb0c2; font-size: 17px; text-align: center; padding: 24px; pointer-events: none;
+  transition: opacity .25s;
+}
+.hint.gone { opacity: 0; }
+
+.tools {
+  flex: 0 0 auto;
+  padding: var(--pad) var(--pad) calc(var(--pad) + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; gap: 10px;
+}
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.colors { display: flex; gap: 8px; overflow-x: auto; padding: 2px; flex: 1 1 auto; }
+.colors button {
+  flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid transparent; cursor: pointer; padding: 0;
+}
+.colors button[aria-pressed=true] { border-color: #fff; transform: scale(1.08); }
+
+.sizes { display: flex; gap: 8px; }
+.sizes button {
+  width: 44px; height: 44px; border-radius: 12px; border: 1px solid #3c4a5c;
+  background: #131a24; cursor: pointer; display: grid; place-items: center; padding: 0;
+}
+.sizes button[aria-pressed=true] { background: #2a6df4; border-color: #2a6df4; }
+.sizes i { display: block; border-radius: 50%; background: #eef3f8; }
+
+/* Havola ham tugma ko'rinishida: `<a class="tool">` ga brauzer o'zining ko'k
+   tagi chizilgan uslubini beradi va u boshqa tugmalar orasida begona
+   ko'rinadi. */
+button.tool, a.tool {
+  display: inline-flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  min-height: 44px; padding: 0 14px; border-radius: 12px;
+  border: 1px solid #3c4a5c; background: #131a24; color: #eef3f8;
+  font-size: 15px; cursor: pointer;
+}
+button.tool[aria-pressed=true] { background: #2a6df4; border-color: #2a6df4; }
+button.tool:disabled { opacity: .4; cursor: default; }
+
+button.go {
+  width: 100%; min-height: 56px; border: 0; border-radius: 14px;
+  background: #17a34a; color: #fff; font-size: 19px; font-weight: 700; cursor: pointer;
+}
+button.go:disabled { background: #3c4a5c; cursor: default; }
+
+.note { font-size: 13px; opacity: .7; text-align: center; min-height: 18px; }
+.note.bad { color: #ff9b9b; opacity: 1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="tool" id="back" href="#" data-t="draw.back">Orqaga</a>
+    <div class="who">
+      <input type="text" id="name" maxlength="24" data-t-ph="draw.name.ph" placeholder="Isming">
+    </div>
+    <span class="scene-name" id="scene"></span>
+  </header>
+
+  <div class="paper">
+    <canvas id="c"></canvas>
+    <div class="hint" id="hint" data-t="draw.hint">Bu yerga chiz</div>
+  </div>
+
+  <div class="tools">
+    <div class="row">
+      <div class="colors" id="colors"></div>
+    </div>
+    <div class="row">
+      <div class="sizes" id="sizes"></div>
+      <button class="tool" id="erase" aria-pressed="false" data-t="draw.erase">O‘chirg‘ich</button>
+      <button class="tool" id="undo" data-t="draw.undo">Orqaga qaytar</button>
+      <button class="tool" id="clear" data-t="draw.clear">Tozalash</button>
+    </div>
+    <button class="go" id="go" data-t="draw.go">Jonlantirish</button>
+    <div class="note" id="note"></div>
+  </div>
+</div>
+
+<script src="/assets/i18n.js"></script>
+<script src="/assets/scenes.js"></script>
+<script src="/assets/tank.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var t = function (k, v) { return window.I18N ? window.I18N.t(k, v) : k; };
+
+  var cv = document.getElementById('c');
+  var ctx = cv.getContext('2d', { willReadFrequently: true });
+  var hint = document.getElementById('hint');
+  var note = document.getElementById('note');
+
+  // ── qalam ────────────────────────────────────────────────────────────────
+  //
+  // Bolaning qo'li beqaror, shuning uchun chiziq yumaloq uchli va yumaloq
+  // burchakli: shunda tez tortilgan chiziq ham silliq chiqadi. Qalam
+  // qalinligi bola tanlagan o'lchamdan olinadi, bosim hisobga olinmaydi —
+  // planshetda bosim bor, barmoqda yo'q, va ikkisi har xil ishlasa bola
+  // "qalamim buzildi" deb o'ylaydi.
+  var COLORS = [
+    '#111111', '#e5342a', '#f5811f', '#f7c948', '#2fa84f',
+    '#1e88e5', '#7b3fbf', '#e0559b', '#8b5a2b', '#ffffff'
+  ];
+  var SIZES = [6, 14, 28];
+
+  var color = COLORS[0];
+  var size = SIZES[1];
+  var erasing = false;
+  var drawing = false;
+  var touched = false;
+  var last = null;
+
+  // Bekor qilish uchun kadrlar. Ko'pi bilan 12 ta: har biri to'liq canvas,
+  // ya'ni xotira. 12 qadam bolaga yetadi, telefonni esa bo'g'maydi.
+  var history = [];
+  var HISTORY_MAX = 12;
+
+  function fit() {
+    // Canvas o'lchami CSS o'lchamiga moslanadi. O'lchov o'zgarganda
+    // chizilgan narsa yo'qolmasligi kerak — shuning uchun eski tasvir
+    // saqlanib, yangisiga ko'chiriladi.
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = Math.round(cv.clientWidth * dpr);
+    var h = Math.round(cv.clientHeight * dpr);
+    if (!w || !h || (w === cv.width && h === cv.height)) return;
+    var old = null;
+    if (cv.width && cv.height) {
+      old = document.createElement('canvas');
+      old.width = cv.width; old.height = cv.height;
+      old.getContext('2d').drawImage(cv, 0, 0);
+    }
+    cv.width = w; cv.height = h;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    if (old) ctx.drawImage(old, 0, 0, w, h);
+  }
+
+  function snapshot() {
+    var s = document.createElement('canvas');
+    s.width = cv.width; s.height = cv.height;
+    s.getContext('2d').drawImage(cv, 0, 0);
+    history.push(s);
+    if (history.length > HISTORY_MAX) history.shift();
+    document.getElementById('undo').disabled = false;
+  }
+
+  function point(e) {
+    var r = cv.getBoundingClientRect();
+    var dpr = cv.width / r.width;
+    return { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr };
+  }
+
+  function begin(e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    cv.setPointerCapture(e.pointerId);
+    snapshot();
+    drawing = true;
+    last = point(e);
+    stroke(last, last);          // bitta tegish ham nuqta qoldiradi
+  }
+
+  function move(e) {
+    if (!drawing) return;
+    var p = point(e);
+    stroke(last, p);
+    last = p;
+  }
+
+  function end(e) {
+    if (!drawing) return;
+    drawing = false;
+    last = null;
+    try { cv.releasePointerCapture(e.pointerId); } catch (err) { /* allaqachon qo'yib yuborilgan */ }
+  }
+
+  function stroke(a, b) {
+    var dpr = cv.width / cv.clientWidth;
+    ctx.save();
+    // O'chirg'ich rangni emas, pikselni olib tashlaydi: fon shaffof
+    // bo'lgani uchun oq rang bilan "o'chirish" sahnada oq dog' bo'lib
+    // chiqardi.
+    ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = color;
+    ctx.lineWidth = size * dpr * (erasing ? 2 : 1);
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+    ctx.restore();
+    if (!touched) { touched = true; hint.classList.add('gone'); }
+    document.getElementById('go').disabled = false;
+  }
+
+  cv.addEventListener('pointerdown', begin);
+  cv.addEventListener('pointermove', move);
+  cv.addEventListener('pointerup', end);
+  cv.addEventListener('pointercancel', end);
+
+  // ── asboblar ─────────────────────────────────────────────────────────────
+
+  var colorsBox = document.getElementById('colors');
+  COLORS.forEach(function (hex) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.style.background = hex;
+    if (hex === '#ffffff') b.style.boxShadow = 'inset 0 0 0 1px #98a6b6';
+    b.setAttribute('aria-pressed', hex === color ? 'true' : 'false');
+    b.setAttribute('aria-label', hex);
+    b.onclick = function () {
+      color = hex;
+      erasing = false;
+      document.getElementById('erase').setAttribute('aria-pressed', 'false');
+      paintTools();
+    };
+    colorsBox.appendChild(b);
+  });
+
+  var sizesBox = document.getElementById('sizes');
+  SIZES.forEach(function (px) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-pressed', px === size ? 'true' : 'false');
+    b.dataset.size = px;
+    var i = document.createElement('i');
+    i.style.width = i.style.height = Math.round(px * 0.8) + 'px';
+    b.appendChild(i);
+    b.onclick = function () { size = px; paintTools(); };
+    sizesBox.appendChild(b);
+  });
+
+  function paintTools() {
+    colorsBox.querySelectorAll('button').forEach(function (b, i) {
+      b.setAttribute('aria-pressed', (!erasing && COLORS[i] === color) ? 'true' : 'false');
+    });
+    sizesBox.querySelectorAll('button').forEach(function (b) {
+      b.setAttribute('aria-pressed', Number(b.dataset.size) === size ? 'true' : 'false');
+    });
+  }
+
+  document.getElementById('erase').onclick = function () {
+    erasing = !erasing;
+    this.setAttribute('aria-pressed', erasing ? 'true' : 'false');
+    paintTools();
+  };
+
+  document.getElementById('undo').onclick = function () {
+    var prev = history.pop();
+    if (!prev) return;
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.drawImage(prev, 0, 0);
+    this.disabled = history.length === 0;
+  };
+  document.getElementById('undo').disabled = true;
+
+  document.getElementById('clear').onclick = function () {
+    snapshot();
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    touched = false;
+    hint.classList.remove('gone');
+    document.getElementById('go').disabled = true;
+  };
+
+  // ── yuborish ─────────────────────────────────────────────────────────────
+  //
+  // Sahnaga ketadigan rasm — chizilgan joyning o'zi, atrofidagi bo'sh
+  // varaq emas. Bo'sh joy bilan yuborilsa, sahnada personaj kichkina
+  // bo'lib, ko'rinmas ramka ichida suzib yurardi.
+
+  function trimmed() {
+    var w = cv.width, h = cv.height;
+    var data = ctx.getImageData(0, 0, w, h).data;
+    var x0 = w, y0 = h, x1 = -1, y1 = -1;
+    for (var y = 0; y < h; y++) {
+      for (var x = 0; x < w; x++) {
+        // 24 — shovqin chegarasi: yumaloq uchli chiziqning eng chekkasida
+        // deyarli shaffof piksellar qoladi, ular bo'yicha kesilsa ramka
+        // bir necha piksel kattaroq chiqadi.
+        if (data[(y * w + x) * 4 + 3] > 24) {
+          if (x < x0) x0 = x;
+          if (x > x1) x1 = x;
+          if (y < y0) y0 = y;
+          if (y > y1) y1 = y;
+        }
+      }
+    }
+    if (x1 < 0) return null;               // butunlay bo'sh
+
+    // Chetiga biroz havo qoldiramiz, aks holda chiziq sahnada qirqilgandek
+    // ko'rinadi.
+    var pad = Math.round(Math.max(x1 - x0, y1 - y0) * 0.04) + 2;
+    x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad);
+    x1 = Math.min(w - 1, x1 + pad); y1 = Math.min(h - 1, y1 + pad);
+
+    var cw = x1 - x0 + 1, ch = y1 - y0 + 1;
+    // Sahnada personaj balandligi ekranning ~30%i, ya'ni 4K televizorda ham
+    // 640 px yetarli. Kattaroq rasm faqat trafik va serverdagi joy.
+    var k = Math.min(1, 640 / Math.max(cw, ch));
+
+    var out = document.createElement('canvas');
+    out.width = Math.max(1, Math.round(cw * k));
+    out.height = Math.max(1, Math.round(ch * k));
+    var octx = out.getContext('2d');
+    octx.imageSmoothingQuality = 'high';
+    octx.drawImage(cv, x0, y0, cw, ch, 0, 0, out.width, out.height);
+    return out;
+  }
+
+  var go = document.getElementById('go');
+  go.disabled = true;
+
+  go.onclick = function () {
+    if (!window.Tank || !window.Tank.id) {
+      return fail(t('draw.err.notank'));
+    }
+    var out = trimmed();
+    if (!out) return fail(t('draw.err.empty'));
+
+    go.disabled = true;
+    note.className = 'note';
+    note.textContent = t('draw.sending');
+
+    var name = document.getElementById('name').value.trim().slice(0, 24);
+    try { localStorage.setItem('alive.name', name); } catch (e) { /* maxfiy rejim */ }
+
+    window.Tank.send(window.Tank.api + '/fish', {
+      body: JSON.stringify({
+        kind: 'drawing',
+        render: 'sprite2d',
+        name: name,
+        scene: scene.id,
+        texture: out.toDataURL('image/png')
+      })
+    }).then(function (r) {
+      if (r.ok) {
+        note.className = 'note';
+        note.textContent = t('draw.sent');
+        // Yuborilgandan keyin varaq tozalanadi: navbatdagi bola darrov
+        // chiza boshlaydi, tarbiyachi hech narsa bosmaydi.
+        history.length = 0;
+        document.getElementById('undo').disabled = true;
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        touched = false;
+        hint.classList.remove('gone');
+        setTimeout(function () { note.textContent = ''; }, 2500);
+        return;
+      }
+      return r.json().catch(function () { return {}; }).then(function (e) {
+        fail(e.error || t('draw.err.send'));
+        go.disabled = false;
+      });
+    }, function () {
+      fail(t('draw.err.net'));
+      go.disabled = false;
+    });
+  };
+
+  function fail(msg) {
+    note.className = 'note bad';
+    note.textContent = msg;
+  }
+
+  // ── sahna va ulanish ─────────────────────────────────────────────────────
+
+  var scene = window.SCENES.get(window.SCENES.defaultId);
+
+  function showScene() {
+    document.getElementById('scene').textContent =
+      window.SCENES.title(scene.id, window.I18N ? window.I18N.lang : 'uz');
+    // Maslahat: shu sahnaga nima chizsa bo'ladi. Bo'sh varaq oldida bola
+    // ko'pincha "nima chizay?" deb qotib qoladi.
+    var lang = window.I18N ? window.I18N.lang : 'uz';
+    var ideas = scene.draw[lang] || scene.draw.uz;
+    hint.textContent = t('draw.hint') + ' — ' + ideas.join(', ');
+  }
+
+  if (window.Tank && window.Tank.id) {
+    document.getElementById('back').href = window.Tank.url;
+    fetch(window.Tank.api + '/settings')
+      .then(function (r) { return r.json(); })
+      .then(function (s) {
+        if (s && s.scene) scene = window.SCENES.get(s.scene);
+        showScene();
+      }, showScene);
+  } else {
+    document.getElementById('back').href = '/';
+    showScene();
+  }
+
+  try {
+    var saved = localStorage.getItem('alive.name');
+    if (saved) document.getElementById('name').value = saved;
+  } catch (e) { /* maxfiy rejim */ }
+
+  window.addEventListener('aqua:lang', showScene);
+  window.addEventListener('resize', fit);
+  // Klaviatura ochilib-yopilganda ham o'lchov o'zgaradi.
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
+  fit();
+  // Birinchi fit() dan keyin canvas hali joylashib ulgurmagan bo'lishi
+  // mumkin — layout tugagach yana bir marta o'lchaymiz.
+  requestAnimationFrame(fit);
+})();
+</script>
+</body>
+</html>
