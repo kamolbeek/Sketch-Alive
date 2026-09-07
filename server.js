@@ -200,19 +200,61 @@ const SHEET_FILE = path.join(ROOT, 'assets', 'coloring', 'manifest.json');
 // покупного пака они лежат в репозитории, поэтому список читается один раз
 // при старте: файлы меняются только вместе с кодом.
 const CREATURES_FILE = path.join(ROOT, 'assets', 'creatures', 'manifest.json');
+
+// Кэш живёт 10 секунд, а не вечно: свою картинку кладут в папку на живом
+// сервере и ждут, что она появится. Перезапускать сервер ради этого никто
+// не будет, а читать папку на каждый запрос — лишнее.
 let creaturesCache = null;
+let creaturesCachedAt = 0;
+const CREATURES_TTL = 10000;
 
 function listCreatures() {
-  if (creaturesCache) return creaturesCache;
+  if (creaturesCache && Date.now() - creaturesCachedAt < CREATURES_TTL) return creaturesCache;
+  let list = [];
   try {
     const m = JSON.parse(fs.readFileSync(CREATURES_FILE, 'utf8'));
-    creaturesCache = Array.isArray(m.creatures) ? m.creatures : [];
+    if (Array.isArray(m.creatures)) list = m.creatures;
   } catch (e) {
     // Манифеста нет — значит, tools/make-creatures.js не запускали.
     // Это не поломка: сцена работает и на одних детских рисунках.
-    creaturesCache = [];
   }
+  creaturesCache = list.concat(listCustomCreatures());
+  creaturesCachedAt = Date.now();
   return creaturesCache;
+}
+
+// Свои картинки: что положили в assets/creatures/custom/, то и появляется
+// в списке. Без сборки, без манифеста, без единой команды — положил файл,
+// обновил страницу.
+//
+// Так сделано намеренно. Готовые персонажи, которые едут вместе с проектом,
+// подходят не всем: у одного детского сада своя тема, другому не нравится
+// стиль. Требовать ради этого правки кода — значит, что картинки не поменяет
+// никто. А папка есть у всех.
+const CUSTOM_DIR = path.join(ROOT, 'assets', 'creatures', 'custom');
+const CUSTOM_RE = /\.(png|svg|webp|jpe?g)$/i;
+
+function listCustomCreatures() {
+  return readDirSafe(CUSTOM_DIR)
+    .filter((name) => CUSTOM_RE.test(name))
+    .sort()
+    .map((name) => {
+      const bare = name.replace(CUSTOM_RE, '');
+      // «-flip» на конце имени — картинка смотрит влево и её надо
+      // отразить. Сцена ждёт голову справа; переименовать файл проще,
+      // чем объяснять, как перевернуть картинку в редакторе.
+      const flip = /-flip$/i.test(bare);
+      const label = bare.replace(/-flip$/i, '').replace(/[-_]+/g, ' ').trim();
+      const title = label.charAt(0).toUpperCase() + label.slice(1);
+      return {
+        id: 'custom:' + name,
+        scene: 'aquarium',
+        custom: true,
+        flip: flip,
+        titles: { uz: title, ru: title, en: title },
+        url: '/assets/creatures/custom/' + encodeURIComponent(name)
+      };
+    });
 }
 
 function sheetKinds() {
@@ -688,6 +730,10 @@ function handleTankApi(req, res, t, url) {
           id: fid,
           type: 'creature',
           creature: c.id,
+          // Адрес картинки храним рядом: у своих картинок он не выводится
+          // из имени вида, там внутри имя файла целиком.
+          url: c.url,
+          flip: !!c.flip,
           name: String(data.name || '').trim().slice(0, 24),
           scene: SCENES.has(data.scene) ? data.scene : SCENES.defaultId,
           created: new Date().toISOString()

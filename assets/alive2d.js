@@ -74,6 +74,9 @@
     this.id = opts.id;
     this.name = opts.name || '';
     this.motion = opts.motion || 'swim';
+    // Rasm chapga qaragan bo'lsa ko'zguda aylantiriladi. Bu doimiy xossa,
+    // suzish yo'nalishidan alohida: ikkalasi ko'paytiriladi.
+    this.mirror = opts.flip ? -1 : 1;
 
     // Chuqurlik: 0 — eng uzoq, 1 — eng yaqin. O'lchamga ham, tartibga ham
     // ta'sir qiladi, shuning uchun sahna tekis emas, hajmli ko'rinadi.
@@ -87,6 +90,20 @@
 
     this.phase = rand(0, Math.PI * 2);
     this.speedScale = rand(0.75, 1.35);
+
+    // Tezlik doimiy emas. Haqiqiy baliq bir tekis suzmaydi: bir oz sirg'anib
+    // boradi, keyin dumini urib oldinga otiladi, keyin yana sekinlashadi.
+    // Doimiy tezlik ekranda darrov bilinadi — personaj suzayotgandek emas,
+    // konveyerda ketayotgandek ko'rinadi.
+    this.gas = 1;              // hozirgi tezlik ko'paytirgichi
+    this.gasTarget = 1;        // qayerga intilyapti
+    this.nextDart = rand(1.5, 6);   // navbatdagi otilishgacha qolgan vaqt
+
+    // Burilishdagi og'ish. Baliq chuqurlikni o'zgartirganda tanasi biroz
+    // qiyshayadi — bu harakatni tekis sirg'anishdan ajratib turadigan
+    // eng sezilarli belgi.
+    this.tilt = 0;
+    this.prevY = 0;
 
     this.x = Math.random();
     this.y = rand(0.15, 0.85);
@@ -110,16 +127,28 @@
 
     if (m === 'place') return;   // xonadagi narsa joyidan jilmaydi
 
+    // Otilish. Vaqti-vaqti bilan personaj tezlashadi va yana sekinlashadi.
+    // `gas` maqsadga asta yetib boradi — keskin sakrash sun'iy ko'rinadi.
+    this.nextDart -= dt;
+    if (this.nextDart <= 0) {
+      this.gasTarget = rand(0.45, 2.1);
+      this.nextDart = rand(1.5, 6);
+    }
+    this.gas += (this.gasTarget - this.gas) * clamp(dt * 1.4, 0, 1);
+
     var base = (m === 'walk') ? 0.045 : (m === 'fly' ? 0.085 : 0.06);
     // Uzoqdagilar sekinroq suzadi — perspektivada shunday ko'rinadi.
-    var speed = base * this.speedScale * (0.55 + 0.45 * this.z);
+    var speed = base * this.speedScale * this.gas * (0.55 + 0.45 * this.z);
 
     this.x += this.dir * speed * dt;
 
     // Chetga yetganda yo'qolib ketmaydi, buriladi. Ekrandan chiqib ketish
-    // katta ekranda "rasmim yo'qoldi" degan taassurot beradi.
-    if (this.x > 1.05) { this.x = 1.05; this.dir = -1; }
-    if (this.x < -0.05) { this.x = -0.05; this.dir = 1; }
+    // katta ekranda "rasmim yo'qoldi" degan taassurot beradi. Burilish
+    // chekkaga tegmasdan oldin boshlanadi — devorga urilgandek emas,
+    // o'zi qaytgandek ko'rinsin.
+    if (this.x > 0.98 && this.dir > 0) this.dir = -1;
+    if (this.x < 0.02 && this.dir < 0) this.dir = 1;
+    this.x = clamp(this.x, -0.04, 1.04);
 
     if (m === 'swim' || m === 'fly') {
       // Vertikal siljish — sekin, uzun to'lqin. Tananing to'lqinlanishi
@@ -129,6 +158,15 @@
       var amp = (m === 'fly') ? 0.10 : 0.06;
       this.y = clamp(this.y + Math.sin(this.driftPhase) * amp * dt, 0.08, 0.88);
     }
+
+    // Og'ish balandlik o'zgarishidan hisoblanadi: yuqoriga ketayotgan
+    // personajning boshi ko'tariladi. Formulaga emas, haqiqiy harakatga
+    // bog'langani uchun u har doim harakatga mos tushadi.
+    if (dt > 0) {
+      var vy = (this.y - this.prevY) / dt;
+      this.tilt += (clamp(vy * 1.6, -0.5, 0.5) - this.tilt) * clamp(dt * 3, 0, 1);
+    }
+    this.prevY = this.y;
 
     // Yuradiganlar hammasi bitta chiziqda tursa, ekranda bir-birining ustiga
     // mingashib, tirbandlik bo'lib qoladi. Shuning uchun yer chizig'i
@@ -235,7 +273,8 @@
       loadImage(c.url).then(function (img) {
         delete self.loading[c.id];
         self.chars.push(new Character(img, {
-          id: c.id, name: c.name, motion: c.motion || self.scene.motion
+          id: c.id, name: c.name, flip: c.flip,
+          motion: c.motion || self.scene.motion
         }));
       }, function () {
         delete self.loading[c.id];   // rasm buzuq — sahna baribir ishlayveradi
@@ -402,7 +441,10 @@
     ctx.save();
     ctx.translate(x, y);
 
-    var flip = c.face < 0 ? -1 : 1;
+    var flip = (c.face < 0 ? -1 : 1) * c.mirror;
+    // Og'ish suzish yo'nalishi bo'yicha qo'llanadi: chapga suzayotgan
+    // baliqning boshi ham yuqoriga ko'tarilishi kerak, pastga emas.
+    if (c.tilt) ctx.rotate(c.tilt * (c.face < 0 ? -1 : 1));
     // |face| < 1 bo'lgan payt — burilish o'rtasi: sprayt yupqalashadi.
     var turn = Math.abs(c.face);
     ctx.scale(flip * Math.max(turn, 0.05) * pop, pop);
@@ -456,8 +498,13 @@
     var n = SLICES;
     var sw = img.width / n;
     var dsw = dw / n;
-    var speed = (c.motion === 'fly' ? 7.5 : 4.2) * c.speedScale;
-    var maxAmp = dh * (c.motion === 'fly' ? 0.05 : 0.07);
+    // Dum urishi tezlikka bog'liq: otilayotgan baliq dumini tez-tez uradi,
+    // sirg'anayotgani esa deyarli qimirlatmaydi. Bu ikkisi bog'lanmasa,
+    // harakat va animatsiya bir-biridan ajralib, o'yinchoqqa o'xshab qoladi.
+    var speed = (c.motion === 'fly' ? 7.5 : 4.2) * c.speedScale
+      * (0.5 + 0.7 * (c.gas || 1));
+    var maxAmp = dh * (c.motion === 'fly' ? 0.05 : 0.07)
+      * (0.6 + 0.5 * clamp(c.gas || 1, 0, 2));
 
     for (var i = 0; i < n; i++) {
       // Bosh — spraytning oldi tomoni (transformdan keyin doim o'ng tomon),

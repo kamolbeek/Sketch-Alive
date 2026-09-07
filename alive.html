@@ -161,9 +161,12 @@ canvas { display: block; width: 100vw; height: 100vh; }
               name: f.name || '',
               // Tayyor personajning fayli loyihada yotadi, bola chizgani esa
               // serverda — shuning uchun manzili ikki xil joydan olinadi.
+              // Yozuvda `url` bo'lsa (o'z rasmlari uchun) o'sha ishlatiladi:
+              // ularning manzilini tur nomidan yasab bo'lmaydi.
               url: f.type === 'creature'
-                ? '/assets/creatures/' + f.creature + '.svg'
-                : window.Tank.api + '/fish/' + f.id + '/texture.png'
+                ? (f.url || '/assets/creatures/' + f.creature + '.svg')
+                : window.Tank.api + '/fish/' + f.id + '/texture.png',
+              flip: !!f.flip
             };
           });
         eng.setCharacters(chars);
