@@ -23,8 +23,12 @@
 //
 // Общее для всех аквариумов:
 //   POST   /api/tanks {name, password?} — создать → {id, name, created, password}
-//   GET    /api/pack                  — покупные модели рыб [{name, title, url}]
+//   GET    /api/pack                  — 3D-модели рыб [{name, title, url, length}]:
+//                                       покупной пак и свои файлы из
+//                                       assets/models/drop/
 //   GET    /api/creatures             — готовые персонажи [{id, scene, titles, url}]
+//                                       (плюс свои картинки из
+//                                       assets/creatures/custom/)
 //
 // Внутри аквариума, префикс /api/t/<id>. Помеченные 🔒 требуют заголовок
 // X-Tank-Pass с паролем аквариума:
@@ -235,7 +239,7 @@ const CUSTOM_DIR = path.join(ROOT, 'assets', 'creatures', 'custom');
 const CUSTOM_RE = /\.(png|svg|webp|jpe?g)$/i;
 
 function listCustomCreatures() {
-  return readDirSafe(CUSTOM_DIR)
+  return listDir(CUSTOM_DIR)
     .filter((name) => CUSTOM_RE.test(name))
     .sort()
     .map((name) => {
@@ -264,18 +268,63 @@ function sheetKinds() {
   } catch (e) { return new Set(); }
 }
 
+// Свои 3D-модели: что положили в assets/models/drop/, то и появляется в
+// 3D-сцене. Без сборки и без конвертера — .glb уже готовый формат, сцена
+// читает его напрямую.
+//
+// Так сделано потому, что покупной пак есть не у всех: он стоит денег и его
+// нельзя перезаливать. А бесплатных моделей в интернете хватает — надо лишь
+// уметь их принять. Папка это и делает.
+const DROP_DIR = path.join(ROOT, 'assets', 'models', 'drop');
+const DROP_RE = /\.(glb|gltf)$/i;
+
+// Длина модели в единицах сцены. Аквариум внутри 24 единицы, так что 2.2 —
+// обычная рыба. Пишется в имя файла после «@»: «акула@4.glb». Это единственное,
+// чего нельзя узнать из самого файла: масштаб в моделях произвольный, и
+// креветка размером с кита — обычное дело.
+const DROP_LEN = 2.2;
+
+function listDropModels() {
+  return listDir(DROP_DIR)
+    .filter((name) => DROP_RE.test(name))
+    .sort()
+    .map((name) => {
+      const bare = name.replace(DROP_RE, '');
+      const at = bare.match(/^(.*)@([\d.]+)$/);
+      const label = (at ? at[1] : bare).replace(/[-_]+/g, ' ').trim();
+      const len = at ? Number(at[2]) : NaN;
+      const title = label.charAt(0).toUpperCase() + label.slice(1);
+      return {
+        name: 'drop:' + name,
+        title: title,
+        titles: { uz: title, ru: title, en: title },
+        url: '/assets/models/drop/' + encodeURIComponent(name),
+        length: (isFinite(len) && len > 0) ? len : DROP_LEN,
+        // Своей раскраски у такой модели нет, но в выборе «готовых рыбок»
+        // она должна быть: иначе её никак не выпустить в аквариум.
+        sheet: true,
+        drop: true
+      };
+    });
+}
+
 function listPack() {
   try {
     const raw = fs.readFileSync(PACK_FILE, 'utf8').replace(/^﻿/, '');
     const list = JSON.parse(raw);
-    if (!Array.isArray(list)) return [];
+    if (!Array.isArray(list)) return listDropModels();
     // sheet — есть ли у вида лист раскраски. Меню аквариума показывает только
     // такие: «готовая рыбка» должна быть той же, какую можно раскрасить.
     // Остальные из списка не убираем: на них ссылаются рыбки, запущенные
     // раньше, и без них они пропали бы из аквариума.
     const kinds = sheetKinds();
-    return list.map((m) => Object.assign({}, m, { sheet: kinds.has(m.name) }));
-  } catch (e) { return []; }
+    return list.map((m) => Object.assign({}, m, { sheet: kinds.has(m.name) }))
+      .concat(listDropModels());
+  } catch (e) {
+    // pack.json нет — значит, покупной пак не собирали. Это не поломка:
+    // свои модели из drop/ работают сами по себе.
+    return listDropModels();
+  }
 }
 
 // ── события ────────────────────────────────────────────────────────────────
@@ -550,6 +599,15 @@ const isUpload = (name) => name.startsWith(UPLOAD_PREFIX);
 
 function readDirSafe(dir) {
   try { return fs.readdirSync(dir).filter((f) => IMG_RE.test(f)).sort(); }
+  catch (e) { return []; }
+}
+
+// Просто содержимое папки, без фильтра по типу. readDirSafe отсеивает всё,
+// кроме картинок — он для фонов, где иначе в список попал бы мусор. А там,
+// где тип проверяется своим правилом (свои персонажи — ещё и .svg, свои
+// модели — .glb), этот фильтр молча съедал нужные файлы.
+function listDir(dir) {
+  try { return fs.readdirSync(dir).sort(); }
   catch (e) { return []; }
 }
 

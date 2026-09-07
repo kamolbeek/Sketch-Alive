@@ -126,6 +126,31 @@ tushadi. Tizim varaqni burchak belgilaridan topib, perspektivani to‘g‘rilab,
 baliq konturi bo‘ylab **shaffof qilib kesadi** — shuning uchun sahnada
 qog‘oz emas, faqat bolaning rasmi suzadi.
 
+## 3D sahna
+
+Asosiy sahna 2D, lekin haqiqiy 3D modellar bilan ishlaydigan sahna ham bor:
+`/t/<kod>/tank`. Modellar skelet animatsiyasi bilan suzadi, bolaning bo‘yagan
+varag‘i esa modelning terisi bo‘lib yopishadi.
+
+Upstream bu yerda sotib olingan pakni talab qiladi. Bizda talab qilmaydi:
+
+```bash
+node tools/get-free-models.js     # CC0 modellar, bepul
+```
+
+Yoki o‘zing topgan har qanday `.glb` faylni `assets/models/drop/` ga
+tashlaysan — buyruqsiz, sahnada darhol paydo bo‘ladi. Fayl nomi ekrandagi
+nomga aylanadi, `@` dan keyingi son esa jonivorning kattaligi:
+`akula@4.glb`. Batafsili — o‘sha papkadagi README.
+
+Sotib olingan pak ham ishlayveradi (`assets/models/pack/`), ikkalasi bir
+ro‘yxatda ko‘rinadi.
+
+> Eslatma: 3D yo‘l **erkin chizishga to‘g‘ri kelmaydi** — bolaning dinozavr
+> rasmini baliq modeliga yopishtirib bo‘lmaydi. Shuning uchun bog‘cha uchun
+> asosiy yo‘l 2D bo‘lib qoladi; 3D — bo‘yash varaqlari bilan ishlaydigan
+> qo‘shimcha imkoniyat.
+
 ## Sahifalar
 
 | Manzil | Nima |
@@ -135,7 +160,7 @@ qog‘oz emas, faqat bolaning rasmi suzadi.
 | `/t/<kod>/draw` | planshet/telefonda chizish |
 | `/t/<kod>/admin` | boshqaruv (parol kerak) |
 | `/t/<kod>/capture` | ranglangan varaqni suratga olish |
-| `/t/<kod>/tank` | eski 3D sahna, sotib olingan modellar kerak |
+| `/t/<kod>/tank` | 3D sahna — `assets/models/drop/` dagi modellar bilan |
 | `/print.html` | chop etish uchun varaqlar |
 
 ## Tillar

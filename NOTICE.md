@@ -59,6 +59,18 @@ o'tkaza olmaydi.
   yasalgan bo'yash varaqlari CC-BY-SA 4.0 bo'lib qoladi. Loyihaning kodi
   bundan ta'sirlanmaydi — u MIT bo'lib qolaveradi.
 
+## Bepul 3D modellar
+
+`node tools/get-free-models.js` Khronos'ning rasmiy namuna to'plamidan
+model yuklab oladi:
+
+- Manba: https://github.com/KhronosGroup/glTF-Sample-Assets
+- Litsenziya: **CC0** — mualliflik huquqidan voz kechilgan, shartsiz
+  ishlatiladi.
+
+Fayllar `assets/models/drop/` ga tushadi va git'ga qo'shilmaydi: har kim
+o'zi yuklab olgani ma'qul.
+
 ## 3D modellar
 
 Upstream 3D baliqlarni **CGTrader'dan sotib olingan** pakdan oladi —
