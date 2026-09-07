@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 214 148" width="642" height="444">
 <title>Blue tang</title>
-<defs><clipPath id="c"><path d="M44,74 C44,36 84,16 126,20 C170,24 200,48 206,74 C200,100 170,124 126,128 C84,132 44,112 44,74 Z"/></clipPath></defs>
+<defs><clipPath id="c"><path d="M44,74 C44,36 84,16 126,20 C170,24 200,48 206,74 C200,100 170,124 126,128 C84,132 44,112 44,74 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#6aa5e9"/><stop offset="0.45" stop-color="#2a7fe0"/><stop offset="1" stop-color="#1d599d"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="10.4"/></filter></defs>
 <path d="M50,74 L8,26 Q22,74 8,122 Z" fill="#f2c53d"/>
       <path d="M88,26 C118,8 148,14 158,28 L140,42 Z" fill="#1f6fd0"/>
       <path d="M92,122 C120,140 148,134 158,120 L140,106 Z" fill="#1f6fd0"/>
-      <path d="M44,74 C44,36 84,16 126,20 C170,24 200,48 206,74 C200,100 170,124 126,128 C84,132 44,112 44,74 Z" fill="#2a7fe0"/>
+      <path d="M44,74 C44,36 84,16 126,20 C170,24 200,48 206,74 C200,100 170,124 126,128 C84,132 44,112 44,74 Z" fill="url(#vol)"/>
       <g clip-path="url(#c)">
         <path d="M92,28 C128,38 148,66 154,104 C142,120 118,124 104,116
                  C116,82 104,54 82,42 Z" fill="#16233c"/>
@@ -12,4 +12,13 @@
       </g>
       <circle cx="180" cy="62" r="9" fill="#fff"/><circle cx="181.62" cy="62" r="4.32" fill="#17202a"/><circle cx="180.18" cy="58.94" r="1.71" fill="#fff"/>
       <path d="M186,84 q5.5,3.74 11,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+<g clip-path="url(#c)">
+  <path d="M44,74 C44,36 84,16 126,20 C170,24 200,48 206,74 C200,100 170,124 126,128 C84,132 44,112 44,74 Z" fill="none" stroke="#ffffff" stroke-width="8.1" opacity=".28"/>
+  <ellipse cx="98" cy="38"
+           rx="64" ry="22"
+           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
+  <ellipse cx="107" cy="157"
+           rx="133" ry="50"
+           fill="#133965" opacity=".42" filter="url(#soft)"/>
+</g>
 </svg>

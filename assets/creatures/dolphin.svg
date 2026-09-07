@@ -1,13 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 138" width="750" height="414">
 <title>Dolphin</title>
-<defs><clipPath id="c"><path d="M40,74 C48,44 88,28 138,30 C180,32 208,44 226,58 C236,66 240,72 246,76 C238,84 216,96 186,102 C140,112 88,110 60,98 C46,92 40,84 40,74 Z"/></clipPath></defs>
+<defs><clipPath id="c"><path d="M40,74 C48,44 88,28 138,30 C180,32 208,44 226,58 C236,66 240,72 246,76 C238,84 216,96 186,102 C140,112 88,110 60,98 C46,92 40,84 40,74 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#85accb"/><stop offset="0.45" stop-color="#5089b4"/><stop offset="1" stop-color="#38607e"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9.7"/></filter></defs>
 <path d="M44,74 L8,26 Q26,74 8,122 Z" fill="#3f6c92"/>
       <path d="M116,34 C124,4 148,-2 158,8 L150,38 Z" fill="#3f6c92"/>
       <path d="M104,104 C100,124 86,132 76,128 L90,100 Z" fill="#3f6c92"/>
-      <path d="M40,74 C48,44 88,28 138,30 C180,32 208,44 226,58 C236,66 240,72 246,76 C238,84 216,96 186,102 C140,112 88,110 60,98 C46,92 40,84 40,74 Z" fill="#5089b4"/>
+      <path d="M40,74 C48,44 88,28 138,30 C180,32 208,44 226,58 C236,66 240,72 246,76 C238,84 216,96 186,102 C140,112 88,110 60,98 C46,92 40,84 40,74 Z" fill="url(#vol)"/>
       <g clip-path="url(#c)">
         <path d="M40,84 C96,104 172,104 246,80 L246,138 L40,138 Z" fill="#dfeaf2"/>
       </g>
       <path d="M228,70 C238,70 250,74 250,78 C242,82 230,82 224,80 Z" fill="#dfeaf2"/>
       <circle cx="206" cy="62" r="8" fill="#fff"/><circle cx="207.44" cy="62" r="3.84" fill="#17202a"/><circle cx="206.16" cy="59.28" r="1.52" fill="#fff"/>
+<g clip-path="url(#c)">
+  <path d="M40,74 C48,44 88,28 138,30 C180,32 208,44 226,58 C236,66 240,72 246,76 C238,84 216,96 186,102 C140,112 88,110 60,98 C46,92 40,84 40,74 Z" fill="none" stroke="#ffffff" stroke-width="7.6" opacity=".28"/>
+  <ellipse cx="115" cy="36"
+           rx="75" ry="21"
+           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
+  <ellipse cx="125" cy="146"
+           rx="155" ry="47"
+           fill="#243e51" opacity=".42" filter="url(#soft)"/>
+</g>
 </svg>

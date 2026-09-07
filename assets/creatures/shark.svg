@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 132" width="756" height="396">
 <title>Shark</title>
-<defs><clipPath id="c"><path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z"/></clipPath></defs>
+<defs><clipPath id="c"><path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#a4b3bf"/><stop offset="0.45" stop-color="#7d93a4"/><stop offset="1" stop-color="#586773"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9.2"/></filter></defs>
 <path d="M44,70 L6,20 Q26,70 6,120 Z" fill="#5f7484"/>
       <path d="M110,30 C122,2 142,-4 152,4 L146,34 Z" fill="#5f7484"/>
       <path d="M96,108 C92,126 80,134 70,132 L82,104 Z" fill="#5f7484"/>
       <path d="M160,108 C164,124 178,130 188,126 L176,104 Z" fill="#5f7484"/>
-      <path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z" fill="#7d93a4"/>
+      <path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z" fill="url(#vol)"/>
       <g clip-path="url(#c)">
         <path d="M40,86 C90,102 180,104 240,86 L240,132 L40,132 Z" fill="#e6edf2"/>
       </g>
@@ -19,4 +19,13 @@
         <path d="M182,46 C188,56 188,68 182,76"/>
       </g>
       <circle cx="206" cy="60" r="9" fill="#fff"/><circle cx="207.62" cy="60" r="4.32" fill="#17202a"/><circle cx="206.18" cy="56.94" r="1.71" fill="#fff"/>
+<g clip-path="url(#c)">
+  <path d="M40,70 C46,44 84,26 132,26 C184,26 226,44 240,70 C226,96 184,114 132,114 C84,114 46,96 40,70 Z" fill="none" stroke="#ffffff" stroke-width="7.3" opacity=".28"/>
+  <ellipse cx="116" cy="34"
+           rx="76" ry="20"
+           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
+  <ellipse cx="126" cy="140"
+           rx="156" ry="45"
+           fill="#38424a" opacity=".42" filter="url(#soft)"/>
+</g>
 </svg>

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186 172" width="558" height="516">
 <title>Pufferfish</title>
-<defs><clipPath id="c"><path d="M28,86 C28,44 62,18 100,18 C138,18 168,44 168,86 C168,128 138,152 100,152 C62,152 28,128 28,86 Z"/></clipPath></defs>
+<defs><clipPath id="c"><path d="M28,86 C28,44 62,18 100,18 C138,18 168,44 168,86 C168,128 138,152 100,152 C62,152 28,128 28,86 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#f3d378"/><stop offset="0.45" stop-color="#eec03e"/><stop offset="1" stop-color="#a7862b"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="12.0"/></filter></defs>
 <path d="M34,86 L4,52 Q16,86 4,120 Z" fill="#c9a02c"/>
       <g fill="#c9a02c">
         <path d="M100,18 L108,0 L116,20 Z"/><path d="M60,30 L60,10 L74,26 Z"/>
@@ -9,7 +9,7 @@
         <path d="M100,152 L106,172 L88,158 Z"/><path d="M60,142 L52,160 L48,140 Z"/>
         <path d="M32,110 L14,124 L24,102 Z"/><path d="M32,60 L14,48 L26,44 Z"/>
       </g>
-      <path d="M28,86 C28,44 62,18 100,18 C138,18 168,44 168,86 C168,128 138,152 100,152 C62,152 28,128 28,86 Z" fill="#eec03e"/>
+      <path d="M28,86 C28,44 62,18 100,18 C138,18 168,44 168,86 C168,128 138,152 100,152 C62,152 28,128 28,86 Z" fill="url(#vol)"/>
       <g clip-path="url(#c)" opacity=".4">
         <ellipse cx="100" cy="122" rx="52" ry="24" fill="#fff"/>
         <circle cx="70" cy="46" r="6" fill="#8a6a10"/>
@@ -19,4 +19,13 @@
       <circle cx="134" cy="78" r="13" fill="#fff"/><circle cx="136.34" cy="78" r="6.24" fill="#17202a"/><circle cx="134.26" cy="73.58" r="2.47" fill="#fff"/>
       <circle cx="96" cy="80" r="13" fill="#fff"/><circle cx="98.34" cy="80" r="6.24" fill="#17202a"/><circle cx="96.26" cy="75.58" r="2.47" fill="#fff"/>
       <path d="M106,108 q11,7.48 22,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+<g clip-path="url(#c)">
+  <path d="M28,86 C28,44 62,18 100,18 C138,18 168,44 168,86 C168,128 138,152 100,152 C62,152 28,128 28,86 Z" fill="none" stroke="#ffffff" stroke-width="9.5" opacity=".28"/>
+  <ellipse cx="86" cy="45"
+           rx="56" ry="26"
+           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
+  <ellipse cx="93" cy="182"
+           rx="115" ry="58"
+           fill="#6b561c" opacity=".42" filter="url(#soft)"/>
+</g>
 </svg>

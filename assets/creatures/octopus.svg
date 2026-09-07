@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 190" width="600" height="570">
 <title>Octopus</title>
-<defs><clipPath id="c"><path d="M40,72 C40,32 68,8 100,8 C132,8 160,32 160,72 C160,100 142,118 100,118 C58,118 40,100 40,72 Z"/></clipPath></defs>
+<defs><clipPath id="c"><path d="M40,72 C40,32 68,8 100,8 C132,8 160,32 160,72 C160,100 142,118 100,118 C58,118 40,100 40,72 Z"/></clipPath><linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#dd8cbd"/><stop offset="0.45" stop-color="#cf5ba0"/><stop offset="1" stop-color="#914070"/></linearGradient><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="13.3"/></filter></defs>
 <g fill="none" stroke="#b84d8f" stroke-width="13" stroke-linecap="round">
         <path d="M52,106 C34,128 40,152 22,164"/>
         <path d="M72,114 C60,140 68,160 50,178"/>
@@ -9,7 +9,7 @@
         <path d="M140,108 C154,132 150,154 170,166"/>
         <path d="M156,92 C176,108 182,128 194,134"/>
       </g>
-      <path d="M40,72 C40,32 68,8 100,8 C132,8 160,32 160,72 C160,100 142,118 100,118 C58,118 40,100 40,72 Z" fill="#cf5ba0"/>
+      <path d="M40,72 C40,32 68,8 100,8 C132,8 160,32 160,72 C160,100 142,118 100,118 C58,118 40,100 40,72 Z" fill="url(#vol)"/>
       <g clip-path="url(#c)" opacity=".35">
         <circle cx="72" cy="30" r="9" fill="#fff"/>
         <circle cx="118" cy="24" r="6" fill="#fff"/>
@@ -18,4 +18,13 @@
       <circle cx="124" cy="64" r="13" fill="#fff"/><circle cx="126.34" cy="64" r="6.24" fill="#17202a"/><circle cx="124.26" cy="59.58" r="2.47" fill="#fff"/>
       <circle cx="74" cy="66" r="13" fill="#fff"/><circle cx="76.34" cy="66" r="6.24" fill="#17202a"/><circle cx="74.26" cy="61.58" r="2.47" fill="#fff"/>
       <path d="M88,92 q9,6.12 18,0" fill="none" stroke="#17202a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+<g clip-path="url(#c)">
+  <path d="M40,72 C40,32 68,8 100,8 C132,8 160,32 160,72 C160,100 142,118 100,118 C58,118 40,100 40,72 Z" fill="none" stroke="#ffffff" stroke-width="10.4" opacity=".28"/>
+  <ellipse cx="92" cy="49"
+           rx="60" ry="29"
+           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
+  <ellipse cx="100" cy="201"
+           rx="124" ry="65"
+           fill="#5d2948" opacity=".42" filter="url(#soft)"/>
+</g>
 </svg>

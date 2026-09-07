@@ -38,6 +38,51 @@ const OUT = path.join(__dirname, '..', 'assets', 'creatures');
 
 // ── umumiy qismlar ─────────────────────────────────────────────────────────
 
+// Rangni ochroq/to'qroq qilish. Hajm shu ikkalasidan quriladi: yuqoridan
+// yorug', pastdan soya — bu narsaning tekis emas, dumaloq ekanini
+// ko'rsatadigan eng oddiy va eng ishonchli belgi.
+function mix(hex, to, k) {
+  const n = parseInt(hex.slice(1), 16);
+  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(function (v) {
+    return Math.round(v + (to - v) * k);
+  });
+  return '#' + ch.map(function (v) { return v.toString(16).padStart(2, '0'); }).join('');
+}
+const lighten = (hex, k) => mix(hex, 255, k);
+const darken = (hex, k) => mix(hex, 0, k);
+
+// Yumaloq uchli besh burchakli yulduz. Qo'lda yozilgan yulduz yo'li
+// chizilgan shakl bilan mos kelmasdi va soyalar yulduzdan tashqariga
+// chiqib ketardi — shuning uchun endi u bir joyda hisoblanadi.
+function star(cx, cy, outer, inner, points) {
+  const pts = [];
+  for (let i = 0; i < points * 2; i++) {
+    const r = i % 2 ? inner : outer;
+    const a = (Math.PI * i) / points - Math.PI / 2;
+    pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]);
+  }
+  // Har bir burchak yumaloqlanadi: o'tkir uchli yulduz bolalar rasmi
+  // orasida qattiq va begona ko'rinadi.
+  let d = '';
+  for (let i = 0; i < pts.length; i++) {
+    const p = pts[i], q = pts[(i + 1) % pts.length];
+    const r = i % 2 ? 5 : 11;
+    const dx = q[0] - p[0], dy = q[1] - p[1];
+    const len = Math.hypot(dx, dy) || 1;
+    const ax = p[0] + (dx / len) * r, ay = p[1] + (dy / len) * r;
+    const bx = q[0] - (dx / len) * (i % 2 ? 11 : 5), by = q[1] - (dy / len) * (i % 2 ? 11 : 5);
+    d += (i ? ' L' : 'M') + ax.toFixed(1) + ',' + ay.toFixed(1)
+       + ' L' + bx.toFixed(1) + ',' + by.toFixed(1)
+       + ' Q' + q[0].toFixed(1) + ',' + q[1].toFixed(1) + ' ';
+    const nn = pts[(i + 2) % pts.length];
+    const ndx = nn[0] - q[0], ndy = nn[1] - q[1];
+    const nlen = Math.hypot(ndx, ndy) || 1;
+    const rr = i % 2 ? 11 : 5;
+    d += (q[0] + (ndx / nlen) * rr).toFixed(1) + ',' + (q[1] + (ndy / nlen) * rr).toFixed(1);
+  }
+  return d + ' Z';
+}
+
 // Ko'z. Bolalar rasmida ko'z eng muhim detal: usiz shakl narsaga o'xshaydi,
 // ko'z qo'yilishi bilan jonivorga aylanadi. Shuning uchun u hamma joyda bir
 // xil — oq doira, qora qorachiq va kichkina yorug'lik nuqtasi.
@@ -259,24 +304,20 @@ const SPECIES = [
   {
     id: 'starfish',
     titles: { uz: 'Dengiz yulduzi', ru: 'Морская звезда', en: 'Starfish' },
-    vb: '0 0 180 174',
-    body: 'M90,10 C102,44 108,54 142,58 C176,62 178,66 154,90 C130,114 126,124 134,158 C142,192 138,194 108,176 C78,158 66,158 36,176 C6,194 2,192 10,158 C18,124 14,114 -10,90 L14,90 C-6,68 -4,62 30,58 C64,54 78,44 90,10 Z',
+    vb: '0 0 180 180',
+    body: star(90, 92, 86, 38, 5),
     art: `
-      <path d="M90,8 C104,46 110,54 150,58 C186,62 188,68 160,92
-               C134,114 130,124 138,160 C146,196 140,200 108,180
-               C78,162 66,162 36,180 C4,200 -2,196 6,160
-               C14,124 10,114 -16,92 C-44,68 -42,62 -6,58
-               C34,54 40,46 54,8 C68,-30 76,-30 90,8 Z" fill="#f2913c" transform="translate(28,14) scale(0.78)"/>
-      <g opacity=".32" fill="#fff">
-        <circle cx="90" cy="60" r="7"/>
-        <circle cx="62" cy="86" r="5"/>
-        <circle cx="118" cy="86" r="5"/>
-        <circle cx="76" cy="118" r="5"/>
-        <circle cx="106" cy="118" r="5"/>
+      <path d="%BODY%" fill="#f2913c"/>
+      <g clip-path="url(#c)" opacity=".3" fill="#fff">
+        <circle cx="90" cy="58" r="7"/>
+        <circle cx="60" cy="88" r="5"/>
+        <circle cx="120" cy="88" r="5"/>
+        <circle cx="74" cy="122" r="5"/>
+        <circle cx="106" cy="122" r="5"/>
       </g>
-      ${eye(104, 74, 10)}
-      ${eye(74, 74, 10)}
-      ${smile(80, 98, 20)}`
+      ${eye(104, 78, 10)}
+      ${eye(74, 78, 10)}
+      ${smile(80, 102, 20)}`
   },
   {
     id: 'pufferfish',
@@ -513,13 +554,66 @@ const SPECIES = [
 // hajmiga ta'sir qilmaydi: vektor baribir vektorligicha qoladi.
 const RASTER = 3;
 
+// HAJM
+//
+// Tekis rangli shakl qog'ozdan qirqilgan applikatsiyaga o'xshaydi. Uni
+// dumaloq ko'rsatish uchun uchta narsa yetadi va uchalasi ham har bir turga
+// bir xil qo'llanadi — qo'lda soya chizish yigirma joyda yigirma xil
+// natija berardi:
+//
+//   1. tana rangi tekis emas, yuqoridan pastga gradient bo'ladi;
+//   2. yuqori qismda yumshoq oq yorug'lik dog'i — yaltiroq nam teri;
+//   3. pastki chekkada to'q soya — shakl u yerda kuzatuvchidan uzoqlashadi.
+//
+// Uchalasi ham tana konturi ichida qirqiladi (clip), shuning uchun soya
+// jonivordan tashqariga chiqmaydi.
+function volume(vw, vh, base) {
+  const blur = (vh * 0.07).toFixed(1);
+  return {
+    defs:
+      `<linearGradient id="vol" x1="0.15" y1="0" x2="0.55" y2="1">`
+      + `<stop offset="0" stop-color="${lighten(base, 0.30)}"/>`
+      + `<stop offset="0.45" stop-color="${base}"/>`
+      + `<stop offset="1" stop-color="${darken(base, 0.30)}"/>`
+      + `</linearGradient>`
+      + `<filter id="soft" x="-60%" y="-60%" width="220%" height="220%">`
+      + `<feGaussianBlur stdDeviation="${blur}"/></filter>`,
+    layer: `
+<g clip-path="url(#c)">
+  <path d="%BODY%" fill="none" stroke="#ffffff" stroke-width="${(vh * 0.055).toFixed(1)}" opacity=".28"/>
+  <ellipse cx="${(vw * 0.46).toFixed(0)}" cy="${(vh * 0.26).toFixed(0)}"
+           rx="${(vw * 0.3).toFixed(0)}" ry="${(vh * 0.15).toFixed(0)}"
+           fill="#ffffff" opacity=".26" filter="url(#soft)"/>
+  <ellipse cx="${(vw * 0.5).toFixed(0)}" cy="${(vh * 1.06).toFixed(0)}"
+           rx="${(vw * 0.62).toFixed(0)}" ry="${(vh * 0.34).toFixed(0)}"
+           fill="${darken(base, 0.55)}" opacity=".42" filter="url(#soft)"/>
+</g>`
+  };
+}
+
 function build(sp) {
-  const art = sp.art.replace(/%BODY%/g, sp.body).trim();
   const [, , vw, vh] = sp.vb.split(/\s+/).map(Number);
+  let art = sp.art.replace(/%BODY%/g, sp.body).trim();
+
+  // Tana rangini art'ning o'zidan olamiz: u yagona haqiqat manbai bo'lib
+  // qolsin, aks holda tur ta'rifida rang ikki joyda yozilib, biri
+  // o'zgarganda ikkinchisi eskirib qolardi.
+  const m = sp.art.match(/<path d="%BODY%"[^>]*?fill="(#[0-9a-fA-F]{6})"/);
+  let extra = '';
+  if (m) {
+    const vol = volume(vw, vh, m[1]);
+    // Tana endi gradient bilan bo'yaladi. Faqat birinchi mos kelgani
+    // almashtiriladi: ba'zi turlarda tana yo'li soya uchun ikkinchi marta
+    // ham ishlatiladi va u tekis qolishi kerak.
+    art = art.replace(m[1], 'url(#vol)');
+    extra = vol.defs;
+    art += vol.layer.replace(/%BODY%/g, sp.body);
+  }
+
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${sp.vb}" `
     + `width="${vw * RASTER}" height="${vh * RASTER}">
 <title>${sp.titles.en}</title>
-<defs><clipPath id="c"><path d="${sp.body}"/></clipPath></defs>
+<defs><clipPath id="c"><path d="${sp.body}"/></clipPath>${extra}</defs>
 ${art}
 </svg>
 `;
