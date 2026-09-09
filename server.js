@@ -67,6 +67,14 @@ const path = require('path');
 const os = require('os');
 
 const ROOT = __dirname;
+
+// Папка данных. По умолчанию — рядом с кодом, как у домашнего сервера. Но
+// есть хостинги, где в папку проекта писать нельзя (Vercel: там доступен
+// только /tmp), — для них папка переносится переменной AQUA_DATA_DIR.
+// Всё, что сервер сохраняет, живёт только здесь; код этой папки не касается.
+const DATA_DIR = process.env.AQUA_DATA_DIR
+  ? path.resolve(process.env.AQUA_DATA_DIR)
+  : path.join(ROOT, 'data');
 const PORT = Number(process.env.PORT) || 8000;
 const MAX_BODY = 12 * 1024 * 1024;
 
@@ -115,7 +123,7 @@ function dataBytes() {
       else { try { total += fs.statSync(full).size; } catch (e) { /* исчез — и ладно */ } }
     }
   };
-  walk(path.join(ROOT, 'data'));
+  walk(DATA_DIR);
   dataSize = { bytes: total, at: Date.now() };
   return total;
 }
@@ -134,8 +142,8 @@ function tooHeavy(dataUrl, limit) {
   return Math.ceil(String(dataUrl).length * 0.75) > limit;
 }
 
-const TANKS = path.join(ROOT, 'data', 'tanks');
-const TANKS_TRASH = path.join(ROOT, 'data', 'trash-tanks');
+const TANKS = path.join(DATA_DIR, 'tanks');
+const TANKS_TRASH = path.join(DATA_DIR, 'trash-tanks');
 
 // Встроенные фоны общие для всех аквариумов и удалению не подлежат.
 // Загруженные лежат внутри своего аквариума.
@@ -1088,9 +1096,15 @@ function staticFor(url) {
   if (clean !== url) return null;
 
   const data = clean.match(DATA_FILE_RE);
-  const allowed = data
-    ? TANK_ID_RE.test(data[1])
-    : STATIC_FILES.includes(clean) || STATIC_DIRS.some((dir) => clean.startsWith(dir));
+  if (data) {
+    if (!TANK_ID_RE.test(data[1])) return null;
+    // Адрес начинается с /data/, но лежит файл в DATA_DIR — а это не
+    // обязательно папка data рядом с кодом (см. AQUA_DATA_DIR).
+    const df = path.normalize(path.join(DATA_DIR, clean.slice('/data/'.length)));
+    return df.startsWith(DATA_DIR + path.sep) ? df : null;
+  }
+
+  const allowed = STATIC_FILES.includes(clean) || STATIC_DIRS.some((dir) => clean.startsWith(dir));
   if (!allowed) return null;
 
   const file = path.normalize(path.join(ROOT, clean));
@@ -1135,7 +1149,11 @@ function coloringPdf(req) {
   return 'en';
 }
 
-http.createServer((req, res) => {
+// Обработчик запросов — отдельная функция, а не безымянная стрелка внутри
+// createServer. Так его можно отдать наружу: на serverless-хостинге (Vercel)
+// сервер не слушает порт, а платформа сама зовёт обработчик на каждый
+// запрос (см. api/index.js). Дома всё по-прежнему: node server.js.
+function handle(req, res) {
   const url = decodeURIComponent(req.url.split('?')[0]);
 
   if (url.startsWith('/api/')) return handleApi(req, res, url);
@@ -1189,7 +1207,14 @@ http.createServer((req, res) => {
   headers['Content-Type'] = MIME[ext] || 'application/octet-stream';
   res.writeHead(200, headers);
   fs.createReadStream(file).pipe(res);
-}).listen(PORT, '0.0.0.0', () => {
+}
+
+module.exports = { handle };
+
+// Слушаем порт только когда файл запущен напрямую. Когда его подключают
+// как модуль (require), сервер не стартует — иначе на Vercel он пытался бы
+// занять порт, которого там нет.
+if (require.main === module) http.createServer(handle).listen(PORT, '0.0.0.0', () => {
   // Ishga tushgandagi xabar — loyihaning birinchi ko'rinadigan qismi va uni
   // odatda kod yozmaydigan odam (tarbiyachi, ota-ona) o'qiydi. Shuning uchun
   // u loyiha tilida va faqat kerakli narsani aytadi: qayerni ochish kerak.

@@ -151,6 +151,23 @@ ro‘yxatda ko‘rinadi.
 > asosiy yo‘l 2D bo‘lib qoladi; 3D — bo‘yash varaqlari bilan ishlaydigan
 > qo‘shimcha imkoniyat.
 
+## Joylashtirish (internetga chiqarish)
+
+Loyiha ikki xil ishlaydi:
+
+**Oddiy server** — `node server.js`. Ma'lumotlar `data/` papkasida, doimiy.
+Bog‘cha uchun asosiy yo‘l shu: noutbuk yoki disk bor har qanday server
+(Railway, Fly.io, oddiy VPS — `Dockerfile` tayyor).
+
+**Vercel** — ko‘rib turish uchun. Repo ulanadi, har push'da o‘zi
+joylashtiriladi. Lekin Vercel serverless: loyiha papkasiga yozib bo‘lmaydi,
+ma'lumot `/tmp` ga tushadi va u **vaqtinchalik** — instansiya to‘xtasa,
+chizilgan rasmlar yo‘qoladi. Demo uchun yetadi, bog‘chada doimiy ishlash
+uchun emas. Kirish nuqtasi — `api/index.js`, sozlama — `vercel.json`.
+
+Ma'lumot papkasini `AQUA_DATA_DIR` o‘zgaruvchisi bilan istalgan joyga
+ko‘chirsa bo‘ladi.
+
 ## Sahifalar
 
 | Manzil | Nima |

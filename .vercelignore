@@ -1,0 +1,4 @@
+data
+.git
+assets/models/drop/*.glb
+assets/models/drop/*.gltf
