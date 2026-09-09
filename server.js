@@ -110,7 +110,7 @@ const LIMITS = {
 // напрямую — в сокете. Ключ нужен только для счётчика, точность не важна.
 function clientKey(req) {
   const fwd = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
-  return fwd || req.socket.remoteAddress || '?';
+  return fwd || (req.socket && req.socket.remoteAddress) || '?';
 }
 
 // Сколько занимает data. Считаем не чаще раза в минуту: обход папки дешёвый,
@@ -154,7 +154,12 @@ const TANKS_TRASH = path.join(DATA_DIR, 'trash-tanks');
 // Загруженные лежат внутри своего аквариума.
 const BG_DIR = path.join(ROOT, 'assets', 'backgrounds');
 
-fs.mkdirSync(TANKS, { recursive: true });
+// Papka yaratilmasa ham modul ochilsin: serverless muhitda yozib
+// bo'lmaydigan joy tushib qolsa, «funksiya yiqildi» degan bo'sh xato
+// o'rniga /api/health aniq sababni ko'rsatadi.
+let DATA_ERROR = null;
+try { fs.mkdirSync(TANKS, { recursive: true }); }
+catch (e) { DATA_ERROR = String(e && e.message || e); console.error('ma\'lumot papkasi yaratilmadi:', DATA_DIR, e); }
 
 // ── идентификаторы аквариумов ──────────────────────────────────────────────
 // Алфавит без похожих знаков: нет 0/O, 1/l/I. 31^10 ≈ 8·10^14 — перебором
@@ -979,6 +984,32 @@ function handleApi(req, res, url) {
     return send(res, 200, JSON.stringify(listPack()));
   }
 
+  // Server holati: joylashtirilgan joyda nima bor, nima yo'q — bir qarashda.
+  // Jurnal ko'rinmaydigan hostinglar uchun (Vercel'da jurnal alohida
+  // huquq talab qiladi) yagona tekshiruv yo'li shu.
+  if (req.method === 'GET' && url === '/api/health') {
+    const exists = (rel) => fs.existsSync(path.join(ROOT, rel));
+    let writable = true;
+    try { fs.writeFileSync(path.join(DATA_DIR, '.w'), '1'); fs.unlinkSync(path.join(DATA_DIR, '.w')); }
+    catch (e) { writable = false; }
+    return send(res, 200, JSON.stringify({
+      ok: !DATA_ERROR && writable && exists('index.html'),
+      node: process.version,
+      vercel: ON_VERCEL,
+      root: ROOT,
+      dataDir: DATA_DIR,
+      dataError: DATA_ERROR,
+      dataWritable: writable,
+      files: {
+        index: exists('index.html'),
+        alive: exists('alive.html'),
+        creatures: exists(path.join('assets', 'creatures', 'manifest.json')),
+        tank3d: exists(path.join('demos', 'realistic-tank.html'))
+      },
+      tanks: tanksCount()
+    }, null, 1));
+  }
+
   // Готовые персонажи одни на все сцены, как и пак, — ручка общая.
   if (req.method === 'GET' && url === '/api/creatures') {
     return send(res, 200, JSON.stringify(listCreatures()));
@@ -1158,8 +1189,22 @@ function coloringPdf(req) {
 // createServer. Так его можно отдать наружу: на serverless-хостинге (Vercel)
 // сервер не слушает порт, а платформа сама зовёт обработчик на каждый
 // запрос (см. api/index.js). Дома всё по-прежнему: node server.js.
+// Bitta so'rovdagi xato butun serverni yiqitmasin. Uyda bu — bitta
+// noto'g'ri manzil (masalan, buzuq %-kodlash) hamma bolaning akvariumini
+// to'xtatishi; serverless'da — jurnal o'rniga «funksiya yiqildi» degan
+// ma'nosiz sahifa. Endi xato so'rovga 500 va sabab bilan qaytadi.
 function handle(req, res) {
-  const url = decodeURIComponent(req.url.split('?')[0]);
+  try {
+    return route(req, res);
+  } catch (e) {
+    console.error('so\'rovda xato:', req.method, req.url, e);
+    if (res.headersSent) return res.end();
+    return send(res, 500, 'Server xatosi / Server error\n\n' + (e && e.stack || e), 'text/plain');
+  }
+}
+
+function route(req, res) {
+  const url = decodeURIComponent(String(req.url || '/').split('?')[0]);
 
   if (url.startsWith('/api/')) return handleApi(req, res, url);
 
@@ -1214,7 +1259,11 @@ function handle(req, res) {
   fs.createReadStream(file).pipe(res);
 }
 
-module.exports = { handle };
+// Экспорт — сама функция-обработчик (так её может вызвать любой хостинг,
+// которому нужен (req, res)), а handle — ещё и свойством, для тех, кто
+// подключает сервер как модуль: const { handle } = require('./server').
+module.exports = handle;
+module.exports.handle = handle;
 
 // Слушаем порт, когда файл запущен напрямую — и на Vercel. Там файл
 // подключают как модуль, но сервер всё равно должен вызвать listen():
@@ -1223,6 +1272,10 @@ module.exports = { handle };
 // В остальных случаях (тесты, другой хостинг подключает handle) порт
 // не занимаем.
 if (require.main === module || ON_VERCEL) http.createServer(handle).listen(PORT, '0.0.0.0', () => {
+  // Serverless'da banner kerak emas: u yerda na terminal, na doimiy disk
+  // bor; tarmoq interfeyslarini so'rash esa cheklangan muhitda xato berishi
+  // mumkin — va u listen ichida bo'lgani uchun butun funksiyani yiqitadi.
+  if (ON_VERCEL) { console.log('Sketch Alive: Vercel, ma\'lumot ' + DATA_DIR); return; }
   // Ishga tushgandagi xabar — loyihaning birinchi ko'rinadigan qismi va uni
   // odatda kod yozmaydigan odam (tarbiyachi, ota-ona) o'qiydi. Shuning uchun
   // u loyiha tilida va faqat kerakli narsani aytadi: qayerni ochish kerak.
