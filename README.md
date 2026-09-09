@@ -163,7 +163,9 @@ Bog‘cha uchun asosiy yo‘l shu: noutbuk yoki disk bor har qanday server
 joylashtiriladi. Lekin Vercel serverless: loyiha papkasiga yozib bo‘lmaydi,
 ma'lumot `/tmp` ga tushadi va u **vaqtinchalik** — instansiya to‘xtasa,
 chizilgan rasmlar yo‘qoladi. Demo uchun yetadi, bog‘chada doimiy ishlash
-uchun emas. Kirish nuqtasi — `api/index.js`, sozlama — `vercel.json`.
+uchun emas. Vercel `server.js` ni o‘zi topadi (Node.js server sifatida) —
+alohida kirish nuqtasi yo‘q; sahifalar va rasmlar funksiyaga `vercel.json`
+dagi `includeFiles` orqali qo‘shiladi.
 
 Ma'lumot papkasini `AQUA_DATA_DIR` o‘zgaruvchisi bilan istalgan joyga
 ko‘chirsa bo‘ladi.

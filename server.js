@@ -71,9 +71,14 @@ const ROOT = __dirname;
 // Папка данных. По умолчанию — рядом с кодом, как у домашнего сервера. Но
 // есть хостинги, где в папку проекта писать нельзя (Vercel: там доступен
 // только /tmp), — для них папка переносится переменной AQUA_DATA_DIR.
+// На Vercel она переносится сама: платформа ставит переменную VERCEL, и
+// тогда данные идут во временную папку. Это память «на посмотреть» — каждый
+// экземпляр функции свою, и она пропадает, когда он останавливается.
 // Всё, что сервер сохраняет, живёт только здесь; код этой папки не касается.
+const ON_VERCEL = !!process.env.VERCEL;
 const DATA_DIR = process.env.AQUA_DATA_DIR
   ? path.resolve(process.env.AQUA_DATA_DIR)
+  : ON_VERCEL ? path.join(os.tmpdir(), 'sketch-alive')
   : path.join(ROOT, 'data');
 const PORT = Number(process.env.PORT) || 8000;
 const MAX_BODY = 12 * 1024 * 1024;
@@ -1211,10 +1216,13 @@ function handle(req, res) {
 
 module.exports = { handle };
 
-// Слушаем порт только когда файл запущен напрямую. Когда его подключают
-// как модуль (require), сервер не стартует — иначе на Vercel он пытался бы
-// занять порт, которого там нет.
-if (require.main === module) http.createServer(handle).listen(PORT, '0.0.0.0', () => {
+// Слушаем порт, когда файл запущен напрямую — и на Vercel. Там файл
+// подключают как модуль, но сервер всё равно должен вызвать listen():
+// платформа перехватывает этот вызов и через него отдаёт запросы (порт
+// берётся из PORT). Без listen() функция падает, не ответив ни разу.
+// В остальных случаях (тесты, другой хостинг подключает handle) порт
+// не занимаем.
+if (require.main === module || ON_VERCEL) http.createServer(handle).listen(PORT, '0.0.0.0', () => {
   // Ishga tushgandagi xabar — loyihaning birinchi ko'rinadigan qismi va uni
   // odatda kod yozmaydigan odam (tarbiyachi, ota-ona) o'qiydi. Shuning uchun
   // u loyiha tilida va faqat kerakli narsani aytadi: qayerni ochish kerak.
