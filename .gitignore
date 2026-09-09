@@ -48,3 +48,4 @@ assets/creatures/custom/*
 # репозиторий не идёт ни то, ни другое.
 assets/models/drop/*
 !assets/models/drop/README.md
+!assets/models/drop/MESHY.md
